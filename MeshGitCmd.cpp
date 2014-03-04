@@ -7,10 +7,10 @@ using namespace std;
 #include <sstream> 
 
 //Comand line flags
-const char *defaultStepSizeFlag = "-s", *defaultStepSizeLongFlag = "-stepSize";
-const char *defaultAngleFlag = "-a", *defaultAngleLongFlag = "-angleSize";
-const char *defaultGrammarFlag = "-g", *defaultGrammarLongFlag = "-grammar";
-const char *defaultNumberOfIterationsFlag = "-i", *defaultNumberOfIterationsLongFlag = "-numberOfIterations";
+//const char *defaultStepSizeFlag = "-s", *defaultStepSizeLongFlag = "-stepSize";
+//const char *defaultAngleFlag = "-a", *defaultAngleLongFlag = "-angleSize";
+//const char *defaultGrammarFlag = "-g", *defaultGrammarLongFlag = "-grammar";
+//const char *defaultNumberOfIterationsFlag = "-i", *defaultNumberOfIterationsLongFlag = "-numberOfIterations";
 
 MeshGitCmd::MeshGitCmd() : MPxCommand()
 {
@@ -47,10 +47,10 @@ MSyntax MeshGitCmd::newSyntax()
 {
     MSyntax syntax;
 
-    syntax.addFlag( defaultStepSizeFlag, defaultStepSizeLongFlag, MSyntax:: kDouble );
-    syntax.addFlag( defaultAngleFlag, defaultAngleLongFlag, MSyntax::kDouble );
-	syntax.addFlag( defaultGrammarFlag, defaultGrammarLongFlag, MSyntax::kString );
-	syntax.addFlag( defaultNumberOfIterationsFlag, defaultNumberOfIterationsLongFlag, MSyntax::kDouble);
+ //   syntax.addFlag( defaultStepSizeFlag, defaultStepSizeLongFlag, MSyntax:: kDouble );
+ //   syntax.addFlag( defaultAngleFlag, defaultAngleLongFlag, MSyntax::kDouble );
+	//syntax.addFlag( defaultGrammarFlag, defaultGrammarLongFlag, MSyntax::kString );
+	//syntax.addFlag( defaultNumberOfIterationsFlag, defaultNumberOfIterationsLongFlag, MSyntax::kDouble);
 
 	return syntax;
 }

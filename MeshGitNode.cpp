@@ -15,8 +15,6 @@
 
 MStatus returnStatus;
 
-
-
 //IMPLEMENTATION
 
 //Node Attributes

@@ -13,6 +13,15 @@
       <UniqueIdentifier>{8208588f-9bcf-44a7-80d6-848c59cb2bc4}</UniqueIdentifier>
       <Extensions>txt</Extensions>
     </Filter>
+    <Filter Include="Source Files\Header Files">
+      <UniqueIdentifier>{27558dcd-cee4-4389-bc38-b52dbd6ba51b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Source Files">
+      <UniqueIdentifier>{43561eb8-d055-4060-a9e2-6c08c115e65a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mel Files">
+      <UniqueIdentifier>{ff4bc643-ae34-4660-ac62-83d8eccfd43c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt">
@@ -21,21 +30,27 @@
     <None Include="Options.txt">
       <Filter>Miscellaneous Files</Filter>
     </None>
+    <None Include="MeshGit.mel">
+      <Filter>Source Files\Mel Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MeshGitCmd.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PluginMain.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MeshGitNode.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MeshGitNode.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshGitCmd.h">
+      <Filter>Source Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

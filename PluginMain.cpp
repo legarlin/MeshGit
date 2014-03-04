@@ -16,7 +16,7 @@
 #include <maya/MStringArray.h>
 #include <list>
 
-//#include "MeshGitCmd.cpp"
+#include "MeshGitCmd.h"
 #include "MeshGitNode.h"
 
 MStatus initializePlugin( MObject obj )
@@ -27,6 +27,7 @@ MStatus initializePlugin( MObject obj )
 	
 	MString pluginPath = plugin.loadPath();
 
+	//Loading the mel file script
 	//MString cmd = "source \""+ pluginPath + "/" + "MeshGit.mel\"";
 	//MGlobal::executeCommand(cmd);
 	//	char buffer[2048];

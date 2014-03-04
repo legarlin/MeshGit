@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="MeshGit.mel" />
     <None Include="Options.txt" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
@@ -20,6 +21,7 @@
     <ClCompile Include="PluginMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MeshGitCmd.h" />
     <ClInclude Include="MeshGitNode.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
