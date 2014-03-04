@@ -1,0 +1,82 @@
+global string $gMainWindow;
+    setParent $gMainWindow;
+    menu
+    -label "LSystem Menu"
+    -parent $gMainWindow
+    -tearOff on;
+    menuItem
+    -ann "LSystem Command"
+    -label "LSystem Command"
+	-c "openLSystemWindow"
+    -echoCommand true;
+	 menuItem
+    -ann "LSystem Node"
+    -label "LSystem Node"
+	-c "createMeshgitNode"
+    -echoCommand true;
+	
+
+global proc openLSystemWindow(){
+	string $window = `window -title "Call LSystem Command"`;
+	columnLayout;
+	button -label "Browse" -command "browse";
+	scrollField -width 400 grammarField;
+
+	floatSliderGrp
+	-label "Number Of Iterations"
+	-field true
+	iterationSlider;
+
+	floatSliderGrp
+		-label "Default Angle"
+		-field true
+		angleSlider;
+
+		floatSliderGrp
+		-label "Default Step"
+		-field true
+		stepSlider;
+		
+	button -label "Create" -command "createButtonPressed";
+	button -label "Cancel" -command "deleteUI -window $window";
+		
+	showWindow $window;
+}
+
+global proc createButtonPressed() {
+int $iterations = `floatSliderGrp -q -v iterationSlider`;
+print ($iterations);
+float $angle = `floatSliderGrp -q -v angleSlider`;
+print ($angle);
+float $step = `floatSliderGrp -q -v stepSlider`;
+print ($step);
+string $grammar = `scrollField -q -tx grammarField`;
+print ($grammar);
+
+LSystemCmd -i $iterations -g $grammar -s $step -a $angle;
+} 
+
+global proc browse(){
+
+	string $filePath[] = `fileDialog2  -fileMode 1 -caption "Select Grammar File"`;
+	$fileId = `fopen $filePath[0] "r"`;
+	string $grammar = `fread $fileId $grammar` ; 
+	scrollField -e -tx $grammar grammarField;
+}
+
+global proc createLSystemNode(){
+	createNode transform -n LSystem1;
+	createNode mesh -n LSystemShape1 -p LSystem1;
+	sets -add initialShadingGroup LSystemShape1;
+	createNode LSystemNode -n LSystemNode1;
+	connectAttr time1.outTime LSystemNode1.time;
+	connectAttr LSystemNode1.outputMesh LSystemShape1.inMesh;
+}
+
+
+
+
+
+
+
+

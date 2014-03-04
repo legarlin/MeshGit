@@ -1,47 +1,66 @@
-////
-//// Copyright (C) 
-//// 
-//// File: MeshGitCmd.cpp
-////
-//// MEL Command: MeshGit
-////
-//// Author: Maya Plug-in Wizard 2.0
-////
-//
-//// Includes everything needed to register a simple MEL command with Maya.
-//// 
-////#include <maya/MSimple.h>
-//#include <maya/MGlobal.h>
-//#include <maya/MSyntax.h>
-//#include <maya/MArgDatabase.h>
-//
-//// Use helper macro to register a command with Maya.  It creates and
-//// registers a command that does not support undo or redo.  The 
-//// created class derives off of MPxCommand.
-////
-//DeclareSimpleCommand( MeshGit, "", "2014");
-//
-//MStatus MeshGit::doIt( const MArgList& args )
-////
-////	Description:
-////		implements the MEL MeshGit command.
-////
-////	Arguments:
-////		args - the argument list that was passes to the command from MEL
-////
-////	Return Value:
-////		MS::kSuccess - command succeeded
-////		MS::kFailure - command failed (returning this value will cause the 
-////                     MEL script that is being run to terminate unless the
-////                     error is caught using a "catch" statement.
-////
-//{
-//	MStatus stat = MS::kSuccess;
-//
-//	// Since this class is derived off of MPxCommand, you can use the 
-//	// inherited methods to return values and set error messages
-//	//
-//	setResult( "MeshGit command executed!\n" );
-//
-//	return stat;
-//}
+#include "MeshGitCmd.h"
+#include <maya/MGlobal.h>
+#include <maya/MSyntax.h>
+#include <maya/MArgDatabase.h>
+#include <list>
+using namespace std;
+#include <sstream> 
+
+//Comand line flags
+const char *defaultStepSizeFlag = "-s", *defaultStepSizeLongFlag = "-stepSize";
+const char *defaultAngleFlag = "-a", *defaultAngleLongFlag = "-angleSize";
+const char *defaultGrammarFlag = "-g", *defaultGrammarLongFlag = "-grammar";
+const char *defaultNumberOfIterationsFlag = "-i", *defaultNumberOfIterationsLongFlag = "-numberOfIterations";
+
+MeshGitCmd::MeshGitCmd() : MPxCommand()
+{
+
+}
+
+MeshGitCmd::~MeshGitCmd() 
+{
+}
+
+MStatus MeshGitCmd::doIt( const MArgList& args )
+{
+
+	MStatus status;
+
+	MArgDatabase argData( syntax(), args, &status );
+    if (!status)
+        return status;
+
+	//Checking if flags are set
+	//if( argData.isFlagSet( defaultStepSizeFlag ) )
+	//	argData.getFlagArgument( defaultStepSizeFlag, 0, defaultStep );
+	//if( argData.isFlagSet( defaultAngleFlag ) )
+	//	argData.getFlagArgument( defaultAngleFlag, 0, angle );
+	//if( argData.isFlagSet( defaultGrammarFlag ) )
+	//	argData.getFlagArgument( defaultGrammarFlag, 0, grammar );
+	//if( argData.isFlagSet( defaultNumberOfIterationsFlag ) )
+	//	argData.getFlagArgument( defaultNumberOfIterationsFlag, 0, angle );
+
+    return MStatus::kSuccess;
+}
+
+MSyntax MeshGitCmd::newSyntax()
+{
+    MSyntax syntax;
+
+    syntax.addFlag( defaultStepSizeFlag, defaultStepSizeLongFlag, MSyntax:: kDouble );
+    syntax.addFlag( defaultAngleFlag, defaultAngleLongFlag, MSyntax::kDouble );
+	syntax.addFlag( defaultGrammarFlag, defaultGrammarLongFlag, MSyntax::kString );
+	syntax.addFlag( defaultNumberOfIterationsFlag, defaultNumberOfIterationsLongFlag, MSyntax::kDouble);
+
+	return syntax;
+}
+
+std::string stringify(double x)
+ {
+	std::stringstream s;
+	s << "(" << x << ")";
+	return s.str();
+
+ }
+
+
