@@ -36,7 +36,7 @@ MStatus initializePlugin( MObject obj )
 
 	//Register Node
 	status = plugin.registerNode("MeshGitNode", MeshGitNode::id,
-						 MeshGitNode::creator, MeshGitNode::initialize);
+						 MeshGitNode::creator, MeshGitNode::initialize, MPxNode::kDeformerNode);
 	if (!status) {
 		status.perror("registerNode");
 	}

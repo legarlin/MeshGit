@@ -11,26 +11,30 @@
 //#include <maya/MFnPlugin.h>
 
 #include <maya/MPxNode.h>
+#include <maya/MPxDeformerNode.h>
 #include <maya/MObject.h>
 #include <maya/MPlug.h>
 #include <maya/MDataBlock.h>
 #include <maya/MFnMeshData.h>
 #include <maya/MIOStream.h>
+#include <maya/MItGeometry.h>
 
 //HEADER
-class MeshGitNode : public MPxNode
+class MeshGitNode : public MPxDeformerNode
 {
 public:
 					MeshGitNode();
 	virtual 		~MeshGitNode();
-	virtual MStatus compute(const MPlug& plug, MDataBlock& data);
+	//virtual MStatus compute(const MPlug& plug, MDataBlock& data);
+    virtual MStatus      		deform(MDataBlock& 		block,
+									   MItGeometry& 	iter,									   
+									   unsigned int		multiIndex);
 	static  void*	creator();
 	static  MStatus initialize();
-	static MObject	defaultAngle;
-	static MObject	defaultStepSize;
-	static MObject	grammarFile;
-	static MObject	time;
-	static MObject	outputMesh;
+	static MObject	originalMesh;
+	static MObject	derivativeAMesh;
+	static MObject	derivativeBMesh;
+	static MObject	mergedMesh;
 	static MTypeId	id;
 	
 
