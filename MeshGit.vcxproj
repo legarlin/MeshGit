@@ -16,6 +16,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MeshGitCmd.cpp" />
+    <ClCompile Include="MeshGitNode.cpp" />
+    <ClCompile Include="PluginMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MeshGitNode.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
