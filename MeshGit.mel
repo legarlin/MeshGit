@@ -1,82 +1,92 @@
 global string $gMainWindow;
-    setParent $gMainWindow;
-    menu
-    -label "LSystem Menu"
-    -parent $gMainWindow
-    -tearOff on;
-    menuItem
-    -ann "LSystem Command"
-    -label "LSystem Command"
-	-c "openLSystemWindow"
-    -echoCommand true;
-	 menuItem
-    -ann "LSystem Node"
-    -label "LSystem Node"
-	-c "createMeshgitNode"
-    -echoCommand true;
-	
+setParent $gMainWindow;
+menu -label "MeshGit" -parent $gMainWindow -tearOff on MeshGitMenu;
+menuItem -ann "Load Files" -label "Load Files" -echoCommand true -command open;
 
-global proc openLSystemWindow(){
-	string $window = `window -title "Call LSystem Command"`;
-	columnLayout;
-	button -label "Browse" -command "browse";
-	scrollField -width 400 grammarField;
+global string $originalFileField;
+global string $AFileField;
+global string $BFileField;
 
-	floatSliderGrp
-	-label "Number Of Iterations"
-	-field true
-	iterationSlider;
+global proc open() 
+{
+	global string $originalFileField;
+	global string $AFileField;
+	global string $BFileField;
 
-	floatSliderGrp
-		-label "Default Angle"
-		-field true
-		angleSlider;
+	if (`window -exists MeshGitGUI`) { deleteUI -window MeshGitGUI; }
+	window -title "Browse MeshGit Files" -width 600 MeshGitGUI;
+	columnLayout -adjustableColumn true;
 
-		floatSliderGrp
-		-label "Default Step"
-		-field true
-		stepSlider;
-		
-	button -label "Create" -command "createButtonPressed";
-	button -label "Cancel" -command "deleteUI -window $window";
-		
-	showWindow $window;
-}
+	frameLayout -label "Original Mesh File" -collapsable false;
+	columnLayout -adjustableColumn true;
+	$originalFileField = `textField -text "" fileFieldOriginal`;
+	button -label "Browse" -command browseOriginalFile;
+	setParent..;
 
-global proc createButtonPressed() {
-int $iterations = `floatSliderGrp -q -v iterationSlider`;
-print ($iterations);
-float $angle = `floatSliderGrp -q -v angleSlider`;
-print ($angle);
-float $step = `floatSliderGrp -q -v stepSlider`;
-print ($step);
-string $grammar = `scrollField -q -tx grammarField`;
-print ($grammar);
+	frameLayout -label "Derivative A Mesh File" -collapsable false;
+	columnLayout -adjustableColumn true;
+	$AFileField = `textField -text "" fileFieldA`;
+	button -label "Browse" -command browseAFile;
+	setParent..;
 
-LSystemCmd -i $iterations -g $grammar -s $step -a $angle;
-} 
+	frameLayout -label "Derivative B Mesh File" -collapsable false;
+	columnLayout -adjustableColumn true;
+	$BFileField = `textField -text "" fileFieldB`;
+	button -label "Browse" -command browseBFile;
+	setParent..;
 
-global proc browse(){
-
-	string $filePath[] = `fileDialog2  -fileMode 1 -caption "Select Grammar File"`;
-	$fileId = `fopen $filePath[0] "r"`;
-	string $grammar = `fread $fileId $grammar` ; 
-	scrollField -e -tx $grammar grammarField;
-}
-
-global proc createLSystemNode(){
-	createNode transform -n LSystem1;
-	createNode mesh -n LSystemShape1 -p LSystem1;
-	sets -add initialShadingGroup LSystemShape1;
-	createNode LSystemNode -n LSystemNode1;
-	connectAttr time1.outTime LSystemNode1.time;
-	connectAttr LSystemNode1.outputMesh LSystemShape1.inMesh;
+	columnLayout -adjustableColumn true;
+	button -label "Done" -command load -actOnPress false;
+	button -label "Cancel" -command cancel -actOnPress false;
+	setParent..;
+	showWindow MeshGitGUI;
 }
 
 
+global proc browseOriginalFile() 
+{
+	textField -edit -text `fileDialog2 -fm 1` fileFieldOriginal;
+}
+
+global proc browseAFile() 
+{
+	textField -edit -text `fileDialog2 -fm 1` fileFieldA;
+}
+
+global proc browseBFile() 
+{
+	textField -edit -text `fileDialog2 -fm 1` fileFieldB;
+}
 
 
+global proc load() 
+{
+	global string $originalFileField;
+	global string $AFileField;
+	global string $BFileField;
 
+	string $originalFilename = `textField -q -text $originalFileField`;
+	string $AFilename = `textField -q -text $AFileField`;
+	string $BFilename = `textField -q -text $BFileField`;
 
+	file -i $originalFilename;
+	file -i $AFilename;
+	file -i $BFilename;
 
+	createNode MeshGitNode;
 
+	deleteUI -window MeshGitGUI;
+}
+
+global proc cancel()
+{
+	deleteUI -window MeshGitGUI;
+}
+
+global proc unloadMenu()
+{
+	global string $gMainFileMenu;
+	buildFileMenu();
+
+	if (`menu -ex MeshGitMenu`) deleteUI -menu MeshGitMenu;
+}

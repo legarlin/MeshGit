@@ -41,8 +41,12 @@ MStatus initializePlugin( MObject obj )
 		status.perror("registerNode");
 	}
 
-	std::cout << "SUCCESSFULLY LOADED MESGIT " << std::endl;
-	MGlobal::displayInfo("SUCCESSFULLY LOADED MESGIT");
+	//Call MELScript file
+	MString path = "source \"" + plugin.loadPath() + "/MeshGit.mel\";";
+	MGlobal::executeCommand(path);
+
+	//std::cout << "SUCCESSFULLY LOADED MESGIT " << std::endl;
+	//MGlobal::displayInfo("SUCCESSFULLY LOADED MESGIT");
 
     return status;
 }
@@ -57,8 +61,11 @@ MStatus uninitializePlugin( MObject obj)
 		status.perror("deregisterNode");
 	}
 
-	std::cout << "SUCCESSFULLY DEREGISTERED MESGIT " << std::endl;
-	MGlobal::displayInfo("SUCCESSFULLY DEREGISTERED MESGIT");
+	MString unloadCmd = "unloadMenu;";
+	MGlobal::executeCommand(unloadCmd);
+
+	//std::cout << "SUCCESSFULLY DEREGISTERED MESGIT " << std::endl;
+	//MGlobal::displayInfo("SUCCESSFULLY DEREGISTERED MESGIT");
     return status;
 }
 

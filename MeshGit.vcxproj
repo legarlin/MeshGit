@@ -49,7 +49,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(Configuration)\</OutDir>
+    <OutDir>$(ProjectDir)</OutDir>
     <TargetExt>.mll</TargetExt>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <IntDir>$(Configuration)\</IntDir>
@@ -78,7 +78,7 @@
       <AdditionalOptions>/export:initializePlugin /export:uninitializePlugin %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>Foundation.lib;OpenMaya.lib;OpenMayaUI.lib;OpenMayaAnim.lib;OpenMayaFX.lib;OpenMayaRender.lib;Image.lib;libMocap.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files\Autodesk\Maya2014\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <OutputFile>$(Configuration)\MeshGit.mll</OutputFile>
+      <OutputFile>$(ProjectDir)\MeshGit.mll</OutputFile>
       <ImportLibrary>$(Configuration)\MeshGit.lib</ImportLibrary>
       <ProgramDatabaseFile>$(Configuration)\MeshGit.pdb</ProgramDatabaseFile>
     </Link>
