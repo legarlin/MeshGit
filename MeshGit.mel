@@ -69,11 +69,38 @@ global proc load()
 	string $AFilename = `textField -q -text $AFileField`;
 	string $BFilename = `textField -q -text $BFileField`;
 
+	//Import and get the filenames
 	file -i $originalFilename;
-	file -i $AFilename;
-	file -i $BFilename;
+	select -allDagObjects;
+	string $nameFirst[] = `ls -selection`;
+	string $originalMeshName = $nameFirst[0];
 
-	createNode MeshGitNode;
+	file -i $AFilename;
+	select -allDagObjects;
+	select -deselect $originalMeshName;
+	string $nameSecond[] = `ls -selection`;
+	string $AMeshName = $nameSecond[0];
+
+	file -i $BFilename;
+	select -allDagObjects;
+	select -deselect $originalMeshName;
+	select -deselect $AMeshName;
+	string $nameThird[] = `ls -selection`;
+	string $BMeshName = $nameThird[0];
+	
+	print("Object Names in Scene");
+	print("Original 1 = " + $originalMeshName  + " ");
+	print("Original 2 = " + $AMeshName + " ");
+	print("Original 3 = " + $BMeshName + " ");
+
+	//Create the node and store the name 
+	string $nodeName = `createNode MeshGitNode`;
+	print("Created node : " + $nodeName);
+	
+	//Attach the geometries to the node
+	deformer -e -g $originalMeshName $nodeName;
+	deformer -e -g $AMeshName $nodeName;
+	deformer -e -g $BMeshName $nodeName;
 
 	deleteUI -window MeshGitGUI;
 }
