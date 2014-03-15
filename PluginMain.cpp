@@ -18,6 +18,7 @@
 
 #include "MeshGitCmd.h"
 #include "MeshGitNode.h"
+#include "MeshGitLocatorNode.h"
 
 MStatus initializePlugin( MObject obj )
 {
@@ -37,6 +38,8 @@ MStatus initializePlugin( MObject obj )
 	//Register Node
 	status = plugin.registerNode("MeshGitNode", MeshGitNode::id,
 						 MeshGitNode::creator, MeshGitNode::initialize, MPxNode::kDeformerNode);
+	status = plugin.registerNode("MeshGitLocatorNode", MeshGitLocatorNode::id,
+						 MeshGitLocatorNode::creator, MeshGitLocatorNode::initialize, MPxNode::kLocatorNode);
 	if (!status) {
 		status.perror("registerNode");
 	}
@@ -57,6 +60,7 @@ MStatus uninitializePlugin( MObject obj)
     MFnPlugin plugin( obj );
 
 	status = plugin.deregisterNode(MeshGitNode::id);
+	status = plugin.deregisterNode(MeshGitLocatorNode::id);
 	if (!status) {
 		status.perror("deregisterNode");
 	}

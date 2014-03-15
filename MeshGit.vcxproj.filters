@@ -44,12 +44,18 @@
     <ClCompile Include="MeshGitNode.cpp">
       <Filter>Source Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MeshGitLocatorNode.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MeshGitNode.h">
       <Filter>Source Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MeshGitCmd.h">
+      <Filter>Source Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshGitLocatorNode.h">
       <Filter>Source Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
