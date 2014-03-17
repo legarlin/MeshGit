@@ -28,12 +28,9 @@ MStatus initializePlugin( MObject obj )
 	
 	MString pluginPath = plugin.loadPath();
 
-	//Loading the mel file script
-	//MString cmd = "source \""+ pluginPath + "/" + "MeshGit.mel\"";
-	//MGlobal::executeCommand(cmd);
-	//	char buffer[2048];
-	//sprintf_s(buffer, 2048, "source \"%s/LSystem.mel\";", pluginPath);
-	//MGlobal::executeCommand(buffer, true);
+	//Register command
+	status = plugin.registerCommand("MeshGitCmd",
+    MeshGitCmd::creator, MeshGitCmd::newSyntax);
 
 	//Register Node
 	status = plugin.registerNode("MeshGitNode", MeshGitNode::id,
@@ -59,6 +56,7 @@ MStatus uninitializePlugin( MObject obj)
     MStatus   status = MStatus::kSuccess;
     MFnPlugin plugin( obj );
 
+	status = plugin.deregisterCommand("MeshGitCmd");
 	status = plugin.deregisterNode(MeshGitNode::id);
 	status = plugin.deregisterNode(MeshGitLocatorNode::id);
 	if (!status) {

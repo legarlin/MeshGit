@@ -12,6 +12,8 @@ public:
     static void* creator() { return new MeshGitCmd(); }
     MStatus doIt( const MArgList& args );
     static MSyntax newSyntax();
+	void connectNodes(MString nodeName, MString locatorName);
+	void reportError(MStatus status);
 
 };
 

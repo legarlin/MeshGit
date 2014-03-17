@@ -17,12 +17,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MeshGitCmd.cpp" />
+    <ClCompile Include="MeshGitFn.cpp" />
     <ClCompile Include="MeshGitLocatorNode.cpp" />
     <ClCompile Include="MeshGitNode.cpp" />
     <ClCompile Include="PluginMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MeshGitCmd.h" />
+    <ClInclude Include="MeshGitFn.h" />
     <ClInclude Include="MeshGitLocatorNode.h" />
     <ClInclude Include="MeshGitNode.h" />
   </ItemGroup>

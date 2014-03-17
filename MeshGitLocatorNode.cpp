@@ -6,11 +6,14 @@
 #include <maya/MMatrix.h>
 #include <maya/MPlugArray.h>
 #include <MeshGitLocatorNode.h>
+#include <maya/MGlobal.h>
 
 #define scopeName "MeshGitLocatorNode"
 MTypeId MeshGitLocatorNode::id(0x03AA4);
 
 using namespace std;
+MObject MeshGitLocatorNode::meshGitNodeConnection;
+
 
 void * MeshGitLocatorNode::creator() {
     return new MeshGitLocatorNode;
@@ -22,6 +25,12 @@ MStatus MeshGitLocatorNode::initialize() {
     MFnMessageAttribute msAttr;
     MFnEnumAttribute eAttr;
 
+	//Create the message attribute which connects to the MeshGitNode (connected by the cmd class) 
+	meshGitNodeConnection = msAttr.create("meshGitNodeConnection", "mgC", &status);
+    reportError(status);
+    status = addAttribute(meshGitNodeConnection);
+	reportError(status);
+  
     return status;
 }
 
@@ -51,4 +60,10 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
     glPopAttrib();
     view.endGL();
 
+}
+
+void MeshGitLocatorNode::reportError(MStatus status ){
+	if(status != MStatus::kSuccess){
+		MGlobal::displayInfo("ERROR " + status.errorString());
+	}
 }

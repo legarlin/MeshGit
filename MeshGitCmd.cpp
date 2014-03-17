@@ -1,7 +1,12 @@
+#include "MeshGitFn.h"
+#include "MeshGitLocatorNode.h"
 #include "MeshGitCmd.h"
 #include <maya/MGlobal.h>
 #include <maya/MSyntax.h>
 #include <maya/MArgDatabase.h>
+#include <maya/MPlugArray.h>
+#include <maya/MSelectionList.h>
+#include <maya/MDGModifier.h>
 #include <list>
 using namespace std;
 #include <sstream> 
@@ -10,6 +15,7 @@ using namespace std;
 const char *originalFlag = "-o", *originalLongFlag = "-original";
 const char *aFlag = "-a", *aLongFlag = "-derivativeA";
 const char *bFlag = "-b", *bLongFlag = "-derivativeB";
+const char *connectFlag = "-c", *connectLongFlag= "-connectNodes";
 
 MeshGitCmd::MeshGitCmd() : MPxCommand()
 {
@@ -31,11 +37,18 @@ MStatus MeshGitCmd::doIt( const MArgList& args )
 	MString originalFilepath = "";
 	MString aFilepath = "";
 	MString bFilepath = "";
+	MString meshGitNodeName;
+	MString locatorNodeName;
 
 	//Set flags
 	if (argData.isFlagSet(originalFlag)) { argData.getFlagArgument(originalFlag, 0, originalFilepath); }
 	if (argData.isFlagSet(aFlag)) { argData.getFlagArgument(aFlag, 0, aFilepath); }
 	if (argData.isFlagSet(bFlag)) { argData.getFlagArgument(bFlag, 0, bFilepath); }
+	if (argData.isFlagSet(connectFlag)) { 
+		argData.getFlagArgument(connectFlag, 0, meshGitNodeName); 
+		argData.getFlagArgument(connectFlag, 1, locatorNodeName);
+		connectNodes(meshGitNodeName, locatorNodeName);
+	}
 
 	MGlobal::displayInfo(originalFilepath);
 
@@ -49,7 +62,7 @@ MSyntax MeshGitCmd::newSyntax()
 	syntax.addFlag(originalFlag, originalLongFlag, MSyntax::kString);
 	syntax.addFlag(aFlag, aLongFlag, MSyntax::kString);
 	syntax.addFlag(bFlag, bLongFlag, MSyntax::kString);
-
+	syntax.addFlag(connectFlag, connectLongFlag, MSyntax::kString, MSyntax::kString);
 	return syntax;
 }
 
@@ -61,4 +74,51 @@ std::string stringify(double x)
 
  }
 
+void MeshGitCmd::connectNodes(MString nodeName, MString locatorName){
+	MGlobal::displayInfo("Connecting " + nodeName + " and " + locatorName);
+	MStatus status;
+
+	//Get Node Object
+	MSelectionList nodeList;
+	status = nodeList.add(nodeName);
+	MObject nodeObject;
+	status = nodeList.getDependNode(0, nodeObject);
+	reportError(status);
+
+	//Get Viz Object
+	MSelectionList vizList;
+	status = vizList.add(nodeName);
+	MObject vizObject;
+	status = vizList.getDependNode(0, vizObject);
+	reportError(status);
+
+	//Create Node Fn
+	MeshGitFn mgFn;
+	status = mgFn.setObject(nodeObject);
+	reportError(status);
+	
+	//Create viz fn
+	MFnDependencyNode vizFn(vizObject, &status);
+
+	//Get the node plug
+	MPlug nodePlug = mgFn.findPlug("message", true, &status);
+	reportError(status);
+
+	//Get the viz plug 
+	MPlug vizPlug = vizFn.findPlug(MeshGitLocatorNode::meshGitNodeConnection, true,
+            &status);
+
+	//Connect the plugs 
+	MDGModifier modifier;
+	status = modifier.connect(nodePlug,vizPlug);
+	reportError(status);
+	status = modifier.doIt();
+
+}
+
+void MeshGitCmd::reportError(MStatus status ){
+	if(status != MStatus::kSuccess){
+		MGlobal::displayInfo("ERROR " + status.errorString());
+	}
+}
 
