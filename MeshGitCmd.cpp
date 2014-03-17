@@ -7,6 +7,7 @@
 #include <maya/MPlugArray.h>
 #include <maya/MSelectionList.h>
 #include <maya/MDGModifier.h>
+#include <maya/MDagModifier.h>
 #include <list>
 using namespace std;
 #include <sstream> 
@@ -109,7 +110,8 @@ void MeshGitCmd::connectNodes(MString nodeName, MString locatorName){
             &status);
 
 	//Connect the plugs 
-	MDGModifier modifier;
+	
+	MDagModifier modifier;
 	status = modifier.connect(nodePlug,vizPlug);
 	reportError(status);
 	status = modifier.doIt();

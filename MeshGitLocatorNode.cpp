@@ -7,6 +7,7 @@
 #include <maya/MPlugArray.h>
 #include <MeshGitLocatorNode.h>
 #include <maya/MGlobal.h>
+#include "MeshGitFn.h"
 
 #define scopeName "MeshGitLocatorNode"
 MTypeId MeshGitLocatorNode::id(0x03AA4);
@@ -38,24 +39,52 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
                               M3dView::DisplayStyle ,
                               M3dView::DisplayStatus ) {
     MStatus status;
-    MObject thisNode = thisMObject();
+    MObject thisObject = thisMObject();
 
     
-    //Display dependency node
-    MObject thisObj = thisMObject();
-    MFnDependencyNode nodeFn(thisObj);
-    MMatrix worldToDisplay = path.inclusiveMatrixInverse(&status);
+    //Obtain the display matrix
+    MMatrix worldToDisplayViewMatrix = path.inclusiveMatrixInverse(&status);
+	reportError(status);
+	MGlobal::displayInfo("Got path matrix value");
+
+	//Getting the actual MeshGitNode Object from the plug
+	MFnDependencyNode nodeFn(thisObject);
+	MPlug plug = nodeFn.findPlug(meshGitNodeConnection, &status);
+	reportError(status);
+	MPlugArray connectedElements;
+	plug.connectedTo(connectedElements, true, false, &status);
+	reportError(status);
+	//might need to check for case where nothing is connected? but we know it will always be connected so don't worry? 
+	//Maya crashes here so check below
+	if (!connectedElements.length()){
+		MGlobal::displayInfo("No connection on viz node");
+	}
+	else{	
+		MObject meshGitNodeObject = connectedElements[0].node();
+		MGlobal::displayInfo("Got meshgitnode object");
+		//Attach a fnset to the object so that we can access what is underneath
+		MeshGitFn mgFn;
+		status = mgFn.setObject(meshGitNodeObject);
+		reportError(status);
+		MGlobal::displayInfo("Attached fnsetobject to the nodeobject");
+	}
 
     view.beginGL();
     glPushAttrib(GL_CURRENT_BIT | GL_LINE_BIT);
     glPushMatrix();
     float matrix[4][4];
-    worldToDisplay.get(matrix);
+    worldToDisplayViewMatrix.get(matrix);
     glMultMatrixf(&matrix[0][0]);
+	glPointSize(10.0f);
+    glLineWidth(10.0f);
+	glColor3f(1, 1, 0);
+	glBegin( GL_POINTS);
+	//do the drawing here!
+	 for (int v = 0; v < 100; v++) {
+		 glVertex3d(0.0, 1.0, (double)v);
+	 }
 
-    glPointSize(1.0f);
-    glLineWidth(1.0f);
-
+	 glEnd();
     glPopMatrix();
     glPopAttrib();
     view.endGL();

@@ -94,17 +94,19 @@ global proc load()
 	print("Original 3 = " + $BMeshName + " ");
 
 	//Create the meshgit node and store the name 
-	string $nodeName = `createNode MeshGitNode`;
-	print("Created node : " + $nodeName);
+	string $mainNodeName = `createNode MeshGitNode`;
+	print("Created node : " + $mainNodeName);
 	
 	//Attach the geometries to the node
-	deformer -e -g $originalMeshName $nodeName;
-	deformer -e -g $AMeshName $nodeName;
-	deformer -e -g $BMeshName $nodeName;
+	deformer -e -g $originalMeshName $mainNodeName;
+	deformer -e -g $AMeshName $mainNodeName;
+	deformer -e -g $BMeshName $mainNodeName;
 
 	//Create visualizer node
-	string $nodeName = `createNode MeshGitLocatorNode`;
+	string $vizNodeName = `createNode MeshGitLocatorNode`;
 
+	//Connect the nodes 
+	MeshGitCmd -c $vizNodeName $mainNodeName;
 
 	deleteUI -window MeshGitGUI;
 }
