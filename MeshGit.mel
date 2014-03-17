@@ -106,7 +106,7 @@ global proc load()
 	string $vizNodeName = `createNode MeshGitLocatorNode`;
 
 	//Connect the nodes 
-	MeshGitCmd -c $vizNodeName $mainNodeName;
+	MeshGitCmd -c $mainNodeName $vizNodeName;
 
 	deleteUI -window MeshGitGUI;
 }

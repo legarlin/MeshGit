@@ -88,7 +88,7 @@ void MeshGitCmd::connectNodes(MString nodeName, MString locatorName){
 
 	//Get Viz Object
 	MSelectionList vizList;
-	status = vizList.add(nodeName);
+	status = vizList.add(locatorName);
 	MObject vizObject;
 	status = vizList.getDependNode(0, vizObject);
 	reportError(status);

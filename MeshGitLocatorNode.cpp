@@ -61,7 +61,7 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	}
 	else{	
 		MObject meshGitNodeObject = connectedElements[0].node();
-		MGlobal::displayInfo("Got meshgitnode object");
+		MGlobal::displayInfo("Got meshgitnode object :"+ connectedElements[0].name());
 		//Attach a fnset to the object so that we can access what is underneath
 		MeshGitFn mgFn;
 		status = mgFn.setObject(meshGitNodeObject);

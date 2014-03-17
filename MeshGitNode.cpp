@@ -142,6 +142,8 @@ MeshGitNode::deform( MDataBlock& block,
 		pt = pt;
 		iter.setPosition(pt);
 	}
+
+
 	return returnStatus;
 }
 
