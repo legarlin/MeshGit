@@ -1,5 +1,6 @@
 #include "MeshGitFn.h"
 #include <maya/MGlobal.h>
+#include <maya/MString.h>
 
 using namespace std;
 
@@ -42,4 +43,10 @@ void MeshGitFn::reportError(MStatus status ){
 	if(status != MStatus::kSuccess){
 		MGlobal::displayInfo("ERROR " + status.errorString());
 	}
+}
+
+void MeshGitFn::getAllVerts(MPointArray &points){
+	MGlobal::displayInfo("GOING TO CALL NODE FUNCTION");
+	meshGitNode->printTEST();
+	meshGitNode->getAllVerts(points);
 }

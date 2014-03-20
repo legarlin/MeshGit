@@ -18,7 +18,7 @@
 #include <maya/MFnMeshData.h>
 #include <maya/MIOStream.h>
 #include <maya/MItGeometry.h>
-
+#include <maya/MPointArray.h>
 //HEADER
 class MeshGitNode : public MPxDeformerNode
 {
@@ -35,11 +35,15 @@ public:
 	static MObject	derivativeAMesh;
 	static MObject	derivativeBMesh;
 	static MObject	mergedMesh;
+	static MObject currentFrame;
 	static MTypeId	id;
-	
+	MPointArray allVerts;
+	void getAllVerts(MPointArray &verts);
+	void printTEST();
+	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 
 
 protected:
-
+	
 };
 //END HEADER

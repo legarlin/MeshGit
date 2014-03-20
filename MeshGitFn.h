@@ -5,6 +5,9 @@
 #include <maya/MFnDependencyNode.h>
 //#include "MeshGitNode.h"
 #include <maya/MGlobal.h>
+#include <vector>
+
+using namespace std;
 
 class MeshGitNode;
 class MeshGitFn: public MFnDependencyNode
@@ -19,6 +22,7 @@ public:
 	//over riding this method so that we can have direct access to the MeshGitFilterNode below that it is attached to!
 	virtual MStatus setObject(MObject & object);
 	MeshGitNode *meshGitNode;
-	void MeshGitFn::reportError(MStatus status );
+	void reportError(MStatus status );
+	void getAllVerts(MPointArray &points);
 };
 

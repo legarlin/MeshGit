@@ -2,7 +2,7 @@
 #define MNoPluginEntry
 #include "MeshGitNode.h"
 #include <maya/MGlobal.h>
-
+#include <maya/MString.h>
 #include "maya/MFnPlugin.h"
 #include <maya/MFnStringData.h>
 
@@ -22,6 +22,8 @@ MObject MeshGitNode::originalMesh;
 MObject MeshGitNode::derivativeAMesh;
 MObject MeshGitNode::derivativeBMesh;
 MObject MeshGitNode::mergedMesh;
+MObject MeshGitNode::currentFrame;
+
 
 MTypeId MeshGitNode::id( 0x4E5000 );
 
@@ -50,6 +52,16 @@ MStatus MeshGitNode::initialize()
 	MStatus returnStatus;
 
 	//Create the attributes
+	// Current time
+    //
+    MeshGitNode::currentFrame = unitAttr.create("currentFrame", "ct", MFnUnitAttribute::kTime, 0,
+            &returnStatus);
+    unitAttr.setKeyable(true);
+    //uAttr.setHidden(true);
+    returnStatus = addAttribute(MeshGitNode::currentFrame);
+	McheckErr(returnStatus, "ERROR adding currentFrame attribute\n");
+
+
 	MeshGitNode::originalMesh = typedAttr.create( "originalMesh", "om",
 												 MFnData::kMesh,
 												 &returnStatus ); 
@@ -82,16 +94,25 @@ MStatus MeshGitNode::initialize()
 	returnStatus = addAttribute(MeshGitNode::mergedMesh);
 	McheckErr(returnStatus, "ERROR adding mergedMesh attribute\n");
 
+
+
 	//Set the attribute affects
-	returnStatus = attributeAffects(MeshGitNode::originalMesh, MeshGitNode::mergedMesh);
+	returnStatus = attributeAffects(currentFrame, outputGeom);
+	McheckErr(returnStatus, "AttributeAffects error for 'currentFrame'");
+	returnStatus = attributeAffects(MeshGitNode::originalMesh, outputGeom);
 	McheckErr(returnStatus, "AttributeAffects error for 'blendEndFrames'");
-	returnStatus = attributeAffects(MeshGitNode::derivativeAMesh, MeshGitNode::mergedMesh);
+	returnStatus = attributeAffects(MeshGitNode::derivativeAMesh, outputGeom);
 	McheckErr(returnStatus, "AttributeAffects error for 'blendEndFrames'");
-	returnStatus = attributeAffects(MeshGitNode::derivativeBMesh, MeshGitNode::mergedMesh);
+	returnStatus = attributeAffects(MeshGitNode::derivativeBMesh, outputGeom);
 	McheckErr(returnStatus, "AttributeAffects error for 'blendEndFrames'");
 
-	std::cout << "Initialize Completed" << std::endl;
-	MGlobal::displayInfo("Initialize Completed");
+	returnStatus = attributeAffects(inputGeom, outputGeom);
+	McheckErr(returnStatus, "AttributeAffects error for 'currentFrame'");
+
+	//std::cout << "Initialize Completed" << std::endl;
+	MGlobal::displayInfo("Initialize Completed!!!!");
+
+	
 
 	return MS::kSuccess;
 }
@@ -113,6 +134,7 @@ MeshGitNode::deform( MDataBlock& block,
 //
 //
 {
+	MGlobal::displayInfo("Deformation Started: " + allVerts.length());
 	MStatus returnStatus;
 	
 	// Envelope data from the base class.
@@ -125,10 +147,13 @@ MeshGitNode::deform( MDataBlock& block,
 
 	// iterate through each point in the geometry
 	//
+	if(multiIndex==0 ||allVerts.length()>10000){
+		allVerts.clear();
+	}
 	for ( ; !iter.isDone(); iter.next()) {
 		MPoint pt = iter.position();
 		//pt *= omatinv;
-		
+		allVerts.append(pt.x,pt.y,pt.z,1.0);
 		//float weight = weightValue(block,multiIndex,iter.index());
 		
 		// offset algorithm
@@ -142,9 +167,60 @@ MeshGitNode::deform( MDataBlock& block,
 		pt = pt;
 		iter.setPosition(pt);
 	}
-
+	MGlobal::displayInfo("Num verts in node function : " + allVerts.length());
 
 	return returnStatus;
 }
 
 
+void MeshGitNode::getAllVerts(MPointArray &verts){
+	verts = allVerts;
+
+}
+
+void MeshGitNode::printTEST(){
+	MGlobal::displayInfo("TESTINGGGG");
+
+}
+
+MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
+	MStatus status = MStatus::kSuccess;
+	if(allVerts.length()>3000)
+		allVerts.clear();
+	MGlobal::displayInfo("COMPUTE CALLED!!"); 
+        if (plug.attribute() == outputGeom) {
+			
+			MGlobal::displayInfo("plug is outputgeom "); 
+                // get the input corresponding to this output
+                //
+                unsigned int index = plug.logicalIndex();
+                MObject thisNode = this->thisMObject();
+                MPlug inPlug(thisNode,input);
+                inPlug.selectAncestorLogicalIndex(index,input);
+                MDataHandle hInput = dataBlock.inputValue(inPlug);
+
+                // get the input geometry and input groupId
+                //
+                MDataHandle hGeom = hInput.child(inputGeom);
+                MDataHandle hGroup = hInput.child(groupId);
+                unsigned int groupId = hGroup.asLong();
+                MDataHandle hOutput = dataBlock.outputValue(plug);
+                hOutput.copy(hGeom);
+
+                // do the deformation
+                //
+                MItGeometry iter(hOutput,groupId,false);
+                for ( ; !iter.isDone(); iter.next()) {
+                        MPoint pt = iter.position();
+						allVerts.append(pt.x,pt.y,pt.z,1.0);
+                        //
+            // insert deformation code here
+                        //
+
+                        iter.setPosition(pt);
+                }
+                status = MStatus::kSuccess;
+        }
+		MGlobal::displayInfo("Num verts in COMPUTE function : " + allVerts.length());
+	return status;
+}

@@ -8,6 +8,7 @@
 #include <MeshGitLocatorNode.h>
 #include <maya/MGlobal.h>
 #include "MeshGitFn.h"
+#include <maya/MPointArray.h>
 
 #define scopeName "MeshGitLocatorNode"
 MTypeId MeshGitLocatorNode::id(0x03AA4);
@@ -58,16 +59,17 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	//Maya crashes here so check below
 	if (!connectedElements.length()){
 		MGlobal::displayInfo("No connection on viz node");
+		return;
 	}
-	else{	
-		MObject meshGitNodeObject = connectedElements[0].node();
-		MGlobal::displayInfo("Got meshgitnode object :"+ connectedElements[0].name());
-		//Attach a fnset to the object so that we can access what is underneath
-		MeshGitFn mgFn;
-		status = mgFn.setObject(meshGitNodeObject);
-		reportError(status);
-		MGlobal::displayInfo("Attached fnsetobject to the nodeobject");
-	}
+	
+	MObject meshGitNodeObject = connectedElements[0].node();
+	MGlobal::displayInfo("Got meshgitnode object :"+ connectedElements[0].name());
+	//Attach a fnset to the object so that we can access what is underneath
+	MeshGitFn mgFn;
+	status = mgFn.setObject(meshGitNodeObject);
+	reportError(status);
+	MGlobal::displayInfo("Attached fnsetobject to the nodeobject");
+	
 
     view.beginGL();
     glPushAttrib(GL_CURRENT_BIT | GL_LINE_BIT);
@@ -75,15 +77,29 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
     float matrix[4][4];
     worldToDisplayViewMatrix.get(matrix);
     glMultMatrixf(&matrix[0][0]);
-	glPointSize(10.0f);
-    glLineWidth(10.0f);
-	glColor3f(1, 1, 0);
+	glPointSize(6.0f);
+    glLineWidth(6.0f);
+	glColor3f(0, 1, 0);
 	glBegin( GL_POINTS);
 	//do the drawing here!
-	 for (int v = 0; v < 100; v++) {
-		 glVertex3d(0.0, 1.0, (double)v);
-	 }
 
+	 //for (int v = 0; v < 100; v++) {
+		// glVertex3d(0.0, 1.0, (double)v);
+	 //}
+	
+	MPointArray verts;
+	mgFn.getAllVerts(verts);
+	MGlobal::displayInfo("Num verts in Draw function : " + verts.length());
+	for (int v = 0; v < verts.length(); v++) {
+		if(v>verts.length()/2 && (v%10>7 || v%10<2)){
+			glColor3f(1, 0, 0);
+		}
+		else 
+			glColor3f(0, 1, 0);
+
+		MPoint currentV = verts[v];
+		glVertex3d(currentV.x,currentV.y, currentV.z);
+	}
 	 glEnd();
     glPopMatrix();
     glPopAttrib();
