@@ -5,4 +5,6 @@ public:
 	enum Type { Vertex, Face, Edge };
 
 	MeshComponent();
+
+	Type type;
 };
