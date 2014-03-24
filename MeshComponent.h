@@ -8,10 +8,8 @@ class MeshComponent {
 	vec3 pos;
 
 public:
-	enum Type { Vertex, Face, Edge };
+	enum Type { Vertex, Face, Edge } type;
 
 	MeshComponent();
 	MeshComponent(vec3 vertexPos);
-
-	Type type;
 };
