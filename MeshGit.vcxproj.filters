@@ -50,6 +50,12 @@
     <ClCompile Include="MeshGitFn.cpp">
       <Filter>Source Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentMatch.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MeshGitNode.h">
@@ -62,6 +68,15 @@
       <Filter>Source Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MeshGitFn.h">
+      <Filter>Source Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Source Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentMatch.h">
+      <Filter>Source Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchComputer.h">
       <Filter>Source Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

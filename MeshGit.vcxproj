@@ -16,6 +16,8 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ComponentMatch.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="MeshGitCmd.cpp" />
     <ClCompile Include="MeshGitFn.cpp" />
     <ClCompile Include="MeshGitLocatorNode.cpp" />
@@ -23,6 +25,9 @@
     <ClCompile Include="PluginMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ComponentMatch.h" />
+    <ClInclude Include="MatchComputer.h" />
+    <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="MeshGitCmd.h" />
     <ClInclude Include="MeshGitFn.h" />
     <ClInclude Include="MeshGitLocatorNode.h" />
