@@ -187,6 +187,10 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
 	MStatus status = MStatus::kSuccess;
 	if(allVerts.length()>3000)
 		allVerts.clear();
+
+
+
+
 	MGlobal::displayInfo("COMPUTE CALLED!!"); 
         if (plug.attribute() == outputGeom) {
 			
