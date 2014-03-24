@@ -17,6 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComponentMatch.cpp" />
+    <ClCompile Include="MatchComputer.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="MeshGitCmd.cpp" />
     <ClCompile Include="MeshGitFn.cpp" />
@@ -77,7 +78,7 @@
       <MinimalRebuild>true</MinimalRebuild>
       <BufferSecurityCheck>true</BufferSecurityCheck>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalIncludeDirectories>.;C:\Program Files\Autodesk\Maya2014\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;C:\Program Files\Autodesk\Maya2014\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(Configuration)\MeshGit.pch</PrecompiledHeaderOutputFile>
     </ClCompile>
     <Link>

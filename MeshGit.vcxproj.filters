@@ -56,6 +56,9 @@
     <ClCompile Include="ComponentMatch.cpp">
       <Filter>Source Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MatchComputer.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MeshGitNode.h">
