@@ -15,6 +15,7 @@ class ComponentMatch {
 
 public:
 	ComponentMatch(MeshComponent &a, MeshComponent&b);
+	ComponentMatch();
 
 	void addGeometricCost();
 	void addAdjacencyCost();

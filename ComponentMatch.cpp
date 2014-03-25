@@ -20,6 +20,8 @@ ComponentMatch::ComponentMatch(MeshComponent &originalComponent, MeshComponent&d
 	}
 
 }
+ComponentMatch::ComponentMatch() { 
+}
 
 void ComponentMatch::addAdjacencyCost() { 
 	double adjCost = 0.0;

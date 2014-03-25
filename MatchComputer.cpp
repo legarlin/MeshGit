@@ -114,8 +114,34 @@ void MatchComputer::swap(int a, int b, vector<ComponentMatch> &data) {
 void MatchComputer::matchGreedy() {
 	
 	//pick lowest cost match from all costs
-	
+	ComponentMatch lowestMatch = getAndRemoveLowestComponentMatch();
 
 
+
+
+}
+
+//Will replace this with the minheap above later
+ComponentMatch& MatchComputer::getAndRemoveLowestComponentMatch(){
+
+	double lowestCost=9999;
+	ComponentMatch lowestMatch;
+	int lowestIndex=-1;
+	for(int i = 0; i <allComponentMatches.size(); i++){
+		double currentCost = allComponentMatches[i].getCost();
+		if(currentCost<lowestCost){
+			lowestMatch=allComponentMatches[i];
+			lowestIndex=i;
+			lowestCost=currentCost;
+		}
+	}
+
+	//this only happens allComponentMatches was empty, it shouldnt be
+	if(lowestIndex==-1)
+		return lowestMatch;
+
+	//Remove the lowest match from the vector
+	allComponentMatches.erase(allComponentMatches.begin()+lowestIndex);
+	return lowestMatch;
 
 }
