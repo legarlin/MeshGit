@@ -19,6 +19,9 @@
 #include <maya/MIOStream.h>
 #include <maya/MItGeometry.h>
 #include <maya/MPointArray.h>
+#include <vector>
+
+
 //HEADER
 class MeshGitNode : public MPxDeformerNode
 {
@@ -37,11 +40,18 @@ public:
 	static MObject	mergedMesh;
 	static MObject currentFrame;
 	static MTypeId	id;
-	MPointArray allVerts;
-	void getAllVerts(MPointArray &verts);
-	void printTEST();
-	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
+	
+	std::vector<MPointArray> allVerts;
+	void getAllVerts(std::vector<MPointArray> &verts);
 
+	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
+	MStatus storeAllVerts(MDataBlock& dataBlock);
+	
+
+	//PRINTING AND DEBUGGING FUNCTIONS
+	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);
+	void printTEST();
+	void reportError(MStatus status);
 
 protected:
 	

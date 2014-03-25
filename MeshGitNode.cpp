@@ -5,7 +5,7 @@
 #include <maya/MString.h>
 #include "maya/MFnPlugin.h"
 #include <maya/MFnStringData.h>
-
+#include <string>
 
 #define McheckErr(stat,msg)			\
 	if ( MS::kSuccess != stat ) {	\
@@ -117,6 +117,62 @@ MStatus MeshGitNode::initialize()
 	return MS::kSuccess;
 }
 
+MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock){
+	MStatus status;
+		MGlobal::displayInfo("Starting storeAllVerts");
+
+	    //Gets the handle to the output geometry
+	    MArrayDataHandle ouputGeomHandle = dataBlock.outputArrayValue(outputGeom,
+            &status);
+		reportError(status);
+
+		//Gets the number of geometries on the handle - should be 3
+		unsigned int numGeom = ouputGeomHandle.elementCount(&status);
+		reportError(status);
+		allVerts.clear();
+		allVerts.resize(numGeom);
+		
+		//Get the input handle
+		MArrayDataHandle inputHandle = dataBlock.outputArrayValue(input, &status);
+		reportError(status);
+
+		for(unsigned int i=0; i<numGeom; i++){
+			MGlobal::displayInfo("Storing Geom " + i);
+			//get the element index that the current geom is in the datablock
+			int geomIndex = ouputGeomHandle.elementIndex(&status);
+
+			//go tot he correct geometry in the input geometry handle
+			status = inputHandle.jumpToElement(geomIndex);
+			reportError(status);
+
+			////get the value of the geometry
+			MDataHandle inputGeomValue = inputHandle.inputValue(&status);
+			reportError(status);
+			
+			//Get the input geometry handle, and the group id as well 
+			MDataHandle hGeom = inputGeomValue.child(inputGeom);
+            MDataHandle hGroup = inputGeomValue.child(groupId);
+            unsigned int groupId = hGroup.asLong();
+
+			////Get the output geometry handle output value
+			MDataHandle hOutputGeomValue = ouputGeomHandle.outputValue(&status);
+
+			////Copy over the data rfom the input to the output
+			status = hOutputGeomValue.copy(hGeom);
+
+			////set an iterator over all points in the current input geometry and copy all the points into the all verts data structure
+			MItGeometry iter(hOutputGeomValue, groupId, false);
+			allVerts[i].clear();
+			iter.allPositions(allVerts[i], MSpace::kWorld);
+			ouputGeomHandle.next();
+
+		}
+
+		ouputGeomHandle.setAllClean();
+		MGlobal::displayInfo("Ending storeAllVerts");
+	return status;
+}
+
 
 MStatus
 MeshGitNode::deform( MDataBlock& block,
@@ -134,7 +190,7 @@ MeshGitNode::deform( MDataBlock& block,
 //
 //
 {
-	MGlobal::displayInfo("Deformation Started: " + allVerts.length());
+	MGlobal::displayInfo("Deformation Started: num geoms = " + allVerts.size());
 	MStatus returnStatus;
 	
 	// Envelope data from the base class.
@@ -147,84 +203,115 @@ MeshGitNode::deform( MDataBlock& block,
 
 	// iterate through each point in the geometry
 	//
-	if(multiIndex==0 ||allVerts.length()>10000){
-		allVerts.clear();
-	}
-	for ( ; !iter.isDone(); iter.next()) {
-		MPoint pt = iter.position();
-		//pt *= omatinv;
-		allVerts.append(pt.x,pt.y,pt.z,1.0);
-		//float weight = weightValue(block,multiIndex,iter.index());
-		
-		// offset algorithm
-		//
-		//pt.y = pt.y + env*weight;
-		//
-		// end of offset algorithm
+	//if(multiIndex==0 ||allVerts.length()>10000){
+	//	allVerts.clear();
+	//}
+	//for ( ; !iter.isDone(); iter.next()) {
+	//	MPoint pt = iter.position();
+	//	//pt *= omatinv;
+	//	allVerts.append(pt.x,pt.y,pt.z,1.0);
+	//	//float weight = weightValue(block,multiIndex,iter.index());
+	//	
+	//	// offset algorithm
+	//	//
+	//	//pt.y = pt.y + env*weight;
+	//	//
+	//	// end of offset algorithm
 
-		//pt *= omat
-		//MPoint pt = 
-		pt = pt;
-		iter.setPosition(pt);
-	}
-	MGlobal::displayInfo("Num verts in node function : " + allVerts.length());
+	//	//pt *= omat
+	//	//MPoint pt = 
+	//	pt = pt;
+	//	iter.setPosition(pt);
+	//}
+	//MGlobal::displayInfo("Num verts in node function : " + allVerts.length());
 
 	return returnStatus;
 }
 
 
-void MeshGitNode::getAllVerts(MPointArray &verts){
+void MeshGitNode::getAllVerts(std::vector<MPointArray> &verts){
 	verts = allVerts;
 
 }
 
-void MeshGitNode::printTEST(){
-	MGlobal::displayInfo("TESTINGGGG");
 
-}
 
 MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
 	MStatus status = MStatus::kSuccess;
-	if(allVerts.length()>3000)
-		allVerts.clear();
-
-
-
+	//if(allVerts.length()>3000)
+	//	allVerts.clear();
 
 	MGlobal::displayInfo("COMPUTE CALLED!!"); 
         if (plug.attribute() == outputGeom) {
 			
 			MGlobal::displayInfo("plug is outputgeom "); 
+
+			storeAllVerts(dataBlock);
                 // get the input corresponding to this output
                 //
-                unsigned int index = plug.logicalIndex();
-                MObject thisNode = this->thisMObject();
-                MPlug inPlug(thisNode,input);
-                inPlug.selectAncestorLogicalIndex(index,input);
-                MDataHandle hInput = dataBlock.inputValue(inPlug);
+                //unsigned int index = plug.logicalIndex();
+                //MObject thisNode = this->thisMObject();
+                //MPlug inPlug(thisNode,input);
+                //inPlug.selectAncestorLogicalIndex(index,input);
+                //MDataHandle hInput = dataBlock.inputValue(inPlug);
 
-                // get the input geometry and input groupId
-                //
-                MDataHandle hGeom = hInput.child(inputGeom);
-                MDataHandle hGroup = hInput.child(groupId);
-                unsigned int groupId = hGroup.asLong();
-                MDataHandle hOutput = dataBlock.outputValue(plug);
-                hOutput.copy(hGeom);
+                //// get the input geometry and input groupId
+                ////
+                //MDataHandle hGeom = hInput.child(inputGeom);
+                //MDataHandle hGroup = hInput.child(groupId);
+                //unsigned int groupId = hGroup.asLong();
+                //MDataHandle hOutput = dataBlock.outputValue(plug);
+                //hOutput.copy(hGeom);
 
                 // do the deformation
                 //
-                MItGeometry iter(hOutput,groupId,false);
-                for ( ; !iter.isDone(); iter.next()) {
-                        MPoint pt = iter.position();
-						allVerts.append(pt.x,pt.y,pt.z,1.0);
-                        //
-            // insert deformation code here
-                        //
+      //          MItGeometry iter(hOutput,groupId,false);
+      //          for ( ; !iter.isDone(); iter.next()) {
+      //                  MPoint pt = iter.position();
+						//allVerts.append(pt.x,pt.y,pt.z,1.0);
+      //                  //
+      //      // insert deformation code here
+      //                  //
 
-                        iter.setPosition(pt);
-                }
+      //                  iter.setPosition(pt);
+      //          }
                 status = MStatus::kSuccess;
         }
-		MGlobal::displayInfo("Num verts in COMPUTE function : " + allVerts.length());
+
+		MGlobal::displayInfo("Num geometries at end of COMPUTE function : " + allVerts.size());
 	return status;
+}
+
+
+//PRINTING AND DEBUGGING FUNCTIONS
+
+void MeshGitNode::reportError(MStatus status ){
+	if(status != MStatus::kSuccess){
+		MGlobal::displayInfo("ERROR in MeshGitDeformerNode " + status.errorString());
+	}
+}
+void MeshGitNode::printTEST(){
+	MGlobal::displayInfo("TESTINGGGG");
+
+}
+
+void MeshGitNode::printVectorOfPoints(MString name, std::vector<MPointArray> &points){
+	MGlobal::displayInfo(name);
+	for(int i = 0; i <points.size(); i ++){
+		for(int j = 0; j <points[i].length(); j ++){
+			double x = points[i][j].x;
+			double y = points[i][j].y;
+			double z = points[i][j].z;
+			//std::string toPrint = "g" + i + std::string("v") + j + std::string("[") + x + std::string(",") + y + std::string(",") + z + std::string("]");
+			MString toPrint2 = "g" + i ;//+ "v" + j + "[" + x + "," + y + "," + z + "]";
+			toPrint2 += "v" + j;
+			toPrint2 +="[" + (int)x;
+			toPrint2 +="," +(int) y ;
+			toPrint2 +="," +(int) z ;
+			toPrint2 +="]";
+			//MGlobal::displayInfo("POINT");
+			MGlobal::displayInfo(toPrint2);
+		}
+	}
+
 }

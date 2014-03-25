@@ -87,18 +87,22 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 		// glVertex3d(0.0, 1.0, (double)v);
 	 //}
 	
-	MPointArray verts;
+	std::vector<MPointArray> verts;
 	mgFn.getAllVerts(verts);
-	MGlobal::displayInfo("Num verts in Draw function : " + verts.length());
-	for (int v = 0; v < verts.length(); v++) {
-		if(v>verts.length()/2 && (v%10>7 || v%10<2)){
-			glColor3f(1, 0, 0);
-		}
-		else 
-			glColor3f(0, 1, 0);
+	MGlobal::displayInfo("Num verts in Draw function : " + verts.size());
+	for (int g = 0; g < verts.size(); g++){
+		for (int v = 0; v < verts[g].length(); v++) {
+			if(g==0){
+				glColor3f(1, 0, 0);
+			}
+			else if(g==1)
+				glColor3f(0, 1, 0);
+			else if(g==2)
+				glColor3f(0, 0, 1);
 
-		MPoint currentV = verts[v];
-		glVertex3d(currentV.x,currentV.y, currentV.z);
+			MPoint currentV = verts[g][v];
+			glVertex3d(currentV.x,currentV.y, currentV.z);
+		}
 	}
 	 glEnd();
     glPopMatrix();

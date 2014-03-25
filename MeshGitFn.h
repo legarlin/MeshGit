@@ -23,6 +23,6 @@ public:
 	virtual MStatus setObject(MObject & object);
 	MeshGitNode *meshGitNode;
 	void reportError(MStatus status );
-	void getAllVerts(MPointArray &points);
+	void getAllVerts(std::vector<MPointArray> &points);
 };
 

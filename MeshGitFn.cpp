@@ -45,8 +45,7 @@ void MeshGitFn::reportError(MStatus status ){
 	}
 }
 
-void MeshGitFn::getAllVerts(MPointArray &points){
-	MGlobal::displayInfo("GOING TO CALL NODE FUNCTION");
+void MeshGitFn::getAllVerts(std::vector<MPointArray> &points){
 	meshGitNode->printTEST();
 	meshGitNode->getAllVerts(points);
 }
