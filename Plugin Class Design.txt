@@ -26,12 +26,12 @@ Class MatchComputer  //does all the work
 	Greedy Algorithm
 		
 		
-		Create N*N ComponentMatch objects, i.e. match all vertices in meshA with all vertices in meshB and put them in a minHeap which sorts it by cost 
+		Create N1*N2 ComponentMatch objects, i.e. match all vertices in meshA with all vertices in meshB and put them in a minHeap which sorts it by cost 
+		Create N1 + N2 componentMatch objects which have deletion/addition costs and put them all into the lowestMatchesVector
+		Store the above in allComponentMatches vector
 		
 		
-		Initialize cost of everything deleted - basically it will be the cost of adding a vertex * number of vertices initially
-			Alternatively could create N componentMatch objects which have deletion/addition costs and put them all into the lowestMatchesVector
-			Each iteration we find which match in the vector the new match is going to replace - remove that and add this new one
+		Each iteration we find which match in the vector the new match is going to replace - remove that and add this new one
 			
 		
 		iteration step:

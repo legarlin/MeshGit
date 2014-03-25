@@ -29,4 +29,6 @@ public:
 	void makeComponentMatches();
 	void makeComponents(MPointArray &meshVerts1, MPointArray &meshVerts2);
 	void matchGreedy();
+
+	
 };

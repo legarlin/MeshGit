@@ -1,8 +1,5 @@
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent() {
-}
-
 MeshComponent::MeshComponent(MPoint vertexPos) {
 	pos = vertexPos;
 	type = VERTEX;
@@ -10,4 +7,5 @@ MeshComponent::MeshComponent(MPoint vertexPos) {
 
 MeshComponent::MeshComponent() {
 	type = EMPTY;
+	//TODO Check if this is actually set
 }

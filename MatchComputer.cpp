@@ -13,34 +13,57 @@ MatchComputer::MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2) {
 
 
 void MatchComputer::makeComponents(MPointArray &meshVerts1, MPointArray &meshVerts2){
-		//Convert verts into components and store them , not doing faces yet
+	//Convert verts into components and store them , not doing faces yet
 	for (unsigned int i = 0; i < meshVerts1.length(); i++) {
 		MeshComponent component(meshVerts1[i]);//is it okay that these aren't pointers?
-		component.type = MeshComponent::Vertex;
 		originalMeshComponents.push_back(component);
 	}
 
 	for (unsigned int i = 0; i < meshVerts2.length(); i++) {
 		MeshComponent component(meshVerts2[i]);
-		component.type = MeshComponent::Vertex;
 		derivativeMeshComponents.push_back(component);
 	}
+
+
 }
 
 
 void MatchComputer::makeComponentMatches(){
 
+	//Create all pairings betewen original components and deriv components, place them into allComponentMatches
+	//these will replace some of the unmatched ones from the next step
 	for (int i = 0; i < originalMeshComponents.size() ; i++){
 		for (int j = 0; j < derivativeMeshComponents.size() ; j++){
 			MeshComponent currentCompA = originalMeshComponents[i];
-			MeshComponent currentCompB = derivativeMeshComponents[i];
+			MeshComponent currentCompB = derivativeMeshComponents[j];
 
 			ComponentMatch newCompMatch(currentCompA,currentCompB);
 			allComponentMatches.push_back(newCompMatch);
 		}
 	}
 
+	//Create all unmatched componentMatches and add them into lowestComponentMatches
+	//initially everything is unmatched!
+	for (int i = 0; i < originalMeshComponents.size(); i++){
+		MeshComponent currentCompA = originalMeshComponents[i];
+		MeshComponent emptyComp;
+		emptyComp.type = MeshComponent::EMPTY;
+		ComponentMatch newCompMatch(currentCompA,emptyComp);
+		lowestComponentMatches.push_back(newCompMatch);
+	}
+	for (int j = 0; j < derivativeMeshComponents.size(); j++){
+		MeshComponent currentCompB = derivativeMeshComponents[j];
+		MeshComponent emptyComp;
+		emptyComp.type = MeshComponent::EMPTY;
+		ComponentMatch newCompMatch(emptyComp,currentCompB);
+		lowestComponentMatches.push_back(newCompMatch);
+	}
+
 }
+
+
+
+
 
 void MatchComputer::makeHeap(vector<ComponentMatch> &data) {
 	int index = (int) data.size() / 2 - 1;
@@ -89,5 +112,10 @@ void MatchComputer::swap(int a, int b, vector<ComponentMatch> &data) {
 }
 
 void MatchComputer::matchGreedy() {
-	// make min heap but associate it to cost	
+	
+	//pick lowest cost match from all costs
+	
+
+
+
 }
