@@ -21,10 +21,10 @@ void MatchComputer::makeComponents(MPointArray &meshVerts1, MPointArray &meshVer
 
 	for (unsigned int i = 0; i < meshVerts2.length(); i++) {
 		MeshComponent component(meshVerts2[i]);
-		derivativeMeshComponents.push_back(component);
+		derivativeMeshComponents.push_back(component);	
 	}
 
-
+	numUnmatched = originalMeshComponents.size() + derivativeMeshComponents.size();
 }
 
 
@@ -42,22 +42,24 @@ void MatchComputer::makeComponentMatches(){
 		}
 	}
 
-	//Create all unmatched componentMatches and add them into lowestComponentMatches
-	//initially everything is unmatched!
-	for (int i = 0; i < originalMeshComponents.size(); i++){
-		MeshComponent currentCompA = originalMeshComponents[i];
-		MeshComponent emptyComp;
-		emptyComp.type = MeshComponent::EMPTY;
-		ComponentMatch newCompMatch(currentCompA,emptyComp);
-		lowestComponentMatches.push_back(newCompMatch);
-	}
-	for (int j = 0; j < derivativeMeshComponents.size(); j++){
-		MeshComponent currentCompB = derivativeMeshComponents[j];
-		MeshComponent emptyComp;
-		emptyComp.type = MeshComponent::EMPTY;
-		ComponentMatch newCompMatch(emptyComp,currentCompB);
-		lowestComponentMatches.push_back(newCompMatch);
-	}
+
+	//COMMENTED OUT, CHANGED IT SO THAT UNMATCHED COSTS ARE TAKEN ACCOUNT OF IN THE COMPUTE COST METHOD
+	//Create all unmatched componentMatches and add them into allComponentMatches
+	//these matches are still valid, and might be better initially
+	//for (int i = 0; i < originalMeshComponents.size(); i++){
+	//	MeshComponent currentCompA = originalMeshComponents[i];
+	//	MeshComponent emptyComp;
+	//	emptyComp.type = MeshComponent::EMPTY;
+	//	ComponentMatch newCompMatch(currentCompA,emptyComp);
+	//	allComponentMatches.push_back(newCompMatch);
+	//}
+	//for (int j = 0; j < derivativeMeshComponents.size(); j++){
+	//	MeshComponent currentCompB = derivativeMeshComponents[j];
+	//	MeshComponent emptyComp;
+	//	emptyComp.type = MeshComponent::EMPTY;
+	//	ComponentMatch newCompMatch(emptyComp,currentCompB);
+	//	allComponentMatches.push_back(newCompMatch);
+	//}
 
 }
 
@@ -112,17 +114,68 @@ void MatchComputer::swap(int a, int b, vector<ComponentMatch> &data) {
 }
 
 void MatchComputer::matchGreedy() {
-	
+	if(allComponentMatches.size()==0)
+		return;
+
+	//Calculate old cost 
+	double oldCost = computeCost(bestComponentMatches,numUnmatched);
+
 	//Pick lowest cost match from all costs
 	ComponentMatch lowestMatch = getAndRemoveLowestComponentMatch();
+	//Check if lowestMatch components are already in lowestComponents - do we need to do this? 
+	//if so go to next iteration since they were already assigned
+	if(areMatchComponentsInVector(lowestMatch, bestComponentMatches)){
+		return matchGreedy();
 
-	//Find out which current lowest matches have the components from the lowestMatch above
-	MeshComponent lowestCompA = lowestMatch.originalComp;
-	MeshComponent lowestCompB = lowestMatch.derivativeComp;
+	}
+	
+	//Find out total cost of using this new match
+	vector<ComponentMatch> newBestComponentMatches(bestComponentMatches);	//make copy of lowestComponentMatches
+	newBestComponentMatches.push_back(lowestMatch);	//insert new lowestMatch
+	//compute possible new cost
+	double newCost = computeCost(newBestComponentMatches,numUnmatched-2);
+	
+	//COMPARE THE OLD AND NEW COSTS
+	if(newCost<oldCost){
+		//copy over the new lowest matches etc . 
+		bestComponentMatches = newBestComponentMatches;
+		numUnmatched= numUnmatched-2;
+
+		//go to next iteration
+		return matchGreedy();
+	}
+	    
+
+	//if not them end the greedy algorithm	
+}
 
 
+bool MatchComputer::areMatchComponentsInVector(ComponentMatch match, vector<ComponentMatch> matches){
+	MeshComponent compA = match.originalComp;
+	MeshComponent compB = match.derivativeComp;
+	
+	for(int i= 0 ; i<matches.size(); i ++){
+		ComponentMatch current = matches[i];
+		if(compA.isEqualTo(current.originalComp) || compB.isEqualTo(current.derivativeComp))
+			return true;
+	}
+
+	return false; 
+}
 
 
+double MatchComputer::computeCost(vector<ComponentMatch> matches, int numUnmatchedArg){
+	double cost = 0.0;
+
+	//All the matched costs
+	for(int i = 0; i<matches.size(); i++){
+		cost += matches[i].getCost();
+	}
+
+	//All the unmatched costs
+	cost += numUnmatchedArg*1.0;
+
+	return cost; 
 }
 
 //Will replace this with the minheap above later
