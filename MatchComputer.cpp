@@ -6,26 +6,44 @@ MatchComputer::MatchComputer() { }
 
 MatchComputer::MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2) {
 
-	//Convert into components and store them 
-	for (int i = 0; i < meshVerts1.length(); i++) {
-		MeshComponent component(meshVerts1[i]);
+	makeComponents(meshVerts1,meshVerts2);
+	makeComponentMatches();
+
+}
+
+
+void MatchComputer::makeComponents(MPointArray &meshVerts1, MPointArray &meshVerts2){
+		//Convert verts into components and store them , not doing faces yet
+	for (unsigned int i = 0; i < meshVerts1.length(); i++) {
+		MeshComponent component(meshVerts1[i]);//is it okay that these aren't pointers?
 		component.type = MeshComponent::Vertex;
 		originalMeshComponents.push_back(component);
 	}
 
-	for (int i = 0; i < meshVerts2.length(); i++) {
+	for (unsigned int i = 0; i < meshVerts2.length(); i++) {
 		MeshComponent component(meshVerts2[i]);
 		component.type = MeshComponent::Vertex;
 		derivativeMeshComponents.push_back(component);
 	}
+}
 
-	//originalMeshComponents=meshVerts1;
-	//derivativeMeshComponents=meshVerts2;
+
+void MatchComputer::makeComponentMatches(){
+
+	for (int i = 0; i < originalMeshComponents.size() ; i++){
+		for (int j = 0; j < derivativeMeshComponents.size() ; j++){
+			MeshComponent currentCompA = originalMeshComponents[i];
+			MeshComponent currentCompB = derivativeMeshComponents[i];
+
+			ComponentMatch newCompMatch(currentCompA,currentCompB);
+			allComponentMatches.push_back(newCompMatch);
+		}
+	}
+
 }
 
 void MatchComputer::makeHeap(vector<ComponentMatch> &data) {
 	int index = (int) data.size() / 2 - 1;
-
 	for (int i = index; i >= 0; i--) {
 		heapify(i, data);
 	}

@@ -11,15 +11,15 @@ class ComponentMatch {
 	MeshComponent originalComp;
 	MeshComponent derivativeComp;
 
-	float cost;
+	double cost;
 
 public:
-	ComponentMatch();
+	ComponentMatch(MeshComponent &a, MeshComponent&b);
 
-	void computeGeometricCost();
-	void computeAdjacencyCost();
+	void addGeometricCost();
+	void addAdjacencyCost();
 
 	Match getMatches();
 
-	float getCost();
+	double getCost();
 };

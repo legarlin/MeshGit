@@ -26,6 +26,7 @@ class MatchComputer {
 public:
 	MatchComputer();
 	MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2);
-
+	void makeComponentMatches();
+	void makeComponents(MPointArray &meshVerts1, MPointArray &meshVerts2);
 	void matchGreedy();
 };

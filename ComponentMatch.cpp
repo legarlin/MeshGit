@@ -1,10 +1,24 @@
 #include "ComponentMatch.h"
 
-ComponentMatch::ComponentMatch() { }
+ComponentMatch::ComponentMatch(MeshComponent &a, MeshComponent&b) { 
+	originalComp = a;
+	derivativeComp = b;
 
-void ComponentMatch::computeAdjacencyCost() { }
+	if(originalComp.type==MeshComponent::Vertex && originalComp.type==MeshComponent::Vertex){
 
-void ComponentMatch::computeGeometricCost() { }
+		
+	}
+
+}
+
+void ComponentMatch::addAdjacencyCost() { 
+
+	double geomCost = 0.0;
+
+
+}
+
+void ComponentMatch::addGeometricCost() { }
 
 Match ComponentMatch::getMatches() {
 	Match match;
@@ -14,6 +28,6 @@ Match ComponentMatch::getMatches() {
 	return match;
 }
 
-float ComponentMatch::getCost() {
+double ComponentMatch::getCost() {
 	return cost;
 }
