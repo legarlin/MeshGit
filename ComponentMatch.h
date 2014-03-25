@@ -8,14 +8,15 @@ struct Match {
 };
 
 class ComponentMatch {
-	MeshComponent originalComp;
-	MeshComponent derivativeComp;
+
 
 	double cost;
 
 public:
 	ComponentMatch(MeshComponent &a, MeshComponent&b);
 	ComponentMatch();
+	MeshComponent originalComp;
+	MeshComponent derivativeComp;
 
 	void addGeometricCost();
 	void addAdjacencyCost();

@@ -116,7 +116,9 @@ void MatchComputer::matchGreedy() {
 	//Pick lowest cost match from all costs
 	ComponentMatch lowestMatch = getAndRemoveLowestComponentMatch();
 
-	//Find out which current lowest matches have the components from both
+	//Find out which current lowest matches have the components from the lowestMatch above
+	MeshComponent lowestCompA = lowestMatch.originalComp;
+	MeshComponent lowestCompB = lowestMatch.derivativeComp;
 
 
 
