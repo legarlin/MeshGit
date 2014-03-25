@@ -8,8 +8,8 @@ void ComponentMatch::computeGeometricCost() { }
 
 Match ComponentMatch::getMatches() {
 	Match match;
-	match.thing1 = thing1;
-	match.thing2 = thing2;
+	match.originalComp = originalComp;
+	match.derivativeComp = derivativeComp;
 
 	return match;
 }

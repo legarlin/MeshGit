@@ -4,19 +4,23 @@
 
 MatchComputer::MatchComputer() { }
 
-MatchComputer::MatchComputer(vector<vec3> meshVerts1, vector<vec3> meshVerts2) {
+MatchComputer::MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2) {
 
-	for (int i = 0; i < meshVerts1.size(); i++) {
+	//Convert into components and store them 
+	for (int i = 0; i < meshVerts1.length(); i++) {
 		MeshComponent component(meshVerts1[i]);
 		component.type = MeshComponent::Vertex;
-		thing1things.push_back(component);
+		originalMeshComponents.push_back(component);
 	}
 
-	for (int i = 0; i < meshVerts2.size(); i++) {
+	for (int i = 0; i < meshVerts2.length(); i++) {
 		MeshComponent component(meshVerts2[i]);
 		component.type = MeshComponent::Vertex;
-		thing2things.push_back(component);
+		derivativeMeshComponents.push_back(component);
 	}
+
+	//originalMeshComponents=meshVerts1;
+	//derivativeMeshComponents=meshVerts2;
 }
 
 void MatchComputer::makeHeap(vector<ComponentMatch> &data) {

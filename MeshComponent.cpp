@@ -3,6 +3,6 @@
 MeshComponent::MeshComponent() {
 }
 
-MeshComponent::MeshComponent(vec3 vertexPos) {
+MeshComponent::MeshComponent(MPoint vertexPos) {
 	pos = vertexPos;
 }

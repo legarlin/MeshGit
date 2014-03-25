@@ -1,15 +1,17 @@
 #pragma once
 
 #include "glm\glm.hpp"
+#include <maya/MPointArray.h>
+#include <maya/MPoint.h>
 
 using namespace glm;
 
 class MeshComponent {
-	vec3 pos;
+	MPoint pos;
 
 public:
 	enum Type { Vertex, Face, Edge } type;
 
 	MeshComponent();
-	MeshComponent(vec3 vertexPos);
+	MeshComponent(MPoint vertexPos);
 };

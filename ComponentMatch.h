@@ -3,13 +3,13 @@
 #include "MeshComponent.h"
 
 struct Match {
-	MeshComponent thing1;
-	MeshComponent thing2;
+	MeshComponent originalComp;
+	MeshComponent derivativeComp;
 };
 
 class ComponentMatch {
-	MeshComponent thing1;
-	MeshComponent thing2;
+	MeshComponent originalComp;
+	MeshComponent derivativeComp;
 
 	float cost;
 

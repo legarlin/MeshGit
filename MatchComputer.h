@@ -5,14 +5,15 @@
 #include "ComponentMatch.h"
 #include "MeshComponent.h"
 #include "glm\glm.hpp"
+#include <maya/MPointArray.h>
 
 using namespace std;
 using namespace glm;
 
 class MatchComputer {
 
-	vector<MeshComponent> thing1things; // lol awful names.
-	vector<MeshComponent> thing2things;
+	vector<MeshComponent> originalMeshComponents; // lol awful names.
+	vector<MeshComponent> derivativeMeshComponents;
 
 	float totalCost;
 	vector<ComponentMatch> lowestComponentMatches;
@@ -24,7 +25,7 @@ class MatchComputer {
 
 public:
 	MatchComputer();
-	MatchComputer(vector<vec3> meshVerts1, vector<vec3> meshVerts2);
+	MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2);
 
 	void matchGreedy();
 };
