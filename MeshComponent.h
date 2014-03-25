@@ -7,10 +7,10 @@
 using namespace glm;
 
 class MeshComponent {
-	MPoint pos;
+	public MPoint pos;
 
 public:
-	enum Type { Vertex, Face, Edge } type;
+	enum Type { VERTEX, FACE, EDGE, EMPTY } type;
 
 	MeshComponent();
 	MeshComponent(MPoint vertexPos);
