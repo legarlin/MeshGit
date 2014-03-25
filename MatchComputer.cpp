@@ -113,8 +113,10 @@ void MatchComputer::swap(int a, int b, vector<ComponentMatch> &data) {
 
 void MatchComputer::matchGreedy() {
 	
-	//pick lowest cost match from all costs
+	//Pick lowest cost match from all costs
 	ComponentMatch lowestMatch = getAndRemoveLowestComponentMatch();
+
+	//Find out which current lowest matches have the components from both
 
 
 
@@ -122,7 +124,7 @@ void MatchComputer::matchGreedy() {
 }
 
 //Will replace this with the minheap above later
-ComponentMatch& MatchComputer::getAndRemoveLowestComponentMatch(){
+ComponentMatch MatchComputer::getAndRemoveLowestComponentMatch(){
 
 	double lowestCost=9999;
 	ComponentMatch lowestMatch;
@@ -142,6 +144,6 @@ ComponentMatch& MatchComputer::getAndRemoveLowestComponentMatch(){
 
 	//Remove the lowest match from the vector
 	allComponentMatches.erase(allComponentMatches.begin()+lowestIndex);
-	return lowestMatch;
+	return lowestMatch;//does deleting it mean this still exists?
 
 }

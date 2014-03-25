@@ -59,3 +59,11 @@ double ComponentMatch::getCost() {
 	return cost;
 }
 
+bool ComponentMatch::isEqualTo(ComponentMatch other){
+	//TO DO - expand for faces case as well 
+	if(originalComp.isEqualTo(other.originalComp) && 
+		(derivativeComp.isEqualTo(other.derivativeComp))){
+			return true;
+	}
+	return false;
+}

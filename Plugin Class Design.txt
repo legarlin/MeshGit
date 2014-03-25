@@ -30,7 +30,6 @@ Class MatchComputer  //does all the work
 		Create N1 + N2 componentMatch objects which have deletion/addition costs and put them all into the lowestMatchesVector
 		Store the above in allComponentMatches vector
 		
-		
 		Each iteration we find which match in the vector the new match is going to replace - remove that and add this new one
 			
 		

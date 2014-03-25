@@ -14,5 +14,6 @@ public:
 	MPoint pos;
 	MeshComponent();
 	MeshComponent(MPoint vertexPos);
+	bool isEqualTo(MeshComponent other);
 
 };

@@ -19,7 +19,7 @@ public:
 
 	void addGeometricCost();
 	void addAdjacencyCost();
-
+	bool isEqualTo(ComponentMatch other);
 	Match getMatches();
 
 	double getCost();
