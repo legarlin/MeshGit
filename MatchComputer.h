@@ -18,6 +18,10 @@ class MatchComputer {
 	vector<ComponentMatch> lowestComponentMatches;
 	vector<ComponentMatch> allComponentMatches; // all possible matches
 
+	void makeHeap(vector<ComponentMatch> &data); // make heap, wrapper function
+	void heapify(int index, vector<ComponentMatch> &data);
+	void swap(int index1, int index2, vector<ComponentMatch> &data);
+
 public:
 	MatchComputer();
 	MatchComputer(vector<vec3> meshVerts1, vector<vec3> meshVerts2);

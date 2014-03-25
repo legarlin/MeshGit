@@ -13,3 +13,7 @@ Match ComponentMatch::getMatches() {
 
 	return match;
 }
+
+float ComponentMatch::getCost() {
+	return cost;
+}

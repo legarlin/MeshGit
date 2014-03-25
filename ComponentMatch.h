@@ -20,4 +20,6 @@ public:
 	void computeAdjacencyCost();
 
 	Match getMatches();
+
+	float getCost();
 };
