@@ -18,28 +18,27 @@ Class ComponentMatch
 Class MatchComputer  //does all the work
 
 	stores: 
-		overallCost of currentmatching
-		vector called lowestMatches, stores ComponentMatches
+		vector called bestComponentMatches, stores final ComponentMatches, updates on each iteration
 		vector called allComponentMatches, stores all the possible matches between each vertex. 
 		
 	Methods:	
 	Greedy Algorithm
 		
-		
 		Create N1*N2 ComponentMatch objects, i.e. match all vertices in meshA with all vertices in meshB and put them in a minHeap which sorts it by cost 
-		Create N1 + N2 componentMatch objects which have deletion/addition costs and put them all into the lowestMatchesVector
 		Store the above in allComponentMatches vector
 		
-		Each iteration we find which match in the vector the new match is going to replace - remove that and add this new one
-			
+		Initialize best matches as empty intially, and numUnmatched as N1 + N2	
 		
 		iteration step:
+			calculate old cost 
 			pick lowest ComponentMatch from minheap
-			remove ComponentMatch object in  lowestMatches which has the same vertex in meshA (but has a higher cost initially)
-			add lowest match ComponentMatch to lowestMatches
-			update the overallCost of currentmatching variable to reflect this new matching
-			iterate again
-			stop when new match increases the cost
+			check if lowest componentmatch components are already in bestMatches, if so then go to next iteration
+			
+			
+			Find out total cost of using this new match instead
+			COMPARE THE OLD AND NEW COSTS
+			if new is lower, update and iterate again
+			if new is higher end all iterations
 		
 		end
 

@@ -18,7 +18,6 @@ class MatchComputer {
 	//Keeps track of how many unmatched elements there are intially
 	int numUnmatched;
 
-	float totalCost;
 	vector<ComponentMatch> bestComponentMatches;
 	vector<ComponentMatch> allComponentMatches; // all possible matches
 
