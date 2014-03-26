@@ -110,6 +110,9 @@ global proc load()
 	//Connect the nodes 
 	MeshGitCmd -c $mainNodeName[0] $vizNodeName;
 
+	//Run the diff
+	MeshGitCmd -d $mainNodeName[0];
+
 	deleteUI -window MeshGitGUI;
 }
 

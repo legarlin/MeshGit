@@ -78,7 +78,7 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
     float matrix[4][4];
     worldToDisplayViewMatrix.get(matrix);
     glMultMatrixf(&matrix[0][0]);
-	glPointSize(6.0f);
+	glPointSize(10.0f);
     glLineWidth(6.0f);
 	glColor3f(0, 1, 0);
 	glBegin( GL_POINTS);
@@ -106,7 +106,7 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 		}
 	}
 
-	drawUnmatched(mgFn);
+	//drawUnmatched(mgFn);
 	drawMatched(mgFn);
 
 	 glEnd();
@@ -137,6 +137,21 @@ void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
 }
 
 void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn){
+	std::vector<ComponentMatch> bestComponentMatches;
+	mgFn.getBestComponentMatches(bestComponentMatches);
+	for (int v = 0; v < bestComponentMatches.size(); v++) {
+			
+		ComponentMatch cM = bestComponentMatches[v];
+		MPoint aP = cM.getMatches().derivativeComp.pos;
+		MPoint bP = cM.getMatches().originalComp.pos;
+		
+		float r= (rand() % 10)/10.0;
+		float g= (rand() % 10)/10.0;
+		float b= (rand() % 10)/10.0;
+		glColor3f(r, g, b);
+		glVertex3d(aP.x,aP.y, aP.z);
+		glVertex3d(bP.x,bP.y+0.02, bP.z);
+	}
 
 
 }
