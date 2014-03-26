@@ -31,6 +31,7 @@ public:
 	void makeComponentMatches();
 	void makeComponents(MPointArray &meshVerts1, MPointArray &meshVerts2);
 	void matchGreedy();
+	int iterationCount;
 
 	//Greedy algorithm helper methods
 	double computeCost(vector<ComponentMatch> matches, int numUnmatched);

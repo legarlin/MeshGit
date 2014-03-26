@@ -1,11 +1,14 @@
 #define MNoVersionString
 #define MNoPluginEntry
 #include "MeshGitNode.h"
+#include "MatchComputer.h"
 #include <maya/MGlobal.h>
 #include <maya/MString.h>
 #include "maya/MFnPlugin.h"
 #include <maya/MFnStringData.h>
 #include <string>
+#include <iostream>
+using namespace std;
 
 #define McheckErr(stat,msg)			\
 	if ( MS::kSuccess != stat ) {	\
@@ -48,7 +51,6 @@ MStatus MeshGitNode::initialize()
 	MFnTypedAttribute typedAttr;
 	MFnNumericAttribute numericAttr;
 	MFnStringData stringFn;
-
 	MStatus returnStatus;
 
 	//Create the attributes
@@ -279,10 +281,19 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
         }
 
 		MGlobal::displayInfo("Num geometries at end of COMPUTE function : " + allVerts.size());
+
 	return status;
 }
 
+void MeshGitNode::startDiff(){
+	MPointArray meshVerts1 = allVerts[0];
+	MPointArray meshVerts2 = allVerts[1];
+		for (unsigned int i = 0; i < meshVerts1.length(); i++) {
+			cout<<meshVerts1[i]<< endl;
+		}
+	MatchComputer matchComputer(allVerts[0],allVerts[1]);
 
+}
 //PRINTING AND DEBUGGING FUNCTIONS
 
 void MeshGitNode::reportError(MStatus status ){

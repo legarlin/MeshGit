@@ -5,21 +5,28 @@
 MatchComputer::MatchComputer() { }
 
 MatchComputer::MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2) {
-
+	iterationCount=0;
 	makeComponents(meshVerts1,meshVerts2);
 	makeComponentMatches();
-
+	matchGreedy();
+	int greedyDone = 10; 
 }
 
 
 void MatchComputer::makeComponents(MPointArray &meshVerts1, MPointArray &meshVerts2){
+
+
+
 	//Convert verts into components and store them , not doing faces yet
+	cout<<"ONE"<< endl;
 	for (unsigned int i = 0; i < meshVerts1.length(); i++) {
+		cout<<meshVerts1[i]<< endl;
 		MeshComponent component(meshVerts1[i]);//is it okay that these aren't pointers?
 		originalMeshComponents.push_back(component);
 	}
-
+	cout<<"TWO"<< endl;
 	for (unsigned int i = 0; i < meshVerts2.length(); i++) {
+		cout<<meshVerts2[i]<< endl;
 		MeshComponent component(meshVerts2[i]);
 		derivativeMeshComponents.push_back(component);	
 	}
@@ -114,6 +121,8 @@ void MatchComputer::swap(int a, int b, vector<ComponentMatch> &data) {
 }
 
 void MatchComputer::matchGreedy() {
+	iterationCount++;
+	//cout<<"Starting Iteration " << iterationCount << endl;
 	if(allComponentMatches.size()==0)
 		return;
 
@@ -141,12 +150,12 @@ void MatchComputer::matchGreedy() {
 		bestComponentMatches = newBestComponentMatches;
 		numUnmatched= numUnmatched-2;
 
-		//go to next iteration
+		//go to next iteration		
 		return matchGreedy();
 	}
 	    
-
 	//if not them end the greedy algorithm	
+	return;
 }
 
 

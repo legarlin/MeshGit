@@ -17,6 +17,7 @@ const char *originalFlag = "-o", *originalLongFlag = "-original";
 const char *aFlag = "-a", *aLongFlag = "-derivativeA";
 const char *bFlag = "-b", *bLongFlag = "-derivativeB";
 const char *connectFlag = "-c", *connectLongFlag= "-connectNodes";
+const char *diffFlag = "-d", *diffLongFlag= "-startDiff";
 
 MeshGitCmd::MeshGitCmd() : MPxCommand()
 {
@@ -50,6 +51,11 @@ MStatus MeshGitCmd::doIt( const MArgList& args )
 		argData.getFlagArgument(connectFlag, 1, locatorNodeName);
 		connectNodes(meshGitNodeName, locatorNodeName);
 	}
+	if (argData.isFlagSet(diffFlag)) { 
+		argData.getFlagArgument(diffFlag, 0, meshGitNodeName); 
+		startDiff(meshGitNodeName);
+	}
+
 
 	MGlobal::displayInfo(originalFilepath);
 
@@ -64,6 +70,7 @@ MSyntax MeshGitCmd::newSyntax()
 	syntax.addFlag(aFlag, aLongFlag, MSyntax::kString);
 	syntax.addFlag(bFlag, bLongFlag, MSyntax::kString);
 	syntax.addFlag(connectFlag, connectLongFlag, MSyntax::kString, MSyntax::kString);
+	syntax.addFlag(diffFlag, diffLongFlag, MSyntax::kString);
 	return syntax;
 }
 
@@ -74,6 +81,31 @@ std::string stringify(double x)
 	return s.str();
 
  }
+
+void MeshGitCmd::startDiff(MString nodeName){
+	MGlobal::displayInfo("Starting diff on Node:  " + nodeName );
+	MStatus status;
+
+	//Get Node Object
+	MSelectionList nodeList;
+	status = nodeList.add(nodeName);
+	MObject nodeObject;
+	status = nodeList.getDependNode(0, nodeObject);
+	reportError(status);
+
+	//Create Node Fn
+	MeshGitFn mgFn;
+	status = mgFn.setObject(nodeObject);
+	reportError(status);
+
+	//Start the diff
+
+	//Get the node plug
+	MPlug nodePlug = mgFn.findPlug("message", true, &status);
+	reportError(status);
+
+
+}
 
 void MeshGitCmd::connectNodes(MString nodeName, MString locatorName){
 	MGlobal::displayInfo("Connecting " + nodeName + " and " + locatorName);

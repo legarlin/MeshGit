@@ -14,7 +14,7 @@ public:
     static MSyntax newSyntax();
 	void connectNodes(MString nodeName, MString locatorName);
 	void reportError(MStatus status);
-
+	void startDiff(MString nodeName);
 };
 
 #endif

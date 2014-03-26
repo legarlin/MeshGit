@@ -40,13 +40,15 @@ public:
 	static MObject	mergedMesh;
 	static MObject currentFrame;
 	static MTypeId	id;
-	
+
 	std::vector<MPointArray> allVerts;
 	void getAllVerts(std::vector<MPointArray> &verts);
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 	MStatus storeAllVerts(MDataBlock& dataBlock);
+	void startDiff();
 	
+
 
 	//PRINTING AND DEBUGGING FUNCTIONS
 	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);
