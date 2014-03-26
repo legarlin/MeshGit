@@ -1,5 +1,7 @@
 #include <maya/MPxLocatorNode.h>
 
+
+class MeshGitFn;
 class MeshGitLocatorNode:
 		public MPxLocatorNode
 {
@@ -20,6 +22,9 @@ public:
 	virtual void draw(M3dView & view, const MDagPath & path,
 					  M3dView::DisplayStyle style,
 					  M3dView::DisplayStatus status);
+
+	void drawUnmatched(MeshGitFn &fn);
+	void drawMatched(MeshGitFn &fn);
 
 	//Data
 	static MTypeId id;

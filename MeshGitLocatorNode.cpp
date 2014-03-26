@@ -8,6 +8,7 @@
 #include <MeshGitLocatorNode.h>
 #include <maya/MGlobal.h>
 #include "MeshGitFn.h"
+
 #include <maya/MPointArray.h>
 
 #define scopeName "MeshGitLocatorNode"
@@ -101,15 +102,45 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 				glColor3f(0, 0, 1);
 
 			MPoint currentV = verts[g][v];
-			glVertex3d(currentV.x,currentV.y, currentV.z);
+			//glVertex3d(currentV.x,currentV.y, currentV.z);
 		}
 	}
+
+	drawUnmatched(mgFn);
+	drawMatched(mgFn);
+
 	 glEnd();
     glPopMatrix();
     glPopAttrib();
     view.endGL();
 
 }
+
+
+void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
+	MPointArray unmatchedOriginalMeshPoints;
+	MPointArray unmatchedDerivativeMeshPoints;
+	mgFn.getUnmatchedOriginalMeshPoints(unmatchedOriginalMeshPoints);
+	mgFn.getUnmatchedDerivativeMeshPoints(unmatchedDerivativeMeshPoints);
+	for (int v = 0; v < unmatchedOriginalMeshPoints.length(); v++) {
+			glColor3f(1, 0, 0);
+			MPoint currentV = unmatchedOriginalMeshPoints[v];
+			glVertex3d(currentV.x,currentV.y, currentV.z);
+	}
+	for (int v = 0; v < unmatchedDerivativeMeshPoints.length(); v++) {
+			glColor3f(0, 1, 0);
+			MPoint currentV = unmatchedDerivativeMeshPoints[v];
+			glVertex3d(currentV.x,currentV.y, currentV.z);
+	}
+
+
+}
+
+void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn){
+
+
+}
+
 
 void MeshGitLocatorNode::reportError(MStatus status ){
 	if(status != MStatus::kSuccess){
