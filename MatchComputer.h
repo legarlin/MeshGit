@@ -18,9 +18,10 @@ class MatchComputer {
 	//Keeps track of how many unmatched elements there are intially
 	int numUnmatched;
 
-	vector<ComponentMatch> bestComponentMatches;
-	vector<ComponentMatch> allComponentMatches; // all possible matches
 
+
+
+	//HEAP STUFF
 	void makeHeap(vector<ComponentMatch> &data); // make heap, wrapper function
 	void heapify(int index, vector<ComponentMatch> &data);
 	void swap(int index1, int index2, vector<ComponentMatch> &data);
@@ -36,6 +37,12 @@ public:
 	//Greedy algorithm helper methods
 	double computeCost(vector<ComponentMatch> matches, int numUnmatched);
 	bool areMatchComponentsInVector(ComponentMatch matchA, vector<ComponentMatch> matches);
-
+	void removeFromUnmatched(ComponentMatch match);
 	ComponentMatch getAndRemoveLowestComponentMatch();
+
+	//Gredy Algorithm Data Structure
+	vector<ComponentMatch> allComponentMatches; // all possible matches
+	vector<ComponentMatch> bestComponentMatches;
+	MPointArray unmatchedOriginalMeshPoints;//<--used for drawing later
+	MPointArray unmatchedDerivativeMeshPoints;
 };

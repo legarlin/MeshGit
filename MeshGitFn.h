@@ -24,5 +24,9 @@ public:
 	MeshGitNode *meshGitNode;
 	void reportError(MStatus status );
 	void getAllVerts(std::vector<MPointArray> &points);
+	void getBestComponentMatches( vector<ComponentMatch> &bestComponentMatches);
+	void getUnmatchedOriginalMeshPoints( MPointArray &unmatchedOriginalMeshPoints);
+	void getUnmatchedDerivativeMeshPoints( MPointArray &unmatchedDerivativeMeshPoints);
+	void startDiff();
 };
 

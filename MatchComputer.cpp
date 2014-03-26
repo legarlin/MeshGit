@@ -9,7 +9,10 @@ MatchComputer::MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2) {
 	makeComponents(meshVerts1,meshVerts2);
 	makeComponentMatches();
 	matchGreedy();
-	int greedyDone = 10; 
+
+	//initially has everything, but then later we remove as the algo goes on. 
+	unmatchedOriginalMeshPoints = meshVerts1;
+	unmatchedDerivativeMeshPoints = meshVerts2;
 }
 
 
@@ -150,6 +153,9 @@ void MatchComputer::matchGreedy() {
 		bestComponentMatches = newBestComponentMatches;
 		numUnmatched= numUnmatched-2;
 
+		//remove from unmatched list since these elements are now matched!
+		removeFromUnmatched(lowestMatch);
+
 		//go to next iteration		
 		return matchGreedy();
 	}
@@ -170,6 +176,28 @@ bool MatchComputer::areMatchComponentsInVector(ComponentMatch match, vector<Comp
 	}
 
 	return false; 
+}
+
+void MatchComputer::removeFromUnmatched(ComponentMatch match){
+	MeshComponent compA = match.originalComp;
+	MeshComponent compB = match.derivativeComp;
+	//now all verts so just get those
+	MPoint vA = compA.pos;
+	MPoint vB = compB.pos;
+
+	for(int i = 0; i < unmatchedOriginalMeshPoints.length(); i ++){
+		if(unmatchedOriginalMeshPoints[i]==vA){
+			unmatchedOriginalMeshPoints.remove(i);
+			break;
+		}
+	}
+
+	for(int i = 0; i < unmatchedDerivativeMeshPoints.length(); i ++){
+		if(unmatchedDerivativeMeshPoints[i]==vB){
+			unmatchedDerivativeMeshPoints.remove(i);
+			break;
+		}
+	}
 }
 
 

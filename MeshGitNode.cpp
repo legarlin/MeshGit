@@ -133,7 +133,9 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock){
 		reportError(status);
 		allVerts.clear();
 		allVerts.resize(numGeom);
-		
+		allTransforms.clear();
+		allTransforms.resize(numGeom);
+
 		//Get the input handle
 		MArrayDataHandle inputHandle = dataBlock.outputArrayValue(input, &status);
 		reportError(status);
@@ -162,16 +164,27 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock){
 			////Copy over the data rfom the input to the output
 			status = hOutputGeomValue.copy(hGeom);
 
+			MDataHandle forMat = ouputGeomHandle.inputValue();
+			//MMatrix mat = forMat.geometryTransformMatrix();
+			////cout<< allTransforms[0] <<endl;
+			//allTransforms.push_back(mat);
+
 			////set an iterator over all points in the current input geometry and copy all the points into the all verts data structure
 			MItGeometry iter(hOutputGeomValue, groupId, false);
 			allVerts[i].clear();
-			iter.allPositions(allVerts[i], MSpace::kWorld);
+			iter.allPositions(allVerts[i], MSpace::kObject);
 			ouputGeomHandle.next();
 
 		}
 
 		ouputGeomHandle.setAllClean();
 		MGlobal::displayInfo("Ending storeAllVerts");
+
+		for (unsigned int i = 0; i < allVerts.size(); i++) {
+			cout << "MESH " << i << endl;
+			cout<< allVerts[i] << endl;
+			//cout<<allTransforms[i]<<endl;
+		}
 	return status;
 }
 
@@ -249,34 +262,7 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
 			MGlobal::displayInfo("plug is outputgeom "); 
 
 			storeAllVerts(dataBlock);
-                // get the input corresponding to this output
-                //
-                //unsigned int index = plug.logicalIndex();
-                //MObject thisNode = this->thisMObject();
-                //MPlug inPlug(thisNode,input);
-                //inPlug.selectAncestorLogicalIndex(index,input);
-                //MDataHandle hInput = dataBlock.inputValue(inPlug);
 
-                //// get the input geometry and input groupId
-                ////
-                //MDataHandle hGeom = hInput.child(inputGeom);
-                //MDataHandle hGroup = hInput.child(groupId);
-                //unsigned int groupId = hGroup.asLong();
-                //MDataHandle hOutput = dataBlock.outputValue(plug);
-                //hOutput.copy(hGeom);
-
-                // do the deformation
-                //
-      //          MItGeometry iter(hOutput,groupId,false);
-      //          for ( ; !iter.isDone(); iter.next()) {
-      //                  MPoint pt = iter.position();
-						//allVerts.append(pt.x,pt.y,pt.z,1.0);
-      //                  //
-      //      // insert deformation code here
-      //                  //
-
-      //                  iter.setPosition(pt);
-      //          }
                 status = MStatus::kSuccess;
         }
 
@@ -292,6 +278,10 @@ void MeshGitNode::startDiff(){
 			cout<<meshVerts1[i]<< endl;
 		}
 	MatchComputer matchComputer(allVerts[0],allVerts[1]);
+
+	bestComponentMatches = matchComputer.bestComponentMatches;
+	unmatchedOriginalMeshPoints = matchComputer.unmatchedOriginalMeshPoints;
+	unmatchedDerivativeMeshPoints= matchComputer.unmatchedDerivativeMeshPoints;
 
 }
 //PRINTING AND DEBUGGING FUNCTIONS

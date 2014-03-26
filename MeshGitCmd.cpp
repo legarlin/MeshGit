@@ -99,6 +99,7 @@ void MeshGitCmd::startDiff(MString nodeName){
 	reportError(status);
 
 	//Start the diff
+	mgFn.startDiff();
 
 	//Get the node plug
 	MPlug nodePlug = mgFn.findPlug("message", true, &status);

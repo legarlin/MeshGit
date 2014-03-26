@@ -20,7 +20,8 @@
 #include <maya/MItGeometry.h>
 #include <maya/MPointArray.h>
 #include <vector>
-
+#include <maya/MMatrix.h>
+#include "ComponentMatch.h"
 
 //HEADER
 class MeshGitNode : public MPxDeformerNode
@@ -41,7 +42,13 @@ public:
 	static MObject currentFrame;
 	static MTypeId	id;
 
+	//All Data holders
 	std::vector<MPointArray> allVerts;
+	std::vector<MMatrix> allTransforms;
+	std::vector<ComponentMatch> bestComponentMatches;
+	MPointArray unmatchedOriginalMeshPoints;
+	MPointArray unmatchedDerivativeMeshPoints;
+
 	void getAllVerts(std::vector<MPointArray> &verts);
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
