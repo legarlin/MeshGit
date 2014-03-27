@@ -7,8 +7,13 @@ struct Match {
 	MeshComponent derivativeComp;
 };
 
-class ComponentMatch {
+struct Color {
+	float r;
+	float g;
+	float b;
+};
 
+class ComponentMatch {
 
 	double cost;
 
@@ -24,4 +29,6 @@ public:
 	Match getMatches();
 
 	double getCost();
+
+	Color color;
 };

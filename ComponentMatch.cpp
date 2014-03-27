@@ -19,6 +19,9 @@ ComponentMatch::ComponentMatch(MeshComponent &originalComponent, MeshComponent&d
 		cost = costUnmatched;
 	}
 
+	color.r= (rand() % 10)/10.0;
+	color.g= (rand() % 10)/10.0;
+	color.b= (rand() % 10)/10.0;
 }
 ComponentMatch::ComponentMatch() { 
 }

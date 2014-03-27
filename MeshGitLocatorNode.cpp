@@ -109,7 +109,7 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	//drawUnmatched(mgFn);
 	drawMatched(mgFn);
 
-	 glEnd();
+	glEnd();
     glPopMatrix();
     glPopAttrib();
     view.endGL();
@@ -144,11 +144,8 @@ void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn){
 		ComponentMatch cM = bestComponentMatches[v];
 		MPoint aP = cM.getMatches().derivativeComp.pos;
 		MPoint bP = cM.getMatches().originalComp.pos;
-		
-		float r= (rand() % 10)/10.0;
-		float g= (rand() % 10)/10.0;
-		float b= (rand() % 10)/10.0;
-		glColor3f(r, g, b);
+
+		glColor3f(cM.color.r, cM.color.g, cM.color.b);
 		glVertex3d(aP.x,aP.y, aP.z);
 		glVertex3d(bP.x,bP.y+0.02, bP.z);
 	}
