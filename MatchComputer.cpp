@@ -7,12 +7,13 @@ MatchComputer::MatchComputer() { }
 MatchComputer::MatchComputer(MPointArray &meshVerts1, MPointArray &meshVerts2) {
 	iterationCount=0;
 	makeComponents(meshVerts1,meshVerts2);
-	makeComponentMatches();
-	matchGreedy();
-
+	
 	//initially has everything, but then later we remove as the algo goes on. 
 	unmatchedOriginalMeshPoints = meshVerts1;
 	unmatchedDerivativeMeshPoints = meshVerts2;
+
+	makeComponentMatches();
+	matchGreedy();
 }
 
 
