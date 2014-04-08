@@ -88,6 +88,12 @@ global proc load()
 	string $nameThird[] = `ls -selection`;
 	string $BMeshName = $nameThird[0];
 	
+	//Move the derivative meshes to a side 
+	string $attrNameA = $AMeshName + ".translate";
+	setAttr $attrNameA 0 2 1;
+	string $attrNameB = $BMeshName + ".translate";
+	setAttr $attrNameB 0 2 -1;
+
 	print("Object Names in Scene");
 	print("Original 1 = " + $originalMeshName  + " ");
 	print("Original 2 = " + $AMeshName + " ");

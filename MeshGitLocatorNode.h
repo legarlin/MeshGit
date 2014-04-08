@@ -32,6 +32,15 @@ public:
 	//Objects
 	static MObject meshGitNodeConnection;
 
+	//How much to translate the derivative meshes so we can see them
+	//Must match up with setAttr lines in mel file 
+	static const int derivativeATranslateX = 0;
+	static const int derivativeATranslateY = 2;
+	static const int derivativeATranslateZ = 1;
+	static const int derivativeBTranslateX = 0;
+	static const int derivativeBTranslateY = 2;
+	static const int derivativeBTranslateZ = -1;
+
 
 	//test functions
 	static void MeshGitLocatorNode::reportError(MStatus status );

@@ -147,7 +147,7 @@ void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn){
 
 		glColor3f(cM.color.r, cM.color.g, cM.color.b);
 		glVertex3d(aP.x,aP.y, aP.z);
-		glVertex3d(bP.x,bP.y+0.02, bP.z);
+		glVertex3d(bP.x + derivativeATranslateX,bP.y+derivativeATranslateY, bP.z+derivativeATranslateZ);
 	}
 
 
