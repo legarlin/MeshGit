@@ -106,7 +106,7 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 		}
 	}
 
-	//drawUnmatched(mgFn);
+	drawUnmatched(mgFn);
 	drawMatched(mgFn);
 
 	glEnd();
@@ -130,7 +130,7 @@ void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
 	for (int v = 0; v < unmatchedDerivativeMeshPoints.length(); v++) {
 			glColor3f(0, 1, 0);
 			MPoint currentV = unmatchedDerivativeMeshPoints[v];
-			glVertex3d(currentV.x,currentV.y, currentV.z);
+			glVertex3d(currentV.x+derivativeATranslateX,currentV.y+derivativeATranslateY, currentV.z+derivativeATranslateZ);
 	}
 
 
