@@ -146,8 +146,8 @@ void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn){
 		MPoint bP = cM.getMatches().originalComp.pos;
 
 		glColor3f(cM.color.r, cM.color.g, cM.color.b);
-		glVertex3d(aP.x,aP.y, aP.z);
-		glVertex3d(bP.x + derivativeATranslateX,bP.y+derivativeATranslateY, bP.z+derivativeATranslateZ);
+		glVertex3d(aP.x+derivativeATranslateX, aP.y+derivativeATranslateY, aP.z+derivativeATranslateZ);
+		glVertex3d(bP.x, bP.y, bP.z);
 	}
 
 
