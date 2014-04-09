@@ -118,39 +118,70 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 
 
 void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
-	MPointArray unmatchedOriginalMeshPoints;
-	MPointArray unmatchedDerivativeMeshPoints;
-	mgFn.getUnmatchedOriginalMeshPoints(unmatchedOriginalMeshPoints);
-	mgFn.getUnmatchedDerivativeMeshPoints(unmatchedDerivativeMeshPoints);
-	for (int v = 0; v < unmatchedOriginalMeshPoints.length(); v++) {
-			glColor3f(1, 0, 0);
-			MPoint currentV = unmatchedOriginalMeshPoints[v];
-			glVertex3d(currentV.x,currentV.y, currentV.z);
+	MPointArray dA_unmatchedPointsOrig;
+	MPointArray dA_unmatchedPointsA;
+	MPointArray dB_unmatchedPointsOrig;
+	MPointArray dB_unmatchedPointsB;
+
+	mgFn.getUnmatchedOriginalMeshPoints(dA_unmatchedPointsOrig, dB_unmatchedPointsOrig);
+	mgFn.getUnmatchedDerivativeMeshPoints(dA_unmatchedPointsA, dB_unmatchedPointsB);
+
+	for (int i = 0; i < dA_unmatchedPointsOrig.length(); i++) {
+			glColor3f(1, 0, 0); // red
+			MPoint currVert = dA_unmatchedPointsOrig[i];
+
+			glVertex3d(currVert.x - 0.01, currVert.y, currVert.z);
 	}
-	for (int v = 0; v < unmatchedDerivativeMeshPoints.length(); v++) {
+
+	for (int i = 0; i < dA_unmatchedPointsA.length(); i++) {
 			glColor3f(0, 1, 0);
-			MPoint currentV = unmatchedDerivativeMeshPoints[v];
-			glVertex3d(currentV.x+derivativeATranslateX,currentV.y+derivativeATranslateY, currentV.z+derivativeATranslateZ);
+			MPoint currVert = dA_unmatchedPointsA[i];
+
+			glVertex3d(currVert.x + dATranslateX, currVert.y + dATranslateY, currVert.z + dATranslateZ);
+	}
+
+	for (int i = 0; i < dB_unmatchedPointsOrig.length(); i++) {
+		glColor3f(0, 0, 1); // blue
+		MPoint currVert = dB_unmatchedPointsOrig[i];
+
+		glVertex3d(currVert.x + 0.01, currVert.y, currVert.z);
+	}
+
+	for (int i = 0; i < dB_unmatchedPointsB.length(); i++) {
+		glColor3f(0, 1, 0);
+		MPoint currVert = dB_unmatchedPointsB[i];
+
+		glVertex3d(currVert.x + dBTranslateX, currVert.y + dBTranslateY, currVert.z + dBTranslateZ);
 	}
 
 
 }
 
 void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn){
-	std::vector<ComponentMatch> bestComponentMatches;
-	mgFn.getBestComponentMatches(bestComponentMatches);
-	for (int v = 0; v < bestComponentMatches.size(); v++) {
-			
-		ComponentMatch cM = bestComponentMatches[v];
-		MPoint aP = cM.getMatches().derivativeComp.pos;
-		MPoint bP = cM.getMatches().originalComp.pos;
+	std::vector<ComponentMatch> dA_bestMatches;
+	std::vector<ComponentMatch> dB_bestMatches;
+
+	mgFn.getBestComponentMatches(dA_bestMatches, dB_bestMatches);
+
+	for (int v = 0; v < dA_bestMatches.size(); v++) {
+		ComponentMatch cM = dA_bestMatches[v];
+		MPoint Ap = cM.getMatches().derivativeComp.pos;
+		MPoint Op = cM.getMatches().originalComp.pos;
 
 		glColor3f(cM.color.r, cM.color.g, cM.color.b);
-		glVertex3d(aP.x+derivativeATranslateX, aP.y+derivativeATranslateY, aP.z+derivativeATranslateZ);
-		glVertex3d(bP.x, bP.y, bP.z);
+		glVertex3d(Ap.x + dATranslateX, Ap.y + dATranslateY, Ap.z + dATranslateZ);
+		glVertex3d(Op.x - 0.01, Op.y, Op.z);
 	}
 
+	for (int i = 0; i < dB_bestMatches.size(); i++) {
+		ComponentMatch cM = dB_bestMatches[i];
+		MPoint Bp = cM.getMatches().derivativeComp.pos;
+		MPoint Op = cM.getMatches().originalComp.pos;
 
+		glColor3f(cM.color.r, cM.color.g, cM.color.b);
+		glVertex3d(Bp.x + dBTranslateX, Bp.y + dBTranslateY, Bp.z + dBTranslateZ);
+		glVertex3d(Op.x + 0.01, Op.y, Op.z);
+	}
 }
 
 

@@ -272,16 +272,21 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
 }
 
 void MeshGitNode::startDiff(){
-	MPointArray meshVerts1 = allVerts[0];
-	MPointArray meshVerts2 = allVerts[1];
-		for (unsigned int i = 0; i < meshVerts1.length(); i++) {
-			cout<<meshVerts1[i]<< endl;
+	MPointArray meshVertsOrig = allVerts[0];
+	MPointArray meshVertsA = allVerts[1];
+		for (unsigned int i = 0; i < meshVertsOrig.length(); i++) {
+			cout<<meshVertsOrig[i]<< endl;
 		}
-	MatchComputer matchComputer(allVerts[0],allVerts[1]);
+	MatchComputer matchComputerA(allVerts[0], allVerts[1]);
+	MatchComputer matchComputerB(allVerts[0], allVerts[2]);
 
-	bestComponentMatches = matchComputer.bestComponentMatches;
-	unmatchedOriginalMeshPoints = matchComputer.unmatchedOriginalMeshPoints;
-	unmatchedDerivativeMeshPoints= matchComputer.unmatchedDerivativeMeshPoints;
+	bestComponentMatches = matchComputerA.bestComponentMatches;
+	unmatchedOriginalMeshPoints = matchComputerA.unmatchedOriginalMeshPoints;
+	unmatchedDerivativeMeshPoints= matchComputerA.unmatchedDerivativeMeshPoints;
+
+	dB_bestMatches = matchComputerB.bestComponentMatches;
+	dB_unmatchedPointsOrig = matchComputerB.unmatchedOriginalMeshPoints;
+	dB_unmatchedPointsB = matchComputerB.unmatchedDerivativeMeshPoints;
 
 }
 //PRINTING AND DEBUGGING FUNCTIONS

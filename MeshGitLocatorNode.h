@@ -34,12 +34,12 @@ public:
 
 	//How much to translate the derivative meshes so we can see them
 	//Must match up with setAttr lines in mel file 
-	static const int derivativeATranslateX = 0;
-	static const int derivativeATranslateY = 2;
-	static const int derivativeATranslateZ = 1;
-	static const int derivativeBTranslateX = 0;
-	static const int derivativeBTranslateY = 2;
-	static const int derivativeBTranslateZ = -1;
+	static const int dATranslateX = 0;
+	static const int dATranslateY = 2;
+	static const int dATranslateZ = 1;
+	static const int dBTranslateX = 0;
+	static const int dBTranslateY = 2;
+	static const int dBTranslateZ = -1;
 
 
 	//test functions

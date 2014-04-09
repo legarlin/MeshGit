@@ -49,6 +49,10 @@ public:
 	MPointArray unmatchedOriginalMeshPoints;
 	MPointArray unmatchedDerivativeMeshPoints;
 
+	std::vector<ComponentMatch> dB_bestMatches;
+	MPointArray dB_unmatchedPointsOrig;
+	MPointArray dB_unmatchedPointsB;
+
 	void getAllVerts(std::vector<MPointArray> &verts);
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
