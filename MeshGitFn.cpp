@@ -51,15 +51,15 @@ void MeshGitFn::getAllVerts(std::vector<MPointArray> &points){
 }
 
 void MeshGitFn::getBestComponentMatches(vector<ComponentMatch> &dA_bestMatches, vector<ComponentMatch> &dB_bestMatches){
-	dA_bestMatches = meshGitNode->bestComponentMatches;
+	dA_bestMatches = meshGitNode->dA_bestMatches;
 	dB_bestMatches = meshGitNode->dB_bestMatches;
 }
 void MeshGitFn::getUnmatchedOriginalMeshPoints(MPointArray &dA_unmatchedPointsOrig, MPointArray &dB_unmatchedPointsOrig){
-	dA_unmatchedPointsOrig = meshGitNode->unmatchedOriginalMeshPoints;
+	dA_unmatchedPointsOrig = meshGitNode->dA_unmatchedPointsOrig;
 	dB_unmatchedPointsOrig = meshGitNode->dB_unmatchedPointsOrig;
 }
 void MeshGitFn::getUnmatchedDerivativeMeshPoints(MPointArray &dA_unmatchedPointsA, MPointArray &dB_unmatchedPointsB){
-	dA_unmatchedPointsA = meshGitNode->unmatchedDerivativeMeshPoints;
+	dA_unmatchedPointsA = meshGitNode->dA_unmatchedPointsA;
 	dB_unmatchedPointsB = meshGitNode->dB_unmatchedPointsB;
 }
 

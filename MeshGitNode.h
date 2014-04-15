@@ -45,9 +45,9 @@ public:
 	//All Data holders
 	std::vector<MPointArray> allVerts;
 	std::vector<MMatrix> allTransforms;
-	std::vector<ComponentMatch> bestComponentMatches;
-	MPointArray unmatchedOriginalMeshPoints;
-	MPointArray unmatchedDerivativeMeshPoints;
+	std::vector<ComponentMatch> dA_bestMatches;
+	MPointArray dA_unmatchedPointsOrig;
+	MPointArray dA_unmatchedPointsA;
 
 	std::vector<ComponentMatch> dB_bestMatches;
 	MPointArray dB_unmatchedPointsOrig;

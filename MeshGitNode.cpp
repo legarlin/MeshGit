@@ -280,9 +280,9 @@ void MeshGitNode::startDiff(){
 	MatchComputer matchComputerA(allVerts[0], allVerts[1]);
 	MatchComputer matchComputerB(allVerts[0], allVerts[2]);
 
-	bestComponentMatches = matchComputerA.bestComponentMatches;
-	unmatchedOriginalMeshPoints = matchComputerA.unmatchedOriginalMeshPoints;
-	unmatchedDerivativeMeshPoints= matchComputerA.unmatchedDerivativeMeshPoints;
+	dA_bestMatches = matchComputerA.bestComponentMatches;
+	dB_unmatchedPointsOrig = matchComputerA.unmatchedOriginalMeshPoints;
+	dA_unmatchedPointsA = matchComputerA.unmatchedDerivativeMeshPoints;
 
 	dB_bestMatches = matchComputerB.bestComponentMatches;
 	dB_unmatchedPointsOrig = matchComputerB.unmatchedOriginalMeshPoints;
