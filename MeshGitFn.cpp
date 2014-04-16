@@ -8,7 +8,6 @@ MeshGitFn::MeshGitFn(void)
 {
 }
 
-
 MeshGitFn::~MeshGitFn(void)
 {
 }
@@ -45,23 +44,41 @@ void MeshGitFn::reportError(MStatus status ){
 	}
 }
 
-void MeshGitFn::getAllVerts(std::vector<MPointArray> &points){
-	meshGitNode->printTEST();
-	meshGitNode->getAllVerts(points);
+vector<MPointArray*> MeshGitFn::getAllVerts(){
+	//meshGitNode->printTEST();
+	return meshGitNode->getAllVerts();
 }
 
-void MeshGitFn::getBestComponentMatches(vector<ComponentMatch> &dA_bestMatches, vector<ComponentMatch> &dB_bestMatches){
-	dA_bestMatches = meshGitNode->dA_bestMatches;
-	dB_bestMatches = meshGitNode->dB_bestMatches;
+Matched MeshGitFn::getMatched() {
+	Matched m;
+	m.dA_bestMatches = meshGitNode->dA_bestMatches;
+	m.dB_bestMatches = meshGitNode->dB_bestMatches;
+
+	return m;
 }
-void MeshGitFn::getUnmatchedOriginalMeshPoints(MPointArray &dA_unmatchedPointsOrig, MPointArray &dB_unmatchedPointsOrig){
-	dA_unmatchedPointsOrig = meshGitNode->dA_unmatchedPointsOrig;
-	dB_unmatchedPointsOrig = meshGitNode->dB_unmatchedPointsOrig;
+
+Unmatched MeshGitFn::getUnmatched() {
+	Unmatched m;
+	m.dA_unmatchedPointsOrig = meshGitNode->dA_unmatchedPointsOrig;
+	m.dB_unmatchedPointsOrig = meshGitNode->dB_unmatchedPointsOrig;
+	m.dA_unmatchedPointsA = meshGitNode->dA_unmatchedPointsA;
+	m.dB_unmatchedPointsB = meshGitNode->dB_unmatchedPointsB;
+
+	return m;
 }
-void MeshGitFn::getUnmatchedDerivativeMeshPoints(MPointArray &dA_unmatchedPointsA, MPointArray &dB_unmatchedPointsB){
-	dA_unmatchedPointsA = meshGitNode->dA_unmatchedPointsA;
-	dB_unmatchedPointsB = meshGitNode->dB_unmatchedPointsB;
-}
+
+//void MeshGitFn::getBestComponentMatches(vector<ComponentMatch*> &dA_bestMatches, vector<ComponentMatch*> &dB_bestMatches){
+//	dA_bestMatches = meshGitNode->dA_bestMatches;
+//	dB_bestMatches = meshGitNode->dB_bestMatches;
+//}
+//void MeshGitFn::getUnmatchedOriginalMeshPoints(MPointArray* &dA_unmatchedPointsOrig, MPointArray* &dB_unmatchedPointsOrig){
+//	dA_unmatchedPointsOrig = &(meshGitNode->dA_unmatchedPointsOrig);
+//	dB_unmatchedPointsOrig = meshGitNode->dB_unmatchedPointsOrig;
+//}
+//void MeshGitFn::getUnmatchedDerivativeMeshPoints(MPointArray* &dA_unmatchedPointsA, MPointArray* &dB_unmatchedPointsB){
+//	dA_unmatchedPointsA = meshGitNode->dA_unmatchedPointsA;
+//	dB_unmatchedPointsB = meshGitNode->dB_unmatchedPointsB;
+//}
 
 void MeshGitFn::startDiff(){
 	meshGitNode->startDiff();

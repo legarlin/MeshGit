@@ -7,7 +7,6 @@
 using namespace glm;
 
 class MeshComponent {
-	
 
 public:
 	enum Type { VERTEX, FACE, EDGE, EMPTY } type;
@@ -15,6 +14,6 @@ public:
 	MPoint pos;
 	MeshComponent();
 	MeshComponent(MPoint vertexPos);
-	bool isEqualTo(MeshComponent other);
+	bool isEqualTo(MeshComponent* other);
 
 };

@@ -121,70 +121,77 @@ MStatus MeshGitNode::initialize()
 
 MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock){
 	MStatus status;
-		MGlobal::displayInfo("Starting storeAllVerts");
+	MGlobal::displayInfo("Starting storeAllVerts");
 
-	    //Gets the handle to the output geometry
-	    MArrayDataHandle ouputGeomHandle = dataBlock.outputArrayValue(outputGeom,
-            &status);
+	//Gets the handle to the output geometry
+	MArrayDataHandle ouputGeomHandle = dataBlock.outputArrayValue(outputGeom,
+        &status);
+	reportError(status);
+
+	//Gets the number of geometries on the handle - should be 3
+	unsigned int numGeom = ouputGeomHandle.elementCount(&status);
+	reportError(status);
+		
+	vector<MPointArray> sceneVerts;
+	sceneVerts.clear();
+	sceneVerts.resize(numGeom);	
+
+	allVerts.clear();
+	allVerts.resize(numGeom);
+	allTransforms.clear();
+	allTransforms.resize(numGeom);
+
+	//Get the input handle
+	MArrayDataHandle inputHandle = dataBlock.outputArrayValue(input, &status);
+	reportError(status);
+
+	for(unsigned int i=0; i<numGeom; i++){
+		MGlobal::displayInfo("Storing Geom " + i);
+		//get the element index that the current geom is in the datablock
+		int geomIndex = ouputGeomHandle.elementIndex(&status);
+
+		//go tot he correct geometry in the input geometry handle
+		status = inputHandle.jumpToElement(geomIndex);
 		reportError(status);
 
-		//Gets the number of geometries on the handle - should be 3
-		unsigned int numGeom = ouputGeomHandle.elementCount(&status);
+		////get the value of the geometry
+		MDataHandle inputGeomValue = inputHandle.inputValue(&status);
 		reportError(status);
-		allVerts.clear();
-		allVerts.resize(numGeom);
-		allTransforms.clear();
-		allTransforms.resize(numGeom);
-
-		//Get the input handle
-		MArrayDataHandle inputHandle = dataBlock.outputArrayValue(input, &status);
-		reportError(status);
-
-		for(unsigned int i=0; i<numGeom; i++){
-			MGlobal::displayInfo("Storing Geom " + i);
-			//get the element index that the current geom is in the datablock
-			int geomIndex = ouputGeomHandle.elementIndex(&status);
-
-			//go tot he correct geometry in the input geometry handle
-			status = inputHandle.jumpToElement(geomIndex);
-			reportError(status);
-
-			////get the value of the geometry
-			MDataHandle inputGeomValue = inputHandle.inputValue(&status);
-			reportError(status);
 			
-			//Get the input geometry handle, and the group id as well 
-			MDataHandle hGeom = inputGeomValue.child(inputGeom);
-            MDataHandle hGroup = inputGeomValue.child(groupId);
-            unsigned int groupId = hGroup.asLong();
+		//Get the input geometry handle, and the group id as well 
+		MDataHandle hGeom = inputGeomValue.child(inputGeom);
+        MDataHandle hGroup = inputGeomValue.child(groupId);
+        unsigned int groupId = hGroup.asLong();
 
-			////Get the output geometry handle output value
-			MDataHandle hOutputGeomValue = ouputGeomHandle.outputValue(&status);
+		////Get the output geometry handle output value
+		MDataHandle hOutputGeomValue = ouputGeomHandle.outputValue(&status);
 
-			////Copy over the data rfom the input to the output
-			status = hOutputGeomValue.copy(hGeom);
+		////Copy over the data rfom the input to the output
+		status = hOutputGeomValue.copy(hGeom);
 
-			MDataHandle forMat = ouputGeomHandle.inputValue();
-			//MMatrix mat = forMat.geometryTransformMatrix();
-			////cout<< allTransforms[0] <<endl;
-			//allTransforms.push_back(mat);
+		MDataHandle forMat = ouputGeomHandle.inputValue();
+		//MMatrix mat = forMat.geometryTransformMatrix();
+		////cout<< allTransforms[0] <<endl;
+		//allTransforms.push_back(mat);
 
-			////set an iterator over all points in the current input geometry and copy all the points into the all verts data structure
-			MItGeometry iter(hOutputGeomValue, groupId, false);
-			allVerts[i].clear();
-			iter.allPositions(allVerts[i], MSpace::kObject);
-			ouputGeomHandle.next();
+		////set an iterator over all points in the current input geometry and copy all the points into the all verts data structure
+		MItGeometry iter(hOutputGeomValue, groupId, false);
+		sceneVerts[i].clear();
+		iter.allPositions(sceneVerts[i], MSpace::kObject);
+		ouputGeomHandle.next();
 
-		}
+		MPointArray* mp = new MPointArray(sceneVerts[i]);
+		allVerts[i] = mp;
+	}
 
-		ouputGeomHandle.setAllClean();
-		MGlobal::displayInfo("Ending storeAllVerts");
+	ouputGeomHandle.setAllClean();
+	MGlobal::displayInfo("Ending storeAllVerts");
 
-		for (unsigned int i = 0; i < allVerts.size(); i++) {
-			cout << "MESH " << i << endl;
-			cout<< allVerts[i] << endl;
-			//cout<<allTransforms[i]<<endl;
-		}
+	for (unsigned int i = 0; i < allVerts.size(); i++) {
+		cout << "MESH " << i << endl;
+		cout<< allVerts[i] << endl;
+		//cout<<allTransforms[i]<<endl;
+	}
 	return status;
 }
 
@@ -244,9 +251,8 @@ MeshGitNode::deform( MDataBlock& block,
 }
 
 
-void MeshGitNode::getAllVerts(std::vector<MPointArray> &verts){
-	verts = allVerts;
-
+vector<MPointArray*> MeshGitNode::getAllVerts() {
+	return allVerts;
 }
 
 
@@ -257,37 +263,39 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
 	//	allVerts.clear();
 
 	MGlobal::displayInfo("COMPUTE CALLED!!"); 
-        if (plug.attribute() == outputGeom) {
+    if (plug.attribute() == outputGeom) {
 			
-			MGlobal::displayInfo("plug is outputgeom "); 
+		MGlobal::displayInfo("plug is outputgeom "); 
 
-			storeAllVerts(dataBlock);
+		storeAllVerts(dataBlock);
 
-                status = MStatus::kSuccess;
-        }
+            status = MStatus::kSuccess;
+    }
 
-		MGlobal::displayInfo("Num geometries at end of COMPUTE function : " + allVerts.size());
+	MGlobal::displayInfo("Num geometries at end of COMPUTE function : " + allVerts.size());
 
 	return status;
 }
 
 void MeshGitNode::startDiff(){
-	MPointArray meshVertsOrig = allVerts[0];
-	MPointArray meshVertsA = allVerts[1];
-		for (unsigned int i = 0; i < meshVertsOrig.length(); i++) {
-			cout<<meshVertsOrig[i]<< endl;
-		}
-	MatchComputer matchComputerA(allVerts[0], allVerts[1]);
-	MatchComputer matchComputerB(allVerts[0], allVerts[2]);
+	MPointArray* meshVertsOrig = allVerts[0];
+	MPointArray* meshVertsA = allVerts[1];
+	MPointArray* meshVertsB = allVerts[2];
 
-	dA_bestMatches = matchComputerA.bestComponentMatches;
-	dB_unmatchedPointsOrig = matchComputerA.unmatchedOriginalMeshPoints;
-	dA_unmatchedPointsA = matchComputerA.unmatchedDerivativeMeshPoints;
+	/*for (unsigned int i = 0; i < meshVertsOrig.length(); i++) {
+		cout << meshVertsOrig[i] << endl;
+	}*/
 
-	dB_bestMatches = matchComputerB.bestComponentMatches;
-	dB_unmatchedPointsOrig = matchComputerB.unmatchedOriginalMeshPoints;
-	dB_unmatchedPointsB = matchComputerB.unmatchedDerivativeMeshPoints;
+	MatchComputer* matchComputerA = new MatchComputer(meshVertsOrig, meshVertsA);
+	MatchComputer* matchComputerB = new MatchComputer(meshVertsOrig, meshVertsB);
 
+	dA_bestMatches = matchComputerA->bestComponentMatches;
+	dA_unmatchedPointsOrig = matchComputerA->unmatchedOriginalMeshPoints;
+	dA_unmatchedPointsA = matchComputerA->unmatchedDerivativeMeshPoints;
+
+	dB_bestMatches = matchComputerB->bestComponentMatches;
+	dB_unmatchedPointsOrig = matchComputerB->unmatchedOriginalMeshPoints;
+	dB_unmatchedPointsB = matchComputerB->unmatchedDerivativeMeshPoints;
 }
 //PRINTING AND DEBUGGING FUNCTIONS
 

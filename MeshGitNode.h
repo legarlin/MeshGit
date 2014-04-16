@@ -23,6 +23,8 @@
 #include <maya/MMatrix.h>
 #include "ComponentMatch.h"
 
+using namespace std;
+
 //HEADER
 class MeshGitNode : public MPxDeformerNode
 {
@@ -43,17 +45,17 @@ public:
 	static MTypeId	id;
 
 	//All Data holders
-	std::vector<MPointArray> allVerts;
+	std::vector<MPointArray*> allVerts;
 	std::vector<MMatrix> allTransforms;
-	std::vector<ComponentMatch> dA_bestMatches;
-	MPointArray dA_unmatchedPointsOrig;
-	MPointArray dA_unmatchedPointsA;
+	std::vector<ComponentMatch*> dA_bestMatches;
+	MPointArray* dA_unmatchedPointsOrig;
+	MPointArray* dA_unmatchedPointsA;
 
-	std::vector<ComponentMatch> dB_bestMatches;
-	MPointArray dB_unmatchedPointsOrig;
-	MPointArray dB_unmatchedPointsB;
+	std::vector<ComponentMatch*> dB_bestMatches;
+	MPointArray* dB_unmatchedPointsOrig;
+	MPointArray* dB_unmatchedPointsB;
 
-	void getAllVerts(std::vector<MPointArray> &verts);
+	vector<MPointArray*> getAllVerts();
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 	MStatus storeAllVerts(MDataBlock& dataBlock);
