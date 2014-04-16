@@ -18,8 +18,8 @@ struct Matched {
 
 struct Unmatched {
 	MPointArray* dA_unmatchedPointsOrig;
-	MPointArray* dB_unmatchedPointsOrig;
 	MPointArray* dA_unmatchedPointsA; 
+	MPointArray* dB_unmatchedPointsOrig;
 	MPointArray* dB_unmatchedPointsB;
 };
 

@@ -119,13 +119,13 @@ MStatus MeshGitNode::initialize()
 	return MS::kSuccess;
 }
 
-MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock){
+MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
+{
 	MStatus status;
 	MGlobal::displayInfo("Starting storeAllVerts");
 
 	//Gets the handle to the output geometry
-	MArrayDataHandle ouputGeomHandle = dataBlock.outputArrayValue(outputGeom,
-        &status);
+	MArrayDataHandle ouputGeomHandle = dataBlock.outputArrayValue(outputGeom, &status);
 	reportError(status);
 
 	//Gets the number of geometries on the handle - should be 3
@@ -251,25 +251,22 @@ MeshGitNode::deform( MDataBlock& block,
 }
 
 
-vector<MPointArray*> MeshGitNode::getAllVerts() {
+vector<MPointArray*> MeshGitNode::getAllVerts() 
+{
 	return allVerts;
 }
 
-
-
-MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
+MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock)
+{
 	MStatus status = MStatus::kSuccess;
 	//if(allVerts.length()>3000)
 	//	allVerts.clear();
 
 	MGlobal::displayInfo("COMPUTE CALLED!!"); 
-    if (plug.attribute() == outputGeom) {
-			
+    if(plug.attribute() == outputGeom) {
 		MGlobal::displayInfo("plug is outputgeom "); 
-
 		storeAllVerts(dataBlock);
-
-            status = MStatus::kSuccess;
+		status = MStatus::kSuccess;
     }
 
 	MGlobal::displayInfo("Num geometries at end of COMPUTE function : " + allVerts.size());
@@ -277,7 +274,8 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock){
 	return status;
 }
 
-void MeshGitNode::startDiff(){
+void MeshGitNode::startDiff()
+{
 	MPointArray* meshVertsOrig = allVerts[0];
 	MPointArray* meshVertsA = allVerts[1];
 	MPointArray* meshVertsB = allVerts[2];
@@ -297,19 +295,23 @@ void MeshGitNode::startDiff(){
 	dB_unmatchedPointsOrig = matchComputerB->unmatchedOriginalMeshPoints;
 	dB_unmatchedPointsB = matchComputerB->unmatchedDerivativeMeshPoints;
 }
+
 //PRINTING AND DEBUGGING FUNCTIONS
 
-void MeshGitNode::reportError(MStatus status ){
+void MeshGitNode::reportError(MStatus status )
+{
 	if(status != MStatus::kSuccess){
 		MGlobal::displayInfo("ERROR in MeshGitDeformerNode " + status.errorString());
 	}
 }
-void MeshGitNode::printTEST(){
+void MeshGitNode::printTEST()
+{
 	MGlobal::displayInfo("TESTINGGGG");
 
 }
 
-void MeshGitNode::printVectorOfPoints(MString name, std::vector<MPointArray> &points){
+void MeshGitNode::printVectorOfPoints(MString name, std::vector<MPointArray> &points)
+{
 	MGlobal::displayInfo(name);
 	for(int i = 0; i <points.size(); i ++){
 		for(int j = 0; j <points[i].length(); j ++){

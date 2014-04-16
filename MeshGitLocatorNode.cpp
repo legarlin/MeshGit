@@ -18,7 +18,7 @@ using namespace std;
 MObject MeshGitLocatorNode::meshGitNodeConnection;
 
 
-void * MeshGitLocatorNode::creator() {
+void* MeshGitLocatorNode::creator() {
     return new MeshGitLocatorNode;
 }
 
@@ -90,20 +90,20 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	
 	vector<MPointArray*> verts = mgFn.getAllVerts();
 	MGlobal::displayInfo("Num verts in Draw function : " + verts.size());
-	for (int g = 0; g < verts.size(); g++){
-		for (int v = 0; v < verts[g]->length(); v++) {
-			if(g==0){
-				glColor3f(1, 0, 0);
-			}
-			else if(g==1)
-				glColor3f(0, 1, 0);
-			else if(g==2)
-				glColor3f(0, 0, 1);
+	//for (int g = 0; g < verts.size(); g++){
+	//	for (int v = 0; v < verts[g]->length(); v++) {
+	//		if(g==0){
+	//			glColor3f(1, 0, 0);
+	//		}
+	//		else if(g==1)
+	//			glColor3f(0, 1, 0);
+	//		else if(g==2)
+	//			glColor3f(0, 0, 1);
 
-			MPoint currentV = (*verts[g])[v];
-			//glVertex3d(currentV.x,currentV.y, currentV.z);
-		}
-	}
+	//		MPoint currentV = (*verts[g])[v];
+	//		//glVertex3d(currentV.x,currentV.y, currentV.z);
+	//	}
+	//}
 
 	drawUnmatched(mgFn);
 	drawMatched(mgFn);
@@ -126,17 +126,17 @@ void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
 	MPointArray* dB_unmatchedPointsB = m.dB_unmatchedPointsB;
 
 	for (int i = 0; i < dA_unmatchedPointsOrig->length(); i++) {
-			glColor3f(1, 0, 0); // red
-			MPoint currVert = (*dA_unmatchedPointsOrig)[i];
+		glColor3f(1, 0, 0); // red
+		MPoint currVert = (*dA_unmatchedPointsOrig)[i];
 
-			glVertex3d(currVert.x - 0.01, currVert.y, currVert.z);
+		glVertex3d(currVert.x - 0.01, currVert.y, currVert.z);
 	}
 
 	for (int i = 0; i < dA_unmatchedPointsA->length(); i++) {
-			glColor3f(0, 1, 0);
-			MPoint currVert = (*dA_unmatchedPointsA)[i];
+		glColor3f(0, 1, 0); // green
+		MPoint currVert = (*dA_unmatchedPointsA)[i];
 
-			glVertex3d(currVert.x + dATranslateX, currVert.y + dATranslateY, currVert.z + dATranslateZ);
+		glVertex3d(currVert.x + dATranslateX, currVert.y + dATranslateY, currVert.z + dATranslateZ);
 	}
 
 	for (int i = 0; i < dB_unmatchedPointsOrig->length(); i++) {
@@ -147,7 +147,7 @@ void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
 	}
 
 	for (int i = 0; i < dB_unmatchedPointsB->length(); i++) {
-		glColor3f(0, 1, 0);
+		glColor3f(0, 1, 0); // green
 		MPoint currVert = (*dB_unmatchedPointsB)[i];
 
 		glVertex3d(currVert.x + dBTranslateX, currVert.y + dBTranslateY, currVert.z + dBTranslateZ);
@@ -156,8 +156,8 @@ void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
 
 }
 
-void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn) {
-
+void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn) 
+{
 	Matched m = mgFn.getMatched();
 
 	vector<ComponentMatch*> dA_bestMatches = m.dA_bestMatches;

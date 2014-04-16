@@ -8,28 +8,31 @@ MeshGitFn::MeshGitFn(void)
 {
 }
 
-MeshGitFn::~MeshGitFn(void)
-{
+MeshGitFn::~MeshGitFn(void) 
+{ 
 }
 
-void MeshGitFn::testMethod(MString test){
+void MeshGitFn::testMethod(MString test) 
+{
 	MGlobal::displayInfo(test);
 }
 
-MStatus MeshGitFn::setObject(MObject & object){
+MStatus MeshGitFn::setObject(MObject & object) 
+{
 	MStatus status;
-
-	//call the super's implementation
-	status = MFnDependencyNode::setObject(object);
-
-	//Set the pointer to our internal object
-	MPxNode *genericMeshGitNode = userNode(&status);
+	status = MFnDependencyNode::setObject(object); // call the super's implementation
+	
+	MPxNode* genericMeshGitNode = userNode(&status); // set the pointer to our internal object
 	reportError(status);
+
 	MGlobal::displayInfo("Node pointer name: "  + genericMeshGitNode->name());
-	MeshGitNode *specificMeshGitNode = dynamic_cast<MeshGitNode *> (genericMeshGitNode);
-	if (!specificMeshGitNode) 
+
+	MeshGitNode* specificMeshGitNode = dynamic_cast<MeshGitNode*> (genericMeshGitNode);
+
+	if (!specificMeshGitNode) {
 		MGlobal::displayInfo("Failed to set MeshGitNode pointer in MeshGitFn");
-	else{
+	}
+	else {
 		MGlobal::displayInfo("Set MeshGitNode pointer in MeshGitFn");
 		meshGitNode = specificMeshGitNode;
 	}
@@ -38,18 +41,21 @@ MStatus MeshGitFn::setObject(MObject & object){
 }
 
 
-void MeshGitFn::reportError(MStatus status ){
-	if(status != MStatus::kSuccess){
+void MeshGitFn::reportError(MStatus status ) 
+{
+	if(status != MStatus::kSuccess) {
 		MGlobal::displayInfo("ERROR " + status.errorString());
 	}
 }
 
-vector<MPointArray*> MeshGitFn::getAllVerts(){
+vector<MPointArray*> MeshGitFn::getAllVerts()
+{
 	//meshGitNode->printTEST();
 	return meshGitNode->getAllVerts();
 }
 
-Matched MeshGitFn::getMatched() {
+Matched MeshGitFn::getMatched() 
+{
 	Matched m;
 	m.dA_bestMatches = meshGitNode->dA_bestMatches;
 	m.dB_bestMatches = meshGitNode->dB_bestMatches;
@@ -57,7 +63,8 @@ Matched MeshGitFn::getMatched() {
 	return m;
 }
 
-Unmatched MeshGitFn::getUnmatched() {
+Unmatched MeshGitFn::getUnmatched() 
+{
 	Unmatched m;
 	m.dA_unmatchedPointsOrig = meshGitNode->dA_unmatchedPointsOrig;
 	m.dB_unmatchedPointsOrig = meshGitNode->dB_unmatchedPointsOrig;
@@ -80,6 +87,7 @@ Unmatched MeshGitFn::getUnmatched() {
 //	dB_unmatchedPointsB = meshGitNode->dB_unmatchedPointsB;
 //}
 
-void MeshGitFn::startDiff(){
+void MeshGitFn::startDiff()
+{
 	meshGitNode->startDiff();
 }

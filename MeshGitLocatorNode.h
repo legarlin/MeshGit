@@ -2,17 +2,13 @@
 
 
 class MeshGitFn;
-class MeshGitLocatorNode:
-		public MPxLocatorNode
+class MeshGitLocatorNode: public MPxLocatorNode 
 {
 
 public:
 
-	MeshGitLocatorNode() {
-	   
-	}
-	virtual ~MeshGitLocatorNode() {
-	}
+	MeshGitLocatorNode() { }
+	virtual ~MeshGitLocatorNode() { }
 
 	//Registration Functions
 	static void *creator();
@@ -41,11 +37,6 @@ public:
 	static const int dBTranslateY = 2;
 	static const int dBTranslateZ = -1;
 
-
 	//test functions
 	static void MeshGitLocatorNode::reportError(MStatus status );
-private:
-
-
-
 };
