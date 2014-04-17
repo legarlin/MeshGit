@@ -39,6 +39,7 @@ public:
 	vector<MPointArray*> getAllVerts();
 	Matched getMatched();
 	Unmatched getUnmatched();
+	vector<MFnMesh*> getMFnMeshObjects();
 	/*void getBestComponentMatches(vector<ComponentMatch*> &dA_bestMatches, vector<ComponentMatch*> &dB_bestMatches);
 	void getUnmatchedOriginalMeshPoints(MPointArray* &dA_unmatchedPointsOrig, MPointArray* &dB_unmatchedPointsOrig);
 	void getUnmatchedDerivativeMeshPoints(MPointArray* &dA_unmatchedPointsA, MPointArray* &dB_unmatchedPointsB);*/

@@ -13,7 +13,7 @@ public:
 
 	MPoint pos;
 	MeshComponent();
-	MeshComponent(MPoint vertexPos);
+	MeshComponent(Type t, MPoint position);
 	bool isEqualTo(MeshComponent* other);
 
 };

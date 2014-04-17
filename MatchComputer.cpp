@@ -20,17 +20,19 @@ MatchComputer::MatchComputer(MPointArray* originalVerts, MPointArray* derivative
 void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* derivativeVerts){
 	// Convert verts into components and store them, not doing faces yet
 
-	//cout<<"ONE"<< endl;
+	//Make Vertex Components for Original Mesh
 	for (unsigned int i = 0; i < originalVerts->length(); i++) {
 		//cout<<originalVerts[i]<< endl;
-		MeshComponent* component = new MeshComponent((*originalVerts)[i]);
+		MeshComponent* component = new MeshComponent(MeshComponent::VERTEX,(*originalVerts)[i]);
 		originalMeshComponents.push_back(component);
 	}
 
-	//cout<<"TWO"<< endl;
+	//Make Face Components for Original Mesh 
+
+	//Make Vertex Components for Derivative Mesh
 	for (unsigned int i = 0; i < derivativeVerts->length(); i++) {
 		//cout<<derivativeVerts[i]<< endl;
-		MeshComponent* component = new MeshComponent((*derivativeVerts)[i]);
+		MeshComponent* component = new MeshComponent(MeshComponent::VERTEX,(*derivativeVerts)[i]);
 		derivativeMeshComponents.push_back(component);	
 	}
 

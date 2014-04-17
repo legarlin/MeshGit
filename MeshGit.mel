@@ -119,6 +119,8 @@ global proc load()
 	//Run the diff
 	MeshGitCmd -d $mainNodeName[0];
 
+	//Connect the attributes so we have access to the kMesh Objects
+
 	deleteUI -window MeshGitGUI;
 }
 

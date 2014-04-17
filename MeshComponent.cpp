@@ -1,8 +1,8 @@
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(MPoint vertexPos) {
-	pos = vertexPos;
-	type = VERTEX;
+MeshComponent::MeshComponent(Type t, MPoint position) {
+	pos = position;
+	type = t;
 }
 
 MeshComponent::MeshComponent() {

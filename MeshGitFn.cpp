@@ -54,6 +54,12 @@ vector<MPointArray*> MeshGitFn::getAllVerts()
 	return meshGitNode->getAllVerts();
 }
 
+vector<MFnMesh*> MeshGitFn::getMFnMeshObjects()
+{
+	//meshGitNode->printTEST();
+	return meshGitNode->getMFnMeshObjects();
+}
+
 Matched MeshGitFn::getMatched() 
 {
 	Matched m;

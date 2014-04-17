@@ -140,6 +140,8 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 	allVerts.resize(numGeom);
 	allTransforms.clear();
 	allTransforms.resize(numGeom);
+	allMFnMeshObjects.clear();
+	allMFnMeshObjects.resize(numGeom);
 
 	//Get the input handle
 	MArrayDataHandle inputHandle = dataBlock.outputArrayValue(input, &status);
@@ -157,7 +159,11 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 		////get the value of the geometry
 		MDataHandle inputGeomValue = inputHandle.inputValue(&status);
 		reportError(status);
-			
+		
+		MObject meshObject = inputGeomValue.asMesh();
+		MFnMesh *currentMeshFn = new MFnMesh(meshObject);
+		allMFnMeshObjects[i] = currentMeshFn;
+
 		//Get the input geometry handle, and the group id as well 
 		MDataHandle hGeom = inputGeomValue.child(inputGeom);
         MDataHandle hGroup = inputGeomValue.child(groupId);
@@ -188,8 +194,8 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 	MGlobal::displayInfo("Ending storeAllVerts");
 
 	for (unsigned int i = 0; i < allVerts.size(); i++) {
-		cout << "MESH " << i << endl;
-		cout<< allVerts[i] << endl;
+		//cout << "MESH " << i << endl;
+		//cout<< allVerts[i] << endl;
 		//cout<<allTransforms[i]<<endl;
 	}
 	return status;
@@ -254,6 +260,11 @@ MeshGitNode::deform( MDataBlock& block,
 vector<MPointArray*> MeshGitNode::getAllVerts() 
 {
 	return allVerts;
+}
+
+vector<MFnMesh*> MeshGitNode::getMFnMeshObjects() 
+{
+	return allMFnMeshObjects;
 }
 
 MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock)

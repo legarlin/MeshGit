@@ -48,6 +48,7 @@ public:
 	std::vector<MPointArray*> allVerts;
 	std::vector<MMatrix> allTransforms;
 	std::vector<ComponentMatch*> dA_bestMatches;
+	std::vector<MFnMesh*> allMFnMeshObjects;
 	MPointArray* dA_unmatchedPointsOrig;
 	MPointArray* dA_unmatchedPointsA;
 
@@ -56,6 +57,7 @@ public:
 	MPointArray* dB_unmatchedPointsB;
 
 	vector<MPointArray*> getAllVerts();
+	vector<MFnMesh*> getMFnMeshObjects();
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 	MStatus storeAllVerts(MDataBlock& dataBlock);
