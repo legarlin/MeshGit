@@ -6,6 +6,8 @@
 #include "MeshComponent.h"
 #include "glm\glm.hpp"
 #include <maya/MPointArray.h>
+#include <maya/MFnMeshData.h>
+#include <maya/MFnMesh.h>
 
 using namespace std;
 using namespace glm;
@@ -25,7 +27,7 @@ class MatchComputer {
 
 public:
 	MatchComputer();
-	MatchComputer(MPointArray* originalVerts, MPointArray* derivativeVerts);
+	MatchComputer(MPointArray* originalVerts, MPointArray* derivativeVerts, MFnMesh* oMeshFn , MFnMesh* dMeshFn);
 	void makeComponentMatches();
 	void makeComponents(MPointArray* originalVerts, MPointArray* derivativeVerts);
 	void matchGreedy();
@@ -42,4 +44,6 @@ public:
 	vector<ComponentMatch*> bestComponentMatches;
 	MPointArray* unmatchedOriginalMeshPoints;//<--used for drawing later
 	MPointArray* unmatchedDerivativeMeshPoints;
+	MFnMesh* originalMeshFn;
+	MFnMesh* derivativeMeshFn;
 };

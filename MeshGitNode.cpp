@@ -163,6 +163,7 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 		MObject meshObject = inputGeomValue.asMesh();
 		MFnMesh *currentMeshFn = new MFnMesh(meshObject);
 		allMFnMeshObjects[i] = currentMeshFn;
+		//cout<< " NUM POLYGONS " << allMFnMeshObjects[i]->numPolygons() << endl;
 
 		//Get the input geometry handle, and the group id as well 
 		MDataHandle hGeom = inputGeomValue.child(inputGeom);
@@ -290,13 +291,16 @@ void MeshGitNode::startDiff()
 	MPointArray* meshVertsOrig = allVerts[0];
 	MPointArray* meshVertsA = allVerts[1];
 	MPointArray* meshVertsB = allVerts[2];
+	MFnMesh* fnOrig = allMFnMeshObjects[0];
+	MFnMesh* fnA = allMFnMeshObjects[1];
+	MFnMesh* fnB = allMFnMeshObjects[2];
 
 	/*for (unsigned int i = 0; i < meshVertsOrig.length(); i++) {
 		cout << meshVertsOrig[i] << endl;
 	}*/
 
-	MatchComputer* matchComputerA = new MatchComputer(meshVertsOrig, meshVertsA);
-	MatchComputer* matchComputerB = new MatchComputer(meshVertsOrig, meshVertsB);
+	MatchComputer* matchComputerA = new MatchComputer(meshVertsOrig, meshVertsA, fnOrig,fnA );
+	MatchComputer* matchComputerB = new MatchComputer(meshVertsOrig, meshVertsB, fnOrig,fnB );
 
 	dA_bestMatches = matchComputerA->bestComponentMatches;
 	dA_unmatchedPointsOrig = matchComputerA->unmatchedOriginalMeshPoints;

@@ -71,7 +71,6 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	reportError(status);
 	MGlobal::displayInfo("Attached fnsetobject to the nodeobject");
 	
-
     view.beginGL();
     glPushAttrib(GL_CURRENT_BIT | GL_LINE_BIT);
     glPushMatrix();

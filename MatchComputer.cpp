@@ -1,16 +1,22 @@
 #include "MatchComputer.h"
+#include <maya/MIntArray.h>
 
 #include <queue>
 
 MatchComputer::MatchComputer() { }
 
-MatchComputer::MatchComputer(MPointArray* originalVerts, MPointArray* derivativeVerts) {
+MatchComputer::MatchComputer(MPointArray* originalVerts, MPointArray* derivativeVerts, MFnMesh* oMeshFn , MFnMesh* dMeshFn) {
 	iterationCount = 0;
+	originalMeshFn=oMeshFn;
+	derivativeMeshFn=dMeshFn;
 	makeComponents(originalVerts, derivativeVerts);
 
 	//initially has everything, but then later we remove as the algo goes on. 
 	unmatchedOriginalMeshPoints = new MPointArray(*originalVerts);
 	unmatchedDerivativeMeshPoints = new MPointArray(*derivativeVerts);
+
+	int numPolygons = originalMeshFn->numPolygons();
+	cout<<"Num Polygons " << numPolygons <<endl;
 
 	makeComponentMatches();
 	matchGreedy();
@@ -27,7 +33,21 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 		originalMeshComponents.push_back(component);
 	}
 
-	//Make Face Components for Original Mesh 
+	cout<<"Original Verts " << *originalVerts <<endl;
+	//Make Face Components for Original Mesh
+	int numPolygons = originalMeshFn->numPolygons();
+	cout<<"Num Polygons " << numPolygons <<endl;
+	for(int i = 0 ; i <numPolygons; i++){
+		MIntArray points;
+		originalMeshFn->getPolygonVertices(i,points);
+		cout<<"POLYGON " << i<< "    " << points<<endl;
+
+
+		MeshComponent* component = new MeshComponent(MeshComponent::FACE,(*originalVerts)[i]);
+		
+
+		originalMeshComponents.push_back(component);
+	}
 
 	//Make Vertex Components for Derivative Mesh
 	for (unsigned int i = 0; i < derivativeVerts->length(); i++) {
