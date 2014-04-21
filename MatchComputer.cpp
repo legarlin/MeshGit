@@ -1,6 +1,6 @@
 #include "MatchComputer.h"
 #include <maya/MIntArray.h>
-
+#include <map>
 #include <queue>
 
 MatchComputer::MatchComputer() { }
@@ -32,8 +32,7 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 		MeshComponent* component = new MeshComponent(MeshComponent::VERTEX,(*originalVerts)[i]);
 		originalMeshComponents.push_back(component);
 	}
-
-	cout<<"Original Verts " << *originalVerts <<endl;
+	
 	//Make Face Components for Original Mesh
 	int numPolygons = originalMeshFn->numPolygons();
 	cout<<"Num Polygons " << numPolygons <<endl;
@@ -42,18 +41,35 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 		originalMeshFn->getPolygonVertices(i,points);
 		cout<<"POLYGON " << i<< "    " << points<<endl;
 		MPoint averagePoint(0,0,0,0); 
+		MeshComponent* component = new MeshComponent(MeshComponent::FACE,averagePoint);//averagePoint is overwritten later
 		for(int v = 0; v<points.length(); v++){
 			MPoint currentPoint = (*originalVerts)[points[v]];
 			MVector vRep(currentPoint);
 			averagePoint += vRep;
+			//Add in ALL Face-Vertex Adjacency Information as well 
+			MeshComponent* vertComponent = originalMeshComponents[points[v]];
+			component->addAdjacency(vertComponent);
 		}
 		averagePoint = averagePoint / points.length();
 
-		MeshComponent* component = new MeshComponent(MeshComponent::FACE,(*originalVerts)[i]);
 		component->pos = averagePoint;
 		cout<<"Face " << i  << " Position " << averagePoint <<endl;
 		originalMeshComponents.push_back(component);
 	}
+
+	//FILL IN ADJACENCY INFORMATION
+	//Face-Vertex Adjacencies
+	for(int i = 0 ; i <numPolygons; i++){
+		int faceComponentIndex = originalVerts->length()+i;
+		MeshComponent* faceComponent = originalMeshComponents[faceComponentIndex];
+
+
+	}
+
+
+
+
+
 
 	//Make Vertex Components for Derivative Mesh
 	for (unsigned int i = 0; i < derivativeVerts->length(); i++) {

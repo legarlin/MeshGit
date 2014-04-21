@@ -24,3 +24,20 @@ bool MeshComponent::isEqualTo(MeshComponent* other){
 
 	return false;
 }
+
+void MeshComponent::addAdjacency(MeshComponent* adjacentComponent){
+	
+	//We dont want to add adj info to itself
+	if(this == adjacentComponent) 
+		return;
+
+	if(adjacentComponent->type == VERTEX){
+		adjacentVertices.insert(adjacentComponent);
+	}
+	else 
+		adjacentFaces.insert(adjacentComponent);
+
+	adjacentComponents.insert(adjacentComponent);
+	adjacentComponent->addAdjacency(this);
+
+}
