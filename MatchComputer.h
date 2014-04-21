@@ -8,6 +8,7 @@
 #include <maya/MPointArray.h>
 #include <maya/MFnMeshData.h>
 #include <maya/MFnMesh.h>
+#include <maya/MVector.h>
 
 using namespace std;
 using namespace glm;

@@ -41,11 +41,17 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 		MIntArray points;
 		originalMeshFn->getPolygonVertices(i,points);
 		cout<<"POLYGON " << i<< "    " << points<<endl;
-
+		MPoint averagePoint(0,0,0,0); 
+		for(int v = 0; v<points.length(); v++){
+			MPoint currentPoint = (*originalVerts)[points[v]];
+			MVector vRep(currentPoint);
+			averagePoint += vRep;
+		}
+		averagePoint = averagePoint / points.length();
 
 		MeshComponent* component = new MeshComponent(MeshComponent::FACE,(*originalVerts)[i]);
-		
-
+		component->pos = averagePoint;
+		cout<<"Face " << i  << " Position " << averagePoint <<endl;
 		originalMeshComponents.push_back(component);
 	}
 
