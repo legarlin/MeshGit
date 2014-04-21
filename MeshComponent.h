@@ -22,5 +22,5 @@ public:
     std::unordered_set<MeshComponent*> adjacentFaces;
     std::unordered_set<MeshComponent*> adjacentComponents;
 
-	void addAdjacency(MeshComponent* other);
+	void addAdjacency(MeshComponent* other , bool isSecondAdd);
 };

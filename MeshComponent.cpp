@@ -25,7 +25,7 @@ bool MeshComponent::isEqualTo(MeshComponent* other){
 	return false;
 }
 
-void MeshComponent::addAdjacency(MeshComponent* adjacentComponent){
+void MeshComponent::addAdjacency(MeshComponent* adjacentComponent, bool isSecondAdd){
 	
 	//We dont want to add adj info to itself
 	if(this == adjacentComponent) 
@@ -38,6 +38,7 @@ void MeshComponent::addAdjacency(MeshComponent* adjacentComponent){
 		adjacentFaces.insert(adjacentComponent);
 
 	adjacentComponents.insert(adjacentComponent);
-	adjacentComponent->addAdjacency(this);
+	if(!isSecondAdd)
+		adjacentComponent->addAdjacency(this,true);
 
 }

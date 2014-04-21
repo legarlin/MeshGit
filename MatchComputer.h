@@ -16,6 +16,7 @@ using namespace glm;
 class MatchComputer {
 
 	vector<MeshComponent*> originalMeshComponents; 
+	vector<MeshComponent*> originalMeshFaceComponents; 
 	vector<MeshComponent*> derivativeMeshComponents;
 
 	//Keeps track of how many unmatched elements there are intially

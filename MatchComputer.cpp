@@ -42,26 +42,31 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 		cout<<"POLYGON " << i<< "    " << points<<endl;
 		MPoint averagePoint(0,0,0,0); 
 		MeshComponent* component = new MeshComponent(MeshComponent::FACE,averagePoint);//averagePoint is overwritten later
-		for(int v = 0; v<points.length(); v++){
+		int numPoints= points.length();
+		for(int v = 0; v<numPoints; v++){
 			MPoint currentPoint = (*originalVerts)[points[v]];
 			MVector vRep(currentPoint);
 			averagePoint += vRep;
 			//Add in ALL Face-Vertex Adjacency Information as well 
 			MeshComponent* vertComponent = originalMeshComponents[points[v]];
-			component->addAdjacency(vertComponent);
+			component->addAdjacency(vertComponent,false);
+
+			//Add on all Vert-Vert Adjacency information. All those connected to each other around each face will be adjacent!
+			int nextVertIndex = (v+1)%numPoints;
+			MeshComponent* vertComponent2 = originalMeshComponents[points[nextVertIndex]];
+			vertComponent->addAdjacency(vertComponent2,false);
 		}
 		averagePoint = averagePoint / points.length();
 
 		component->pos = averagePoint;
 		cout<<"Face " << i  << " Position " << averagePoint <<endl;
-		originalMeshComponents.push_back(component);
+		originalMeshFaceComponents.push_back(component);
 	}
 
 	//FILL IN ADJACENCY INFORMATION
 	//Face-Vertex Adjacencies
 	for(int i = 0 ; i <numPolygons; i++){
-		int faceComponentIndex = originalVerts->length()+i;
-		MeshComponent* faceComponent = originalMeshComponents[faceComponentIndex];
+		//MeshComponent* faceComponent = originalMeshFaceComponents[i];
 
 
 	}
