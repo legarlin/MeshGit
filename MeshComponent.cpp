@@ -37,7 +37,8 @@ void MeshComponent::addAdjacency(MeshComponent* adjacentComponent, bool isSecond
 	else 
 		adjacentFaces.insert(adjacentComponent);
 
-	adjacentComponents.insert(adjacentComponent);
+	adjacentComponents.insert(adjacentComponent);//contains all adjacent components
+
 	if(!isSecondAdd)
 		adjacentComponent->addAdjacency(this,true);
 

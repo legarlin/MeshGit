@@ -4,6 +4,7 @@
 #include <maya/MPointArray.h>
 #include <maya/MPoint.h>
 #include <unordered_set>
+#include <set>
 
 using namespace glm;
 
@@ -18,9 +19,9 @@ public:
     bool isEqualTo(MeshComponent* other);
 
    // Adjacency Information
-    std::unordered_set<MeshComponent*> adjacentVertices;
-    std::unordered_set<MeshComponent*> adjacentFaces;
-    std::unordered_set<MeshComponent*> adjacentComponents;
+    std::set<MeshComponent*> adjacentVertices;
+    std::set<MeshComponent*> adjacentFaces;
+    std::set<MeshComponent*> adjacentComponents;
 
 	void addAdjacency(MeshComponent* other , bool isSecondAdd);
 };
