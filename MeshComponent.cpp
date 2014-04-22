@@ -43,3 +43,11 @@ void MeshComponent::addAdjacency(MeshComponent* adjacentComponent, bool isSecond
 		adjacentComponent->addAdjacency(this,true);
 
 }
+
+bool MeshComponent::hasAdjacency(MeshComponent* adjacentComponent){
+	int num = this->adjacentComponents.count(adjacentComponent);
+	if(num>0)
+		return true;
+	else 
+		return false;
+}

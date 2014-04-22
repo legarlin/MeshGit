@@ -24,4 +24,5 @@ public:
     std::set<MeshComponent*> adjacentComponents;
 
 	void addAdjacency(MeshComponent* other , bool isSecondAdd);
+	bool hasAdjacency(MeshComponent* adjacentComponent);
 };
