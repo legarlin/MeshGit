@@ -1,8 +1,9 @@
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(Type t, MPoint position) {
+MeshComponent::MeshComponent(Type t, MPoint position, int i) {
 	pos = position;
 	type = t;
+	index = i;
 }
 
 MeshComponent::MeshComponent() {

@@ -13,9 +13,10 @@ class MeshComponent {
 public:
     enum Type { VERTEX, FACE, EDGE, EMPTY } type;
 
+	int index;
     MPoint pos;
     MeshComponent();
-    MeshComponent(Type t, MPoint position);
+    MeshComponent(Type t, MPoint position, int i);
     bool isEqualTo(MeshComponent* other);
 
    // Adjacency Information

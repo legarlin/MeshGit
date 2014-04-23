@@ -7,8 +7,8 @@ MatchComputer::MatchComputer() { }
 
 MatchComputer::MatchComputer(MPointArray* originalVerts, MPointArray* derivativeVerts, MFnMesh* oMeshFn , MFnMesh* dMeshFn) {
 	iterationCount = 0;
-	originalMeshFn=oMeshFn;
-	derivativeMeshFn=dMeshFn;
+	originalMeshFn = oMeshFn;
+	derivativeMeshFn = dMeshFn;
 	makeComponents(originalVerts, derivativeVerts);
 
 	//initially has everything, but then later we remove as the algo goes on. 
@@ -29,7 +29,7 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 	//Make Vertex Components for Original Mesh
 	for (unsigned int i = 0; i < originalVerts->length(); i++) {
 		//cout<<originalVerts[i]<< endl;
-		MeshComponent* component = new MeshComponent(MeshComponent::VERTEX,(*originalVerts)[i]);
+		MeshComponent* component = new MeshComponent(MeshComponent::VERTEX,(*originalVerts)[i], i);
 		originalMeshComponents.push_back(component);
 	}
 	
