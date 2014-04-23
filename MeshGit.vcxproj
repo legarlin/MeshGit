@@ -23,6 +23,7 @@
     <ClCompile Include="MeshGitFn.cpp" />
     <ClCompile Include="MeshGitLocatorNode.cpp" />
     <ClCompile Include="MeshGitNode.cpp" />
+    <ClCompile Include="MeshOperator.cpp" />
     <ClCompile Include="PluginMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +34,7 @@
     <ClInclude Include="MeshGitFn.h" />
     <ClInclude Include="MeshGitLocatorNode.h" />
     <ClInclude Include="MeshGitNode.h" />
+    <ClInclude Include="MeshOperator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>

@@ -22,6 +22,7 @@
 #include <vector>
 #include <maya/MMatrix.h>
 #include "ComponentMatch.h"
+#include "MeshOperator.h"
 
 using namespace std;
 

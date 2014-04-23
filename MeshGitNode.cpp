@@ -288,31 +288,33 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock)
 
 void MeshGitNode::startDiff()
 {
-	MPointArray* meshVertsOrig = allVerts[0];
-	MPointArray* meshVertsA = allVerts[1];
-	MPointArray* meshVertsB = allVerts[2];
-	MFnMesh* fnOrig = allMFnMeshObjects[0];
-	MFnMesh* fnA = allMFnMeshObjects[1];
-	MFnMesh* fnB = allMFnMeshObjects[2];
+	MeshOperator* meshOperation = new MeshOperator(allVerts, allMFnMeshObjects);
+	meshOperation->diff();
+	
+	//MPointArray* meshVertsOrig = allVerts[0];
+	//MPointArray* meshVertsA = allVerts[1];
+	//MPointArray* meshVertsB = allVerts[2];
+	//MFnMesh* fnOrig = allMFnMeshObjects[0];
+	//MFnMesh* fnA = allMFnMeshObjects[1];
+	//MFnMesh* fnB = allMFnMeshObjects[2];
 
-	/*for (unsigned int i = 0; i < meshVertsOrig.length(); i++) {
-		cout << meshVertsOrig[i] << endl;
-	}*/
+	///*for (unsigned int i = 0; i < meshVertsOrig.length(); i++) {
+	//	cout << meshVertsOrig[i] << endl;
+	//}*/
 
-	MatchComputer* matchComputerA = new MatchComputer(meshVertsOrig, meshVertsA, fnOrig,fnA );
-	MatchComputer* matchComputerB = new MatchComputer(meshVertsOrig, meshVertsB, fnOrig,fnB );
+	//MatchComputer* matchComputerA = new MatchComputer(meshVertsOrig, meshVertsA, fnOrig,fnA );
+	//MatchComputer* matchComputerB = new MatchComputer(meshVertsOrig, meshVertsB, fnOrig,fnB );
 
-	dA_bestMatches = matchComputerA->bestComponentMatches;
-	dA_unmatchedPointsOrig = matchComputerA->unmatchedOriginalMeshPoints;
-	dA_unmatchedPointsA = matchComputerA->unmatchedDerivativeMeshPoints;
+	dA_bestMatches = meshOperation->dA_bestMatches;
+	dA_unmatchedPointsOrig = meshOperation->dA_unmatchedPointsOrig;
+	dA_unmatchedPointsA = meshOperation->dA_unmatchedPointsA;
 
-	dB_bestMatches = matchComputerB->bestComponentMatches;
-	dB_unmatchedPointsOrig = matchComputerB->unmatchedOriginalMeshPoints;
-	dB_unmatchedPointsB = matchComputerB->unmatchedDerivativeMeshPoints;
+	dB_bestMatches = meshOperation->dB_bestMatches;
+	dB_unmatchedPointsOrig = meshOperation->dB_unmatchedPointsOrig;
+	dB_unmatchedPointsB = meshOperation->dB_unmatchedPointsB;
 }
 
 //PRINTING AND DEBUGGING FUNCTIONS
-
 void MeshGitNode::reportError(MStatus status )
 {
 	if(status != MStatus::kSuccess){
