@@ -7,6 +7,9 @@
 #include <maya/MVector.h>
 
 #include "MatchComputer.h"
+#include "EditOperation.h"
+#include "MeshComponent.h"
+#include "ComponentMatch.h"
 
 using namespace std;
 
@@ -22,6 +25,8 @@ class MeshOperator {
 	MatchComputer* matchComputerA;
 	MatchComputer* matchComputerB;
 
+	vector<MeshComponent*> origMeshComponents;
+
 public:
 	vector<ComponentMatch*> dA_bestMatches;
 	MPointArray* dA_unmatchedPointsOrig;
@@ -31,8 +36,12 @@ public:
 	MPointArray* dB_unmatchedPointsOrig;
 	MPointArray* dB_unmatchedPointsB;
 
+	vector<EditOperation*> nonconflictingEdits;
+
 	MeshOperator();
 	MeshOperator(vector<MPointArray*> meshVerts, vector<MFnMesh*> fnMeshObjects);
 
+	void makeComponents();
 	void diff();
+	void checkConflicts();
 };

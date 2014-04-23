@@ -4,6 +4,7 @@ MeshComponent::MeshComponent(Type t, MPoint position, int i) {
 	pos = position;
 	type = t;
 	index = i;
+	matched = nullptr;
 }
 
 MeshComponent::MeshComponent() {
@@ -45,10 +46,16 @@ void MeshComponent::addAdjacency(MeshComponent* adjacentComponent, bool isSecond
 
 }
 
-bool MeshComponent::hasAdjacency(MeshComponent* adjacentComponent){
+bool MeshComponent::hasAdjacency(MeshComponent* adjacentComponent)
+{
 	int num = this->adjacentComponents.count(adjacentComponent);
 	if(num>0)
 		return true;
 	else 
 		return false;
+}
+
+void MeshComponent::addComponentMatch(ComponentMatch* cM)
+{
+	matched = cM;
 }

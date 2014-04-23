@@ -62,6 +62,9 @@
     <ClCompile Include="MeshOperator.cpp">
       <Filter>Source Files\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EditOperation.cpp">
+      <Filter>Source Files\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MeshGitNode.h">
@@ -86,6 +89,9 @@
       <Filter>Source Files\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MeshOperator.h">
+      <Filter>Source Files\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EditOperation.h">
       <Filter>Source Files\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

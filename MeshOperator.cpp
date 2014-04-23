@@ -26,3 +26,33 @@ void MeshOperator::diff()
 	dB_unmatchedPointsOrig = matchComputerB->unmatchedOriginalMeshPoints;
 	dB_unmatchedPointsB = matchComputerB->unmatchedDerivativeMeshPoints;
 }
+
+void MeshOperator::checkConflicts()
+{
+	vector<MeshComponent*> origMeshComponents_A = matchComputerA->originalMeshComponents;
+	vector<MeshComponent*> origMeshComponents_B = matchComputerB->originalMeshComponents;
+
+	if (origMeshComponents_A.size() != origMeshComponents_B.size()) {
+		cout << "uh oh." << endl;
+		return;
+	}
+
+	unsigned int i, size_orig;
+	size_orig = origMeshComponents_A.size();
+	for (i = 0; i < size_orig; ++i) {
+		MeshComponent* mc_A = origMeshComponents_A[i];
+		MeshComponent* mc_B = origMeshComponents_B[i];
+
+		if (!mc_A->matched) break;
+		if (!mc_B->matched) break;
+
+		ComponentMatch* cm_A = mc_A->matched;
+		ComponentMatch* cm_B = mc_B->matched;
+				
+		EditOperation* edit = new EditOperation(cm_A, cm_B);
+
+		if (!edit->conflict) {
+			nonconflictingEdits.push_back(edit);
+		}
+	}
+}

@@ -15,9 +15,6 @@ using namespace glm;
 
 class MatchComputer {
 
-	vector<MeshComponent*> originalMeshComponents; 
-	vector<MeshComponent*> originalMeshFaceComponents; 
-	vector<MeshComponent*> derivativeMeshComponents;
 
 	//Keeps track of how many unmatched elements there are intially
 	int numUnmatched;
@@ -28,6 +25,11 @@ class MatchComputer {
 	void swap(int a, int b, vector<ComponentMatch*> &data);
 
 public:
+	
+	vector<MeshComponent*> originalMeshComponents; 
+	vector<MeshComponent*> originalMeshFaceComponents; 
+	vector<MeshComponent*> derivativeMeshComponents;
+
 	MatchComputer();
 	MatchComputer(MPointArray* originalVerts, MPointArray* derivativeVerts, MFnMesh* oMeshFn , MFnMesh* dMeshFn);
 	void makeComponentMatches();
@@ -44,6 +46,10 @@ public:
 	//Gredy Algorithm Data Structure
 	vector<ComponentMatch*> allComponentMatches; // all possible matches
 	vector<ComponentMatch*> bestComponentMatches;
+
+	vector<MeshComponent*> unmatchedOriginalMeshComponents;
+	vector<MeshComponent*> unmatchedDerivativeMeshComponents;
+
 	MPointArray* unmatchedOriginalMeshPoints;//<--used for drawing later
 	MPointArray* unmatchedDerivativeMeshPoints;
 	MFnMesh* originalMeshFn;

@@ -15,6 +15,9 @@ MatchComputer::MatchComputer(MPointArray* originalVerts, MPointArray* derivative
 	unmatchedOriginalMeshPoints = new MPointArray(*originalVerts);
 	unmatchedDerivativeMeshPoints = new MPointArray(*derivativeVerts);
 
+	unmatchedOriginalMeshComponents = originalMeshComponents;
+	unmatchedDerivativeMeshComponents = derivativeMeshComponents;
+
 	int numPolygons = originalMeshFn->numPolygons();
 	cout<<"Num Polygons " << numPolygons <<endl;
 
@@ -265,6 +268,10 @@ void MatchComputer::removeFromUnmatched(ComponentMatch* match){
 	MPoint vA = compA->pos;
 	MPoint vB = compB->pos;
 
+	//point ref in MeshComponent to ComponentMatch
+	compA->addComponentMatch(match);
+	compB->addComponentMatch(match);
+
 	int Olength = unmatchedOriginalMeshPoints->length();
 
 	for(int i = 0; i < Olength; i ++) {
@@ -281,6 +288,7 @@ void MatchComputer::removeFromUnmatched(ComponentMatch* match){
 	for(int i = 0; i < Dlength; i ++) {
 		if((*unmatchedDerivativeMeshPoints)[i] == vB) {
 			unmatchedDerivativeMeshPoints->remove(i);
+			//unmatchedDerivativeMeshComponents.erase(unmatchedDerivativeMeshComponents.begin() + i);
 			break;
 		}
 	}

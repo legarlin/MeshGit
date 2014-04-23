@@ -2,6 +2,8 @@
 
 #include "MeshComponent.h"
 
+class MeshComponent;
+
 struct Match {
 	MeshComponent* originalComp;
 	MeshComponent* derivativeComp;
@@ -18,8 +20,9 @@ class ComponentMatch {
 	double cost;
 
 public:
-	ComponentMatch(MeshComponent* a, MeshComponent* b);
 	ComponentMatch();
+	ComponentMatch(MeshComponent* a, MeshComponent* b);
+
 	MeshComponent* originalComp;
 	MeshComponent* derivativeComp;
 

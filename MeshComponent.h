@@ -1,12 +1,16 @@
 #pragma once
 
-#include "glm\glm.hpp"
 #include <maya/MPointArray.h>
 #include <maya/MPoint.h>
 #include <unordered_set>
 #include <set>
+#include <vector>
 
-using namespace glm;
+#include "ComponentMatch.h"
+
+class ComponentMatch;
+
+using namespace std;
 
 class MeshComponent {
 
@@ -15,15 +19,21 @@ public:
 
 	int index;
     MPoint pos;
+
+	// Adjacency Information
+    set<MeshComponent*> adjacentVertices;
+    set<MeshComponent*> adjacentFaces;
+    set<MeshComponent*> adjacentComponents;
+
+	ComponentMatch* matched;
+
     MeshComponent();
     MeshComponent(Type t, MPoint position, int i);
-    bool isEqualTo(MeshComponent* other);
 
-   // Adjacency Information
-    std::set<MeshComponent*> adjacentVertices;
-    std::set<MeshComponent*> adjacentFaces;
-    std::set<MeshComponent*> adjacentComponents;
+    bool isEqualTo(MeshComponent* other);
 
 	void addAdjacency(MeshComponent* other , bool isSecondAdd);
 	bool hasAdjacency(MeshComponent* adjacentComponent);
+
+	void addComponentMatch(ComponentMatch*cM);
 };
