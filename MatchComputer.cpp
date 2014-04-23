@@ -41,7 +41,7 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 		originalMeshFn->getPolygonVertices(i,points);
 		cout<<"POLYGON " << i<< "    " << points<<endl;
 		MPoint averagePoint(0,0,0,0); 
-		MeshComponent* component = new MeshComponent(MeshComponent::FACE,averagePoint);//averagePoint is overwritten later
+		MeshComponent* component = new MeshComponent(MeshComponent::FACE,averagePoint, i);//averagePoint is overwritten later
 		int numPoints= points.length();
 		for(int v = 0; v<numPoints; v++){
 			MPoint currentPoint = (*originalVerts)[points[v]];
@@ -113,7 +113,7 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 	//Make Vertex Components for Derivative Mesh
 	for (unsigned int i = 0; i < derivativeVerts->length(); i++) {
 		//cout<<derivativeVerts[i]<< endl;
-		MeshComponent* component = new MeshComponent(MeshComponent::VERTEX,(*derivativeVerts)[i]);
+		MeshComponent* component = new MeshComponent(MeshComponent::VERTEX,(*derivativeVerts)[i],  i);
 		derivativeMeshComponents.push_back(component);	
 	}
 
