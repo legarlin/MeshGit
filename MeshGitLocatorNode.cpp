@@ -8,6 +8,7 @@
 #include <MeshGitLocatorNode.h>
 #include <maya/MGlobal.h>
 #include "MeshGitFn.h"
+#include "EditOperation.h"
 
 #include <maya/MPointArray.h>
 
@@ -104,8 +105,9 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	//	}
 	//}
 
-	drawUnmatched(mgFn);
-	drawMatched(mgFn);
+	//drawUnmatched(mgFn);
+	//drawMatched(mgFn);
+	drawNonconflicting(mgFn);
 
 	glEnd();
     glPopMatrix();
@@ -183,6 +185,32 @@ void MeshGitLocatorNode::drawMatched(MeshGitFn &mgFn)
 	}
 }
 
+
+void MeshGitLocatorNode::drawNonconflicting(MeshGitFn &mgFn)
+{
+	vector<EditOperation*> eOs = mgFn.getNonconflictingEdits();
+
+	for (int i = 0; i < eOs.size(); i++) {
+
+		EditOperation* eO = eOs[i];
+
+		if (eO->aChanged) {
+			ComponentMatch* cM = eO->matchA;
+			MPoint Op = cM->getMatches().derivativeComp->pos;
+
+			glColor3f(cM->color.r, cM->color.g, cM->color.b);
+			glVertex3d(Op.x, Op.y, Op.z);
+		}
+
+		if (eO->bChanged) {
+			ComponentMatch* cM = eO->matchB;
+			MPoint Op = cM->getMatches().derivativeComp->pos;
+
+			glColor3f(cM->color.r, cM->color.g, cM->color.b);
+			glVertex3d(Op.x, Op.y, Op.z);
+		}
+	}
+}
 
 void MeshGitLocatorNode::reportError(MStatus status ){
 	if(status != MStatus::kSuccess){

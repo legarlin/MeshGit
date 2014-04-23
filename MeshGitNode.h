@@ -23,6 +23,7 @@
 #include <maya/MMatrix.h>
 #include "ComponentMatch.h"
 #include "MeshOperator.h"
+#include "EditOperation.h"
 
 using namespace std;
 
@@ -59,6 +60,8 @@ public:
 
 	vector<MPointArray*> getAllVerts();
 	vector<MFnMesh*> getMFnMeshObjects();
+
+	vector<EditOperation*> nonconflictingOriginalVerts;
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 	MStatus storeAllVerts(MDataBlock& dataBlock);

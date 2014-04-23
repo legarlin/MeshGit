@@ -6,6 +6,7 @@
 //#include "MeshGitNode.h"
 #include <maya/MGlobal.h>
 #include <vector>
+#include "EditOperation.h"
 
 using namespace std;
 
@@ -40,6 +41,9 @@ public:
 	Matched getMatched();
 	Unmatched getUnmatched();
 	vector<MFnMesh*> getMFnMeshObjects();
+
+	vector<EditOperation*> getNonconflictingEdits();
+
 	/*void getBestComponentMatches(vector<ComponentMatch*> &dA_bestMatches, vector<ComponentMatch*> &dB_bestMatches);
 	void getUnmatchedOriginalMeshPoints(MPointArray* &dA_unmatchedPointsOrig, MPointArray* &dB_unmatchedPointsOrig);
 	void getUnmatchedDerivativeMeshPoints(MPointArray* &dA_unmatchedPointsA, MPointArray* &dB_unmatchedPointsB);*/

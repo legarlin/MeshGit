@@ -19,8 +19,9 @@ public:
 					  M3dView::DisplayStyle style,
 					  M3dView::DisplayStatus status);
 
-	void drawUnmatched(MeshGitFn &fn);
-	void drawMatched(MeshGitFn &fn);
+	void drawUnmatched(MeshGitFn &mgFn);
+	void drawMatched(MeshGitFn &mgFn);
+	void drawNonconflicting(MeshGitFn &mgFn);
 
 	//Data
 	static MTypeId id;

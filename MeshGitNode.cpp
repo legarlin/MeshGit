@@ -312,6 +312,9 @@ void MeshGitNode::startDiff()
 	dB_bestMatches = meshOperation->dB_bestMatches;
 	dB_unmatchedPointsOrig = meshOperation->dB_unmatchedPointsOrig;
 	dB_unmatchedPointsB = meshOperation->dB_unmatchedPointsB;
+
+	meshOperation->checkConflicts();
+	nonconflictingOriginalVerts = meshOperation->nonconflictingEdits;
 }
 
 //PRINTING AND DEBUGGING FUNCTIONS
