@@ -26,7 +26,7 @@ public:
 	void drawUnmatched(MeshGitFn &mgFn);
 	void drawMatched(MeshGitFn &mgFn);
 	void drawNonconflicting(MeshGitFn &mgFn);
-
+	void drawConflicting(MeshGitFn &mgFn);
 	//Data
 	static MTypeId id;
 

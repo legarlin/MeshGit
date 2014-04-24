@@ -156,6 +156,7 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	if(bdrawNonConflictingObj)
 		drawNonconflicting(mgFn);
 	if(bdrawConflictingObj){
+		drawConflicting(mgFn);
 	}
 
 
@@ -257,6 +258,32 @@ void MeshGitLocatorNode::drawNonconflicting(MeshGitFn &mgFn)
 			MPoint Op = cM->getMatches().derivativeComp->pos;
 
 			glColor3f(0,1,0);
+			glVertex3d(Op.x+ dBTranslateX, Op.y+ dBTranslateY, Op.z+ dBTranslateZ);
+		}
+	}
+}
+
+void MeshGitLocatorNode::drawConflicting(MeshGitFn &mgFn)
+{
+	vector<EditOperation*> eOs = mgFn.getConflictingEdits();
+
+	for (int i = 0; i < eOs.size(); i++) {
+
+		EditOperation* eO = eOs[i];
+
+		if (eO->aChanged) {
+			ComponentMatch* cM = eO->matchA;
+			MPoint Op = cM->getMatches().derivativeComp->pos;
+
+			glColor3f(1,0,0);
+			glVertex3d(Op.x+ dATranslateX, Op.y+ dATranslateY, Op.z+ dATranslateZ);
+		}
+
+		if (eO->bChanged) {
+			ComponentMatch* cM = eO->matchB;
+			MPoint Op = cM->getMatches().derivativeComp->pos;
+
+			glColor3f(1,0,0);
 			glVertex3d(Op.x+ dBTranslateX, Op.y+ dBTranslateY, Op.z+ dBTranslateZ);
 		}
 	}
