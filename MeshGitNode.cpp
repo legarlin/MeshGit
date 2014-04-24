@@ -6,6 +6,7 @@
 #include <maya/MString.h>
 #include "maya/MFnPlugin.h"
 #include <maya/MFnStringData.h>
+#include <maya/MFnStringArrayData.h>
 #include <string>
 #include <iostream>
 using namespace std;
@@ -26,7 +27,7 @@ MObject MeshGitNode::derivativeAMesh;
 MObject MeshGitNode::derivativeBMesh;
 MObject MeshGitNode::mergedMesh;
 MObject MeshGitNode::currentFrame;
-
+MObject MeshGitNode::editStringArray;
 
 MTypeId MeshGitNode::id( 0x4E5000 );
 
@@ -51,6 +52,7 @@ MStatus MeshGitNode::initialize()
 	MFnTypedAttribute typedAttr;
 	MFnNumericAttribute numericAttr;
 	MFnStringData stringFn;
+	MFnStringArrayData stringArrayFn;
 	MStatus returnStatus;
 
 	//Create the attributes
@@ -63,6 +65,13 @@ MStatus MeshGitNode::initialize()
     returnStatus = addAttribute(MeshGitNode::currentFrame);
 	McheckErr(returnStatus, "ERROR adding currentFrame attribute\n");
 
+	MeshGitNode::editStringArray = typedAttr.create( "editStringArray", "es",
+		MFnData::kStringArray,
+												 &returnStatus ); 
+	McheckErr(returnStatus, "ERROR creating MeshGitNode editStringArray attribute\n");
+	typedAttr.setStorable(true);
+	returnStatus = addAttribute(MeshGitNode::editStringArray);
+	McheckErr(returnStatus, "ERROR adding editStringArray attribute\n");
 
 	MeshGitNode::originalMesh = typedAttr.create( "originalMesh", "om",
 												 MFnData::kMesh,
@@ -131,10 +140,6 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 	//Gets the number of geometries on the handle - should be 3
 	unsigned int numGeom = ouputGeomHandle.elementCount(&status);
 	reportError(status);
-		
-	vector<MPointArray> sceneVerts;
-	sceneVerts.clear();
-	sceneVerts.resize(numGeom);	
 
 	allVerts.clear();
 	allVerts.resize(numGeom);
@@ -183,11 +188,12 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 
 		////set an iterator over all points in the current input geometry and copy all the points into the all verts data structure
 		MItGeometry iter(hOutputGeomValue, groupId, false);
-		sceneVerts[i].clear();
-		iter.allPositions(sceneVerts[i], MSpace::kObject);
+		MPointArray currentVerts; 
+		iter.allPositions(currentVerts, MSpace::kObject);
 		ouputGeomHandle.next();
-
-		MPointArray* mp = new MPointArray(sceneVerts[i]);
+		cout << "MESH " << i << endl;
+		cout<< currentVerts << endl;
+		MPointArray* mp = new MPointArray(currentVerts);
 		allVerts[i] = mp;
 	}
 
@@ -195,9 +201,9 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 	MGlobal::displayInfo("Ending storeAllVerts");
 
 	for (unsigned int i = 0; i < allVerts.size(); i++) {
-		//cout << "MESH " << i << endl;
-		//cout<< allVerts[i] << endl;
-		//cout<<allTransforms[i]<<endl;
+		cout << "MESHB " << i << endl;
+		cout<< *allVerts[i] << endl;
+		cout<<allTransforms[i]<<endl;
 	}
 	return status;
 }
@@ -288,8 +294,11 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock)
 
 void MeshGitNode::startDiff()
 {
-	MeshOperator* meshOperation = new MeshOperator(allVerts, allMFnMeshObjects);
-	meshOperation->diff();
+	MPointArray* meshVertsB = allVerts[2];
+	cout << "meshVertsAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	cout<< *meshVertsB << endl;
+	meshOperator = new MeshOperator(allVerts, allMFnMeshObjects);
+	meshOperator->diff();
 	
 	//MPointArray* meshVertsOrig = allVerts[0];
 	//MPointArray* meshVertsA = allVerts[1];
@@ -305,17 +314,30 @@ void MeshGitNode::startDiff()
 	//MatchComputer* matchComputerA = new MatchComputer(meshVertsOrig, meshVertsA, fnOrig,fnA );
 	//MatchComputer* matchComputerB = new MatchComputer(meshVertsOrig, meshVertsB, fnOrig,fnB );
 
-	dA_bestMatches = meshOperation->dA_bestMatches;
-	dA_unmatchedPointsOrig = meshOperation->dA_unmatchedPointsOrig;
-	dA_unmatchedPointsA = meshOperation->dA_unmatchedPointsA;
+	dA_bestMatches = meshOperator->dA_bestMatches;
+	dA_unmatchedPointsOrig = meshOperator->dA_unmatchedPointsOrig;
+	dA_unmatchedPointsA = meshOperator->dA_unmatchedPointsA;
 
-	dB_bestMatches = meshOperation->dB_bestMatches;
-	dB_unmatchedPointsOrig = meshOperation->dB_unmatchedPointsOrig;
-	dB_unmatchedPointsB = meshOperation->dB_unmatchedPointsB;
+	dB_bestMatches = meshOperator->dB_bestMatches;
+	dB_unmatchedPointsOrig = meshOperator->dB_unmatchedPointsOrig;
+	dB_unmatchedPointsB = meshOperator->dB_unmatchedPointsB;
 
-	meshOperation->checkConflicts();
-	nonconflictingOriginalVerts = meshOperation->nonconflictingEdits;
+	meshOperator->checkConflicts();
+	nonconflictingOriginalVerts = meshOperator->nonconflictingEdits;
+
+
+
+
+
+
+
 }
+
+
+//vector<MString> MeshGitNode::getEditStrings( ){
+//	//if(
+//}
+
 
 //PRINTING AND DEBUGGING FUNCTIONS
 void MeshGitNode::reportError(MStatus status )

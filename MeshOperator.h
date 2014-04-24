@@ -10,6 +10,7 @@
 #include "EditOperation.h"
 #include "MeshComponent.h"
 #include "ComponentMatch.h"
+#include <maya/MStringArray.h>
 
 using namespace std;
 
@@ -37,6 +38,8 @@ public:
 	MPointArray* dB_unmatchedPointsB;
 
 	vector<EditOperation*> nonconflictingEdits;
+	vector<EditOperation*> conflictingEdits;
+	vector<MString> editInfo;
 
 	MeshOperator();
 	MeshOperator(vector<MPointArray*> meshVerts, vector<MFnMesh*> fnMeshObjects);

@@ -100,12 +100,18 @@ void MeshGitCmd::startDiff(MString nodeName){
 
 	//Start the diff
 	mgFn.startDiff();
-
+	//mgFn.get
 	//Get the node plug
 	MPlug nodePlug = mgFn.findPlug("message", true, &status);
 	reportError(status);
 
+	MGlobal::executeCommand("window -title \"EDIT OPERATION RESULTS\" -widthHeight 300 200 myWindow2;");
+	
+	
 
+	MGlobal::executeCommand("showWindow myWindow2;");
+
+	
 }
 
 void MeshGitCmd::connectNodes(MString nodeName, MString locatorName){

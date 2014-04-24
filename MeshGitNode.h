@@ -44,6 +44,7 @@ public:
 	static MObject	derivativeBMesh;
 	static MObject	mergedMesh;
 	static MObject currentFrame;
+	static MObject editStringArray;
 	static MTypeId	id;
 
 	//All Data holders
@@ -59,8 +60,9 @@ public:
 	MPointArray* dB_unmatchedPointsB;
 
 	vector<MPointArray*> getAllVerts();
+	vector<MString> getEditStrings();
 	vector<MFnMesh*> getMFnMeshObjects();
-
+	MeshOperator* meshOperator;
 	vector<EditOperation*> nonconflictingOriginalVerts;
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);

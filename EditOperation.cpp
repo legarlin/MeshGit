@@ -1,5 +1,6 @@
 #include "EditOperation.h"
-
+#include <string>
+#include <iostream>
 EditOperation::EditOperation() 
 {
 	matchA = nullptr;
@@ -25,7 +26,9 @@ void EditOperation::checkConflict()
 	Match A = matchA->getMatches();
 	MeshComponent* A_original = A.originalComp;
 	MeshComponent* A_derivative = A.derivativeComp;
+
 	if (A_original->pos != A_derivative->pos) {
+		
 		aChanged = true;
 	}
 
@@ -39,5 +42,13 @@ void EditOperation::checkConflict()
 	if (aChanged && bChanged) {
 		conflict = true;
 	}
+	//cout<<" CONFLICT CHECK"<<endl;
+	//cout<<"1A Pos : "<< A_original->pos <<endl;
+	//cout<<"1B Pos : "<< A_derivative->pos <<endl;
+	//cout<<"2A Pos : "<< B_original->pos <<endl;
+	//cout<<"2B Pos : "<< B_derivative->pos <<endl;
+	//cout<<"aChanged : "<< aChanged <<endl;
+	//cout<<"bChanged : "<< bChanged <<endl;
+	//cout<<"conflict : "<< conflict <<endl;
 
 }

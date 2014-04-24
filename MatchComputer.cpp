@@ -72,37 +72,37 @@ void MatchComputer::makeComponents(MPointArray* originalVerts, MPointArray* deri
 		 MeshComponent* currentVertComp = originalMeshComponents[m];
 		 std::set<MeshComponent*> adjacentFacesFIRST = currentVertComp->adjacentFaces;
 		 std::set<MeshComponent*> adjacentVertsFIRST = currentVertComp->adjacentVertices;
-		 cout<<"Got Elements " << adjacentFacesFIRST.size() << " | " << adjacentVertsFIRST.size()<<endl;
+		 //cout<<"Got Elements " << adjacentFacesFIRST.size() << " | " << adjacentVertsFIRST.size()<<endl;
 		 std::set<MeshComponent*>::iterator it0;
 
 
 		 for (it0 = adjacentVertsFIRST.begin(); it0 != adjacentVertsFIRST.end(); ++it0){
-			 cout<<"it0 " << endl;
+			// cout<<"it0 " << endl;
 			  MeshComponent* secondVertComp = *it0;
 			  std::set<MeshComponent*> adjacentFacesSECOND = secondVertComp->adjacentFaces;
 			  std::vector<MeshComponent*> adjacentFaces; 
 			  //Find out which faces share the current edge and add them into the adjacent face holder
 			   std::set<MeshComponent*>::iterator it1;
 				for (it1 = adjacentFacesFIRST.begin(); it1 != adjacentFacesFIRST.end(); ++it1)
-				{   cout<<"it1 " << endl;
+				{  // cout<<"it1 " << endl;
 					MeshComponent* af1 = *it1;
 					if(adjacentFacesSECOND.count(af1)>0){
 						adjacentFaces.push_back(af1);
 					}
 				}
-			    cout<<"Before Adding " << endl;
+			   // cout<<"Before Adding " << endl;
 				for(int x = 0; x<adjacentFaces.size(); x++){
 					for(int y = 0; y< adjacentFaces.size(); y++){
-						cout<<"Going to add adjacent faces" << endl;
+						//cout<<"Going to add adjacent faces" << endl;
 						MeshComponent* face1 = adjacentFaces[x];
 						MeshComponent* face2 = adjacentFaces[y];
-						cout<<"face1" << face1 << endl;
-						cout<<"face2" << face2 << endl;
+						//cout<<"face1" << face1 << endl;
+						//cout<<"face2" << face2 << endl;
 						face1->addAdjacency(face2,false);
-						cout<<"Added Adjacency" << endl;
+						//cout<<"Added Adjacency" << endl;
 					}
 				}
-				cout<<"Finished Adding Adjacency" << endl;
+				//cout<<"Finished Adding Adjacency" << endl;
 		 }
 
 		 cout<<"ENDING Adjacencies " << m << endl;

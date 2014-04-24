@@ -8,6 +8,10 @@ MeshOperator:: MeshOperator(vector<MPointArray*> meshVerts, vector<MFnMesh*> fnM
 	meshVertsA = meshVerts[1];
 	meshVertsB = meshVerts[2];
 
+	//cout << "meshVertsBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	//cout<< *meshVertsB << endl;
+	
+
 	fnMeshOrig = fnMeshObjects[0];
 	fnMeshA = fnMeshObjects[1];
 	fnMeshB = fnMeshObjects[2];
@@ -51,8 +55,22 @@ void MeshOperator::checkConflicts()
 				
 		EditOperation* edit = new EditOperation(cm_A, cm_B);
 
-		if (!edit->conflict) {
+		bool conflicting = edit->conflict;
+		if (!conflicting) {
 			nonconflictingEdits.push_back(edit);
 		}
+		else 
+			conflictingEdits.push_back(edit);
+
+		MString editString = "Component Number:" + i;
+		editString+=  " | Status: ";
+		if(conflicting)
+			editString+= " CONFLICT!";
+		else
+			editString+= " NO CONFLICT";
+		cout<<editString << endl;
+		editInfo.push_back(editString);
+
+
 	}
 }

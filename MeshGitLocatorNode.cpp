@@ -105,9 +105,9 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	//	}
 	//}
 
-	//drawUnmatched(mgFn);
-	//drawMatched(mgFn);
-	drawNonconflicting(mgFn);
+	drawUnmatched(mgFn);
+	drawMatched(mgFn);
+	//drawNonconflicting(mgFn);
 
 	glEnd();
     glPopMatrix();

@@ -115,13 +115,22 @@ global proc load()
 
 	//Connect the nodes 
 	MeshGitCmd -c $mainNodeName[0] $vizNodeName;
-
+	
 	//Run the diff
 	MeshGitCmd -d $mainNodeName[0];
+	openDiffWindow($mainNodeName[0]);
 
 	//Connect the attributes so we have access to the kMesh Objects
 
 	deleteUI -window MeshGitGUI;
+}
+
+global proc openDiffWindow(string $mainNodeName) {
+	window -title "MESHGIT CONTROLS" -widthHeight 300 200 myWindow;
+     columnLayout -columnAttach "both" 5 -rowSpacing 5 -columnWidth 100;
+	 string $comm = "MeshGitCmd -d " + $mainNodeName;
+     button -label "Start Diff" -command $comm;
+	showWindow myWindow; 
 }
 
 global proc cancel()
@@ -135,4 +144,20 @@ global proc unloadMenu()
 	buildFileMenu();
 
 	if (`menu -ex MeshGitMenu`) deleteUI -menu MeshGitMenu;
+}
+
+global proc showListOfEditOperations(string $nodeName)
+{
+	window;
+	paneLayout;
+	textScrollList -numberOfRows 8 -allowMultiSelection false
+		-append "one"      -append "two"      -append "three"
+		-append "four"     -append "five"     -append "six"
+		-append "seven"    -append "eight"    -append "nine"
+		-append "ten"      -append "eleven"   -append "twelve"
+		-append "thirteen" -append "fourteen" -append "fifteen"
+		-selectItem "six"
+		-showIndexedItem 4;
+	showWindow;
+	
 }
