@@ -105,11 +105,6 @@ void MeshGitCmd::startDiff(MString nodeName){
 	MPlug nodePlug = mgFn.findPlug("message", true, &status);
 	reportError(status);
 
-	MGlobal::executeCommand("window -title \"EDIT OPERATION RESULTS\" -widthHeight 300 200 myWindow2;");
-	
-	
-
-	MGlobal::executeCommand("showWindow myWindow2;");
 
 	
 }

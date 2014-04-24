@@ -62,12 +62,13 @@ void MeshOperator::checkConflicts()
 		else 
 			conflictingEdits.push_back(edit);
 
-		MString editString = "Component Number:" + i;
+		MString editString = "Component Number: ";
+		editString += i;
 		editString+=  " | Status: ";
 		if(conflicting)
 			editString+= " CONFLICT!";
 		else
-			editString+= " NO CONFLICT";
+			editString+= " no conflict";
 		cout<<editString << endl;
 		editInfo.push_back(editString);
 

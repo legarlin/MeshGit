@@ -325,18 +325,33 @@ void MeshGitNode::startDiff()
 	meshOperator->checkConflicts();
 	nonconflictingOriginalVerts = meshOperator->nonconflictingEdits;
 
-
-
-
-
-
-
+	vector<MString> editStrings = meshOperator->editInfo;
+	//Present list of edits 
+	
+	MGlobal::executeCommand("window -title \"DIFF RESULTS\" -widthHeight 600 400; columnLayout;");
+	MGlobal::executeCommand("text -label \"Edit Operation Results\";");
+	MString command2 = "textScrollList -numberOfRows 20 -allowMultiSelection false -width 550";
+	for(int i = 0; i < editStrings.size(); i++){
+		MString s = editStrings.at(i);
+		command2 += "-append ";
+		command2 += "\"";
+		command2 += s;
+		command2 += "\" ";
+	}
+	command2 += " ;";
+	MGlobal::executeCommand(command2);
+	MGlobal::executeCommand("button -label \"Auto Merge NonConflicting Edits\" -command \" \";");
+	MGlobal::executeCommand("button -label \"Manually Merge Selected Conflict\" -command \" \";");
+	MGlobal::executeCommand("showWindow;");
 }
 
+vector<MString> MeshGitNode::getEditStrings( ){
+	if(meshOperator==NULL)
+		return vector<MString>();
 
-//vector<MString> MeshGitNode::getEditStrings( ){
-//	//if(
-//}
+	else return
+		meshOperator->editInfo;
+}
 
 
 //PRINTING AND DEBUGGING FUNCTIONS
