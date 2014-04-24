@@ -85,6 +85,12 @@ vector<EditOperation*> MeshGitFn::getNonconflictingEdits()
 	return meshGitNode->nonconflictingOriginalVerts;
 }
 
+vector<EditOperation*> MeshGitFn::getConflictingEdits()
+{
+	return meshGitNode->conflictingOriginalVerts;
+}
+
+
 //void MeshGitFn::getBestComponentMatches(vector<ComponentMatch*> &dA_bestMatches, vector<ComponentMatch*> &dB_bestMatches){
 //	dA_bestMatches = meshGitNode->dA_bestMatches;
 //	dB_bestMatches = meshGitNode->dB_bestMatches;

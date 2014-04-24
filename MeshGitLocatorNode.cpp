@@ -18,6 +18,10 @@ MTypeId MeshGitLocatorNode::id(0x03AA4);
 using namespace std;
 MObject MeshGitLocatorNode::meshGitNodeConnection;
 
+MObject MeshGitLocatorNode::drawUnmatchedObj;
+MObject MeshGitLocatorNode::drawMatchedObj;
+MObject MeshGitLocatorNode::drawConflictingObj;
+MObject MeshGitLocatorNode::drawNonConflictingObj;
 
 void* MeshGitLocatorNode::creator() {
     return new MeshGitLocatorNode;
@@ -34,7 +38,27 @@ MStatus MeshGitLocatorNode::initialize() {
     reportError(status);
     status = addAttribute(meshGitNodeConnection);
 	reportError(status);
-  
+
+	drawUnmatchedObj = nAttr.create("drawUnmatchedObj", "du", MFnNumericData::kBoolean,
+            false, &status);
+    nAttr.setKeyable(true);
+    addAttribute(drawUnmatchedObj);
+
+	drawMatchedObj = nAttr.create("drawMatchedObj", "dm", MFnNumericData::kBoolean,
+            false, &status);
+    nAttr.setKeyable(true);
+    addAttribute(drawMatchedObj);
+
+	drawConflictingObj = nAttr.create("drawConflictingObj", "dc", MFnNumericData::kBoolean,
+            false, &status);
+    nAttr.setKeyable(true);
+    addAttribute(drawConflictingObj);
+
+	drawNonConflictingObj = nAttr.create("drawNonConflictingObj", "dn", MFnNumericData::kBoolean,
+            false, &status);
+    nAttr.setKeyable(true);
+    addAttribute(drawNonConflictingObj);
+
     return status;
 }
 
@@ -44,7 +68,7 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
     MStatus status;
     MObject thisObject = thisMObject();
 
-    
+
     //Obtain the display matrix
     MMatrix worldToDisplayViewMatrix = path.inclusiveMatrixInverse(&status);
 	reportError(status);
@@ -105,9 +129,35 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 	//	}
 	//}
 
-	drawUnmatched(mgFn);
-	drawMatched(mgFn);
-	//drawNonconflicting(mgFn);
+		//Getting the user selected prefs for what to vizualize
+    MPlug pdrawUnmatchedObj(thisObject, drawUnmatchedObj);
+    bool bdrawUnmatchedObj= false;
+    status = pdrawUnmatchedObj.getValue(bdrawUnmatchedObj);
+
+	//Getting the user selected prefs for what to vizualize
+    MPlug pdrawMatchedObj(thisObject, drawMatchedObj);
+    bool bdrawMatchedObj= false;
+    status = pdrawMatchedObj.getValue(bdrawMatchedObj);
+	
+	//Getting the user selected prefs for what to vizualize
+    MPlug pdrawConflictingObj(thisObject, drawConflictingObj);
+    bool bdrawConflictingObj= false;
+    status = pdrawConflictingObj.getValue(bdrawConflictingObj);
+
+	//Getting the user selected prefs for what to vizualize
+    MPlug pdrawNonConflictingObj(thisObject, drawNonConflictingObj);
+    bool bdrawNonConflictingObj= false;
+    status = pdrawNonConflictingObj.getValue(bdrawNonConflictingObj);
+
+	if(bdrawUnmatchedObj)
+		drawUnmatched(mgFn);
+	if(bdrawMatchedObj)
+		drawMatched(mgFn);
+	if(bdrawNonConflictingObj)
+		drawNonconflicting(mgFn);
+	if(bdrawConflictingObj){
+	}
+
 
 	glEnd();
     glPopMatrix();
@@ -198,16 +248,16 @@ void MeshGitLocatorNode::drawNonconflicting(MeshGitFn &mgFn)
 			ComponentMatch* cM = eO->matchA;
 			MPoint Op = cM->getMatches().derivativeComp->pos;
 
-			glColor3f(cM->color.r, cM->color.g, cM->color.b);
-			glVertex3d(Op.x, Op.y, Op.z);
+			glColor3f(0,1,0);
+			glVertex3d(Op.x+ dATranslateX, Op.y+ dATranslateY, Op.z+ dATranslateZ);
 		}
 
 		if (eO->bChanged) {
 			ComponentMatch* cM = eO->matchB;
 			MPoint Op = cM->getMatches().derivativeComp->pos;
 
-			glColor3f(cM->color.r, cM->color.g, cM->color.b);
-			glVertex3d(Op.x, Op.y, Op.z);
+			glColor3f(0,1,0);
+			glVertex3d(Op.x+ dBTranslateX, Op.y+ dBTranslateY, Op.z+ dBTranslateZ);
 		}
 	}
 }

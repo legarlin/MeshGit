@@ -13,6 +13,10 @@ public:
 	//Registration Functions
 	static void *creator();
 	static MStatus initialize();
+	static MObject drawUnmatchedObj;
+	static MObject drawMatchedObj;
+	static MObject drawConflictingObj;
+	static MObject drawNonConflictingObj;
 
 	//Drawing function
 	virtual void draw(M3dView & view, const MDagPath & path,

@@ -324,7 +324,7 @@ void MeshGitNode::startDiff()
 
 	meshOperator->checkConflicts();
 	nonconflictingOriginalVerts = meshOperator->nonconflictingEdits;
-
+	conflictingOriginalVerts = meshOperator->conflictingEdits;
 	vector<MString> editStrings = meshOperator->editInfo;
 	//Present list of edits 
 	

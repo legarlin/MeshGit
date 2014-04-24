@@ -64,6 +64,7 @@ public:
 	vector<MFnMesh*> getMFnMeshObjects();
 	MeshOperator* meshOperator;
 	vector<EditOperation*> nonconflictingOriginalVerts;
+	vector<EditOperation*> conflictingOriginalVerts;
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 	MStatus storeAllVerts(MDataBlock& dataBlock);
