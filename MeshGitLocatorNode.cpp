@@ -50,12 +50,12 @@ MStatus MeshGitLocatorNode::initialize() {
     addAttribute(drawMatchedObj);
 
 	drawConflictingObj = nAttr.create("drawConflictingObj", "dc", MFnNumericData::kBoolean,
-            false, &status);
+            true, &status);
     nAttr.setKeyable(true);
     addAttribute(drawConflictingObj);
 
 	drawNonConflictingObj = nAttr.create("drawNonConflictingObj", "dn", MFnNumericData::kBoolean,
-            false, &status);
+            true, &status);
     nAttr.setKeyable(true);
     addAttribute(drawNonConflictingObj);
 

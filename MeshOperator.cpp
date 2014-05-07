@@ -78,7 +78,7 @@ void MeshOperator::checkConflicts()
 
 }
 
-void MeshOperator::mergeUnconflictingEdits(){
+MPointArray* MeshOperator::mergeUnconflictingEdits(){
 	cout<<"Starting Merge unconflicting Edits"<<endl;
 	for(int v = 0; v<nonconflictingEdits.size(); v++){
 		EditOperation* eo = nonconflictingEdits.at(v); 
@@ -97,7 +97,8 @@ void MeshOperator::mergeUnconflictingEdits(){
 		meshVertsOutput->set(pos,index); 
 	}
 
-	fnMeshOutput->setPoints(*meshVertsOutput, MSpace::kObject); 
+	//fnMeshOutput->setPoints(*meshVertsOutput, MSpace::kObject); 
+	return meshVertsOutput;
 
 	cout<<"Ended Merge unconflicting Edits = count: " << nonconflictingEdits.size()<<endl;
 }

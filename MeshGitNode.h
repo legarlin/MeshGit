@@ -49,6 +49,9 @@ public:
 
 	//All Data holders
 	std::vector<MPointArray*> allVerts;
+	MPointArray* mergedVerts;
+
+
 	std::vector<MMatrix> allTransforms;
 	std::vector<ComponentMatch*> dA_bestMatches;
 	std::vector<MFnMesh*> allMFnMeshObjects;
@@ -68,15 +71,16 @@ public:
 
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 	MStatus storeAllVerts(MDataBlock& dataBlock);
+	MStatus deformOutputMesh(MDataBlock &dataBlock);
 	void startDiff();
 	void mergeUnconflicting();
-
+	unsigned int mergedMeshGroupID;
 
 	//PRINTING AND DEBUGGING FUNCTIONS
 	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);
 	void printTEST();
 	void reportError(MStatus status);
-
+	virtual void postConstructor();
 
 
 

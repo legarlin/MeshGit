@@ -6,6 +6,8 @@
 #include <maya/MString.h>
 #include "maya/MFnPlugin.h"
 #include <maya/MFnStringData.h>
+#include <maya/MPlugArray.h>
+#include <maya/MDagPath.h>
 #include <maya/MFnStringArrayData.h>
 #include <string>
 #include <iostream>
@@ -128,6 +130,11 @@ MStatus MeshGitNode::initialize()
 	return MS::kSuccess;
 }
 
+void MeshGitNode::postConstructor() {
+	cout<<"POST CONSTRUCTOR CALLED" << endl;
+	mergedVerts = new MPointArray(); 
+}
+
 MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 {
 	MStatus status;
@@ -175,6 +182,9 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 		MDataHandle hGeom = inputGeomValue.child(inputGeom);
         MDataHandle hGroup = inputGeomValue.child(groupId);
         unsigned int groupId = hGroup.asLong();
+		if(i == 3)
+			mergedMeshGroupID= groupId;
+
 
 		////Get the output geometry handle output value
 		MDataHandle hOutputGeomValue = ouputGeomHandle.outputValue(&status);
@@ -210,59 +220,7 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 }
 
 
-MStatus
-MeshGitNode::deform( MDataBlock& block,
-				MItGeometry& iter,
-				unsigned int multiIndex)
-//
-// Method: deform
-//
-// Description:   Deform the point with a squash algorithm
-//
-// Arguments:
-//   block		: the datablock of the node
-//	 iter		: an iterator for the geometry to be deformed
-//	 multiIndex : the index of the geometry that we are deforming
-//
-//
-{
-	MGlobal::displayInfo("Deformation Started: num geoms = " + allVerts.size());
-	MStatus returnStatus;
-	
-	// Envelope data from the base class.
-	// The envelope is simply a scale factor.
-	//
-	MDataHandle envData = block.inputValue(envelope, &returnStatus);
-	if (MS::kSuccess != returnStatus) return returnStatus;
-	float env = envData.asFloat();	
 
-
-	// iterate through each point in the geometry
-	//
-	//if(multiIndex==0 ||allVerts.length()>10000){
-	//	allVerts.clear();
-	//}
-	//for ( ; !iter.isDone(); iter.next()) {
-	//	MPoint pt = iter.position();
-	//	//pt *= omatinv;
-	//	allVerts.append(pt.x,pt.y,pt.z,1.0);
-	//	//float weight = weightValue(block,multiIndex,iter.index());
-	//	
-	//	// offset algorithm
-	//	//
-	//	//pt.y = pt.y + env*weight;
-	//	//
-	//	// end of offset algorithm
-
-	//	//pt *= omat
-	//	//MPoint pt = 
-	//	pt = pt;
-	//	iter.setPosition(pt);
-	//}
-	//MGlobal::displayInfo("Num verts in node function : " + allVerts.length());
-
-	return returnStatus;
-}
 
 
 vector<MPointArray*> MeshGitNode::getAllVerts() 
@@ -286,12 +244,78 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock)
 		MGlobal::displayInfo("plug is outputgeom "); 
 		storeAllVerts(dataBlock);
 		status = MStatus::kSuccess;
+		status = deformOutputMesh(dataBlock);
+
+		//
+
     }
 
 	MGlobal::displayInfo("Num geometries at end of COMPUTE function : " + allVerts.size());
 
 	return status;
 }
+
+MStatus MeshGitNode::deformOutputMesh(MDataBlock &dataBlock) {
+	cout<<"Starting deforming merged mesh" << endl;
+	MStatus status;
+	if(mergedVerts==NULL){
+		cout<<"NULL MERGEDVERTS" << endl;
+	}
+	cout<<"MERGEDVERTS NOT NULL" << endl;
+
+	if(mergedVerts->length()<=1){
+		cout<<"MERGEDVERTS NO LENGTH" << endl;
+	}
+
+
+	if(mergedVerts==NULL || mergedVerts->length()<=1){
+		cout<<"Merged verts empty or null" << endl;
+		return status; 
+	}
+	
+    
+	cout<<"Starting deforming merged mesh 2" << endl;
+    MArrayDataHandle outputGeometryArrayHandle = dataBlock.outputArrayValue(outputGeom,
+            &status);
+
+    int numOutputGeoms= outputGeometryArrayHandle.elementCount(&status);
+   
+
+    for (unsigned g = 0; g < numOutputGeoms; ++g) {
+		if(g<3){ 
+			 outputGeometryArrayHandle.next();
+			continue; 
+		}
+
+        MDataHandle hOutputGeom = outputGeometryArrayHandle.outputValue(&status);
+
+        //Transform to local space
+        unsigned int plugIndex = outputGeometryArrayHandle.elementIndex(&status);
+        MPlug outputGeometryPlug(thisMObject(), outputGeom);
+        MPlug outputPlug = outputGeometryPlug.elementByLogicalIndex(plugIndex,
+                &status);
+
+        // Get the connected node to have access to the path data
+        // of the actual geometry
+        MPlugArray connectedPlugs;
+        outputPlug.connectedTo(connectedPlugs, true, true);
+        MObject obj;
+        MDagPath dagPath;
+
+        // Iterate over each point in the output: by setting the group id, will
+        // Only get the points in the deformation set
+        MItGeometry iter(hOutputGeom, mergedMeshGroupID, false);
+        // Set the position on the iterator(will also set on output as point
+        // to same thing
+		status = iter.setAllPositions(*mergedVerts, MSpace::kObject);
+
+        // go to next geometry
+        outputGeometryArrayHandle.next();
+    }
+
+	cout<<"Finished deforming merged mesh" << endl;
+    return status;
+} // setupOutputGeometry
 
 void MeshGitNode::startDiff()
 {
@@ -348,7 +372,9 @@ void MeshGitNode::startDiff()
 
 void MeshGitNode::mergeUnconflicting(){
 
-	meshOperator->mergeUnconflictingEdits(); 
+	mergedVerts = meshOperator->mergeUnconflictingEdits(); 
+
+	//need to set something dirty so that it recomputes
 }
 
 vector<MString> MeshGitNode::getEditStrings( ){
@@ -393,4 +419,59 @@ void MeshGitNode::printVectorOfPoints(MString name, std::vector<MPointArray> &po
 		}
 	}
 
+}
+
+
+MStatus
+MeshGitNode::deform( MDataBlock& block,
+				MItGeometry& iter,
+				unsigned int multiIndex)
+//
+// Method: deform
+//
+// Description:   Deform the point with a squash algorithm
+//
+// Arguments:
+//   block		: the datablock of the node
+//	 iter		: an iterator for the geometry to be deformed
+//	 multiIndex : the index of the geometry that we are deforming
+//
+//
+{
+	MGlobal::displayInfo("Deformation Started: num geoms = " + allVerts.size());
+	MStatus returnStatus;
+	
+	// Envelope data from the base class.
+	// The envelope is simply a scale factor.
+	//
+	MDataHandle envData = block.inputValue(envelope, &returnStatus);
+	if (MS::kSuccess != returnStatus) return returnStatus;
+	float env = envData.asFloat();	
+
+
+	// iterate through each point in the geometry
+	//
+	//if(multiIndex==0 ||allVerts.length()>10000){
+	//	allVerts.clear();
+	//}
+	//for ( ; !iter.isDone(); iter.next()) {
+	//	MPoint pt = iter.position();
+	//	//pt *= omatinv;
+	//	allVerts.append(pt.x,pt.y,pt.z,1.0);
+	//	//float weight = weightValue(block,multiIndex,iter.index());
+	//	
+	//	// offset algorithm
+	//	//
+	//	//pt.y = pt.y + env*weight;
+	//	//
+	//	// end of offset algorithm
+
+	//	//pt *= omat
+	//	//MPoint pt = 
+	//	pt = pt;
+	//	iter.setPosition(pt);
+	//}
+	//MGlobal::displayInfo("Num verts in node function : " + allVerts.length());
+
+	return returnStatus;
 }

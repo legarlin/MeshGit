@@ -50,5 +50,5 @@ public:
 	void makeComponents();
 	void diff();
 	void checkConflicts();
-	void mergeUnconflictingEdits();
+	MPointArray* mergeUnconflictingEdits();
 };

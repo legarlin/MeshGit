@@ -140,10 +140,10 @@ global proc openDiffWindow(string $mainNodeName) {
 	window -title "MESHGIT CONTROLS" -widthHeight 300 200 myWindow;
     columnLayout -columnAttach "both" 5 -rowSpacing 5 -columnWidth 100;
 	string $comm = "MeshGitCmd -d " + $mainNodeName;
-    button -label "Start Diff" -command $comm;
+    button -label "Start Diff" -command $comm -width 250;
 
-	string $comm2 = "MeshGitCmd -mu " + $mainNodeName;
-	button -label "Merge Unconflicting" -command $comm2;
+	string $comm2 = "MeshGitCmd -mu " + $mainNodeName + "; setAttr " +  $mainNodeName +".currentFrame 3" ;
+	button -label "Merge Unconflicting Edits" -command $comm2 -width 250;
 
 	showWindow myWindow; 
 }
