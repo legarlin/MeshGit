@@ -94,6 +94,17 @@ global proc load()
 	string $attrNameB = $BMeshName + ".translate";
 	setAttr $attrNameB 0 2 -1;
 
+		//Output
+	file -i $originalFilename;
+	select -allDagObjects;
+	select -deselect $originalMeshName;
+	select -deselect $AMeshName;
+	select -deselect $BMeshName;
+	string $nameFourth[] = `ls -selection`;
+	string $outputMeshName = $nameFourth[0];
+	string $attrNameOutput = $outputMeshName + ".translate";
+	setAttr $attrNameOutput 0 5 0;
+
 	print("Object Names in Scene");
 	print("Original 1 = " + $originalMeshName  + " ");
 	print("Original 2 = " + $AMeshName + " ");
