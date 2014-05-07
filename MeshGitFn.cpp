@@ -108,3 +108,8 @@ void MeshGitFn::startDiff()
 {
 	meshGitNode->startDiff();
 }
+
+void MeshGitFn::startMergeUnconflicting()
+{
+	meshGitNode->mergeUnconflicting();
+}

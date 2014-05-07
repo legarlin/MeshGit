@@ -69,13 +69,16 @@ public:
 	MStatus compute(const MPlug& plug, MDataBlock& dataBlock);
 	MStatus storeAllVerts(MDataBlock& dataBlock);
 	void startDiff();
-	
+	void mergeUnconflicting();
 
 
 	//PRINTING AND DEBUGGING FUNCTIONS
 	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);
 	void printTEST();
 	void reportError(MStatus status);
+
+
+
 
 protected:
 	

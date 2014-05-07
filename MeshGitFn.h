@@ -48,5 +48,6 @@ public:
 	void getUnmatchedOriginalMeshPoints(MPointArray* &dA_unmatchedPointsOrig, MPointArray* &dB_unmatchedPointsOrig);
 	void getUnmatchedDerivativeMeshPoints(MPointArray* &dA_unmatchedPointsA, MPointArray* &dB_unmatchedPointsB);*/
 	void startDiff();
+	void startMergeUnconflicting();
 };
 

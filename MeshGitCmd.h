@@ -15,6 +15,8 @@ public:
 	void connectNodes(MString nodeName, MString locatorName);
 	void reportError(MStatus status);
 	void startDiff(MString nodeName);
+	void startMergeUnconflicting(MString nodeName);
+
 };
 
 #endif

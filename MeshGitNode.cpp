@@ -151,9 +151,10 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 	//Get the input handle
 	MArrayDataHandle inputHandle = dataBlock.outputArrayValue(input, &status);
 	reportError(status);
+	//cout<< "NUM GEOMETRIES: " << numGeom << endl;
 
 	for(unsigned int i=0; i<numGeom; i++){
-		MGlobal::displayInfo("Storing Geom " + i);
+		//MGlobal::displayInfo("Storing Geom " + i);
 		//get the element index that the current geom is in the datablock
 		int geomIndex = ouputGeomHandle.elementIndex(&status);
 
@@ -191,8 +192,8 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 		MPointArray currentVerts; 
 		iter.allPositions(currentVerts, MSpace::kObject);
 		ouputGeomHandle.next();
-		cout << "MESH " << i << endl;
-		cout<< currentVerts << endl;
+		//cout << "MESH " << i << endl;
+		//cout<< currentVerts << endl;
 		MPointArray* mp = new MPointArray(currentVerts);
 		allVerts[i] = mp;
 	}
@@ -200,11 +201,11 @@ MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
 	ouputGeomHandle.setAllClean();
 	MGlobal::displayInfo("Ending storeAllVerts");
 
-	for (unsigned int i = 0; i < allVerts.size(); i++) {
-		cout << "MESHB " << i << endl;
-		cout<< *allVerts[i] << endl;
-		cout<<allTransforms[i]<<endl;
-	}
+	//for (unsigned int i = 0; i < allVerts.size(); i++) {
+		//cout << "MESHB " << i << endl;
+		//cout<< *allVerts[i] << endl;
+		//cout<<allTransforms[i]<<endl;
+	//}
 	return status;
 }
 
@@ -343,6 +344,11 @@ void MeshGitNode::startDiff()
 	MGlobal::executeCommand("button -label \"Auto Merge NonConflicting Edits\" -command \" \";");
 	MGlobal::executeCommand("button -label \"Manually Merge Selected Conflict\" -command \" \";");
 	MGlobal::executeCommand("showWindow;");
+}
+
+void MeshGitNode::mergeUnconflicting(){
+
+	meshOperator->mergeUnconflictingEdits(); 
 }
 
 vector<MString> MeshGitNode::getEditStrings( ){

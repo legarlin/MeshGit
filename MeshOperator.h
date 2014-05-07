@@ -18,10 +18,13 @@ class MeshOperator {
 	MPointArray* meshVertsOrig;
 	MPointArray* meshVertsA;
 	MPointArray* meshVertsB;
+	MPointArray* meshVertsOutput;
 
 	MFnMesh* fnMeshOrig;
 	MFnMesh* fnMeshA;
 	MFnMesh* fnMeshB;
+	MFnMesh* fnMeshOutput;
+
 
 	MatchComputer* matchComputerA;
 	MatchComputer* matchComputerB;
@@ -47,4 +50,5 @@ public:
 	void makeComponents();
 	void diff();
 	void checkConflicts();
+	void mergeUnconflictingEdits();
 };

@@ -7,7 +7,7 @@ MeshOperator:: MeshOperator(vector<MPointArray*> meshVerts, vector<MFnMesh*> fnM
 	meshVertsOrig = meshVerts[0];
 	meshVertsA = meshVerts[1];
 	meshVertsB = meshVerts[2];
-
+	meshVertsOutput = meshVerts[3];
 	//cout << "meshVertsBXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	//cout<< *meshVertsB << endl;
 	
@@ -74,4 +74,30 @@ void MeshOperator::checkConflicts()
 
 
 	}
+
+
+}
+
+void MeshOperator::mergeUnconflictingEdits(){
+	cout<<"Starting Merge unconflicting Edits"<<endl;
+	for(int v = 0; v<nonconflictingEdits.size(); v++){
+		EditOperation* eo = nonconflictingEdits.at(v); 
+		ComponentMatch * editedMatch;
+		if(eo->aChanged==true){
+			editedMatch=eo->matchA;
+		}
+		else
+			editedMatch= eo->matchB;
+
+
+		Match m = editedMatch->getMatches();
+		MeshComponent * derivComp = m.derivativeComp; 
+		MPoint pos = derivComp->pos;
+		int index = derivComp->index;
+		meshVertsOutput->set(pos,index); 
+	}
+
+	fnMeshOutput->setPoints(*meshVertsOutput, MSpace::kObject); 
+
+	cout<<"Ended Merge unconflicting Edits = count: " << nonconflictingEdits.size()<<endl;
 }

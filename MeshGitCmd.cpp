@@ -18,6 +18,7 @@ const char *aFlag = "-a", *aLongFlag = "-derivativeA";
 const char *bFlag = "-b", *bLongFlag = "-derivativeB";
 const char *connectFlag = "-c", *connectLongFlag= "-connectNodes";
 const char *diffFlag = "-d", *diffLongFlag= "-startDiff";
+const char *mergeUnconflictingFlag = "-mu", *mergeUnconflictingLongFlag= "-mergeUnconflicting";
 
 MeshGitCmd::MeshGitCmd() : MPxCommand()
 {
@@ -55,6 +56,11 @@ MStatus MeshGitCmd::doIt( const MArgList& args )
 		argData.getFlagArgument(diffFlag, 0, meshGitNodeName); 
 		startDiff(meshGitNodeName);
 	}
+	if (argData.isFlagSet(mergeUnconflictingFlag)) { 
+		argData.getFlagArgument(mergeUnconflictingFlag, 0, meshGitNodeName); 
+		startMergeUnconflicting(meshGitNodeName);
+	}
+
 
 
 	MGlobal::displayInfo(originalFilepath);
@@ -71,6 +77,7 @@ MSyntax MeshGitCmd::newSyntax()
 	syntax.addFlag(bFlag, bLongFlag, MSyntax::kString);
 	syntax.addFlag(connectFlag, connectLongFlag, MSyntax::kString, MSyntax::kString);
 	syntax.addFlag(diffFlag, diffLongFlag, MSyntax::kString);
+	syntax.addFlag(mergeUnconflictingFlag, mergeUnconflictingLongFlag, MSyntax::kString);
 	return syntax;
 }
 
@@ -103,6 +110,33 @@ void MeshGitCmd::startDiff(MString nodeName){
 	//mgFn.get
 	//Get the node plug
 	MPlug nodePlug = mgFn.findPlug("message", true, &status);
+	reportError(status);
+
+
+	
+}
+
+void MeshGitCmd::startMergeUnconflicting(MString nodeName){
+	MGlobal::displayInfo("Starting diff on Node:  " + nodeName );
+	MStatus status;
+
+	//Get Node Object
+	MSelectionList nodeList;
+	status = nodeList.add(nodeName);
+	MObject nodeObject;
+	status = nodeList.getDependNode(0, nodeObject);
+	reportError(status);
+
+	//Create Node Fn
+	MeshGitFn mgFn;
+	status = mgFn.setObject(nodeObject);
+	reportError(status);
+
+	//Start the diff
+	mgFn.startMergeUnconflicting();
+	//mgFn.get
+	//Get the node plug
+	//MPlug nodePlug = mgFn.findPlug("message", true, &status);
 	reportError(status);
 
 
