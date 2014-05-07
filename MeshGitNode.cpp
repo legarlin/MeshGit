@@ -353,7 +353,7 @@ void MeshGitNode::startDiff()
 	vector<MString> editStrings = meshOperator->editInfo;
 	//Present list of edits 
 	
-	MGlobal::executeCommand("window -title \"DIFF RESULTS\" -widthHeight 600 400; columnLayout;");
+	diffResultsWindowName = MGlobal::executeCommandStringResult("window -title \"DIFF RESULTS\" -widthHeight 600 400; columnLayout;");
 	MGlobal::executeCommand("text -label \"Edit Operation Results\";");
 	MString command2 = "textScrollList -numberOfRows 20 -allowMultiSelection false -width 550";
 	for(int i = 0; i < editStrings.size(); i++){
@@ -364,10 +364,19 @@ void MeshGitNode::startDiff()
 		command2 += "\" ";
 	}
 	command2 += " ;";
-	MGlobal::executeCommand(command2);
+	diffResultsScrollListName = MGlobal::executeCommandStringResult(command2);
 	MGlobal::executeCommand("button -label \"Auto Merge NonConflicting Edits\" -command \" \";");
 	MGlobal::executeCommand("button -label \"Manually Merge Selected Conflict\" -command \" \";");
 	MGlobal::executeCommand("showWindow;");
+	cout << "diffResultsWindowName " << diffResultsWindowName << endl;
+	cout << "diffResultsScrollListName " << diffResultsScrollListName << endl;
+
+}
+
+void  MeshGitNode::reloadDiffResultsWindow(){
+
+	MGlobal::executeCommand("textScrollList -e -removeAll " + diffResultsScrollListName); 
+
 }
 
 void MeshGitNode::mergeUnconflicting(){

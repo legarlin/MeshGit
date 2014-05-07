@@ -75,6 +75,10 @@ public:
 	void startDiff();
 	void mergeUnconflicting();
 	unsigned int mergedMeshGroupID;
+	MString diffResultsWindowName;
+	MString diffResultsScrollListName;
+	void  reloadDiffResultsWindow();
+
 
 	//PRINTING AND DEBUGGING FUNCTIONS
 	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);
