@@ -19,6 +19,7 @@ const char *bFlag = "-b", *bLongFlag = "-derivativeB";
 const char *connectFlag = "-c", *connectLongFlag= "-connectNodes";
 const char *diffFlag = "-d", *diffLongFlag= "-startDiff";
 const char *mergeUnconflictingFlag = "-mu", *mergeUnconflictingLongFlag= "-mergeUnconflicting";
+const char *updateSelectedEditFlag = "-us", *updateSelectedEditLongFlag= "-updateSelectedEdit";
 
 MeshGitCmd::MeshGitCmd() : MPxCommand()
 {
@@ -60,6 +61,10 @@ MStatus MeshGitCmd::doIt( const MArgList& args )
 		argData.getFlagArgument(mergeUnconflictingFlag, 0, meshGitNodeName); 
 		startMergeUnconflicting(meshGitNodeName);
 	}
+	if (argData.isFlagSet(updateSelectedEditFlag)) { 
+		argData.getFlagArgument(updateSelectedEditFlag, 0, meshGitNodeName); 
+		startUpdateSelectedEdit(meshGitNodeName);
+	}
 
 
 
@@ -78,6 +83,7 @@ MSyntax MeshGitCmd::newSyntax()
 	syntax.addFlag(connectFlag, connectLongFlag, MSyntax::kString, MSyntax::kString);
 	syntax.addFlag(diffFlag, diffLongFlag, MSyntax::kString);
 	syntax.addFlag(mergeUnconflictingFlag, mergeUnconflictingLongFlag, MSyntax::kString);
+	syntax.addFlag(updateSelectedEditFlag, updateSelectedEditLongFlag, MSyntax::kString);
 	return syntax;
 }
 
@@ -192,3 +198,29 @@ void MeshGitCmd::reportError(MStatus status ){
 	}
 }
 
+
+void MeshGitCmd::startUpdateSelectedEdit(MString nodeName){
+	cout<< "Starting updating selected edit on Node:  " + nodeName << endl;
+	MStatus status;
+	if(nodeName == NULL || nodeName ==""){
+		cout<< "nodeName == NULL  " + nodeName << endl;
+		return;
+	}
+
+	//Get Node Object
+	MSelectionList nodeList;
+	status = nodeList.add(nodeName);
+	MObject nodeObject;
+	status = nodeList.getDependNode(0, nodeObject);
+	reportError(status);
+
+	//Create Node Fn
+	MeshGitFn mgFn;
+	status = mgFn.setObject(nodeObject);
+	reportError(status);
+
+	//Start the diff
+	mgFn.findSelectedEditIndex();
+	reportError(status);
+
+}

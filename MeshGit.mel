@@ -6,6 +6,7 @@ menuItem -ann "Load Files" -label "Load Files" -echoCommand true -command open;
 global string $originalFileField;
 global string $AFileField;
 global string $BFileField;
+//global string $meshGitNodeNameGlobal;
 
 global proc open() 
 {
@@ -64,6 +65,7 @@ global proc load()
 	global string $originalFileField;
 	global string $AFileField;
 	global string $BFileField;
+	global string $meshGitNodeNameGlobal;
 
 	string $originalFilename = `textField -q -text $originalFileField`;
 	string $AFilename = `textField -q -text $AFileField`;
@@ -126,7 +128,8 @@ global proc load()
 
 	//Connect the nodes 
 	MeshGitCmd -c $mainNodeName[0] $vizNodeName;
-	
+	$meshGitNodeNameGlobal = $mainNodeName[0];
+
 	//Run the diff
 	MeshGitCmd -d $mainNodeName[0];
 	openDiffWindow($mainNodeName[0]);
@@ -144,6 +147,9 @@ global proc openDiffWindow(string $mainNodeName) {
 
 	string $comm2 = "MeshGitCmd -mu " + $mainNodeName + "; setAttr " +  $mainNodeName +".currentFrame 3" ;
 	button -label "Merge Unconflicting Edits" -command $comm2 -width 250;
+	
+	string $comm3 = "MeshGitCmd -us " + $mainNodeName; 
+	button -label "Update Selected Edit Index" -command $comm3 -width 250;
 
 	showWindow myWindow; 
 }
@@ -161,18 +167,9 @@ global proc unloadMenu()
 	if (`menu -ex MeshGitMenu`) deleteUI -menu MeshGitMenu;
 }
 
-global proc showListOfEditOperations(string $nodeName)
+global proc updateSelectedEditIndex()
 {
-	window;
-	paneLayout;
-	textScrollList -numberOfRows 8 -allowMultiSelection false
-		-append "one"      -append "two"      -append "three"
-		-append "four"     -append "five"     -append "six"
-		-append "seven"    -append "eight"    -append "nine"
-		-append "ten"      -append "eleven"   -append "twelve"
-		-append "thirteen" -append "fourteen" -append "fifteen"
-		-selectItem "six"
-		-showIndexedItem 4;
-	showWindow;
-	
+	global string $meshGitNodeNameGlobal;
+	print($meshGitNodeNameGlobal); 
+	MeshGitCmd -us $meshGitNodeNameGlobal;
 }

@@ -80,7 +80,7 @@ public:
 	int selectedEditIndex;
 	
 	void  reloadDiffResultsWindow();
-	void  findSelectedEditIndex();
+	int  findSelectedEditIndex();
 
 	//PRINTING AND DEBUGGING FUNCTIONS
 	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);

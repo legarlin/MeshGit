@@ -49,5 +49,6 @@ public:
 	void getUnmatchedDerivativeMeshPoints(MPointArray* &dA_unmatchedPointsA, MPointArray* &dB_unmatchedPointsB);*/
 	void startDiff();
 	void startMergeUnconflicting();
+	int findSelectedEditIndex(); 
 };
 

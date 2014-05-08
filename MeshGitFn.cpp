@@ -113,3 +113,8 @@ void MeshGitFn::startMergeUnconflicting()
 {
 	meshGitNode->mergeUnconflicting();
 }
+
+int MeshGitFn::findSelectedEditIndex()
+{
+	return meshGitNode->findSelectedEditIndex();
+}

@@ -316,6 +316,7 @@ MStatus MeshGitNode::deformOutputMesh(MDataBlock &dataBlock) {
         outputGeometryArrayHandle.next();
     }
 
+	findSelectedEditIndex(); 
 	//cout<<"Finished deforming merged mesh" << endl;
     return status;
 } // setupOutputGeometry
@@ -397,10 +398,18 @@ void  MeshGitNode::reloadDiffResultsWindow(){
 	
 }
 
-void  MeshGitNode::findSelectedEditIndex(){
-	cout<<"Starting find selected edit index" << endl; 
-		MString finalCommand = "textScrollList -q -selectIndexedItem " + diffResultsScrollListName;
-		//selectedEditIndex = MGlobal::Execute(finalCommand); 
+int MeshGitNode::findSelectedEditIndex(){
+	if(diffResultsScrollListName=="none")
+		return 0; 
+
+	//cout<<"Starting find selected edit index" << endl; 
+	MString finalCommand = "textScrollList -q -selectIndexedItem " + diffResultsScrollListName;
+	MIntArray indexArray; 
+	MGlobal::executeCommand(finalCommand, indexArray); 
+	//selectedEditIndex= *indexArray.-1; 
+	//cout<<"finalCommand " << finalCommand<<endl;
+	//cout<<"selectedEditIndex " << selectedEditIndex<<endl;
+	return selectedEditIndex; 
 	
 }
 void MeshGitNode::mergeUnconflicting(){

@@ -16,7 +16,7 @@ public:
 	void reportError(MStatus status);
 	void startDiff(MString nodeName);
 	void startMergeUnconflicting(MString nodeName);
-
+	void startUpdateSelectedEdit(MString nodeName);
 };
 
 #endif
