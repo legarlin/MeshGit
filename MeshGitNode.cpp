@@ -323,6 +323,7 @@ MStatus MeshGitNode::deformOutputMesh(MDataBlock &dataBlock) {
 
 void MeshGitNode::startDiff()
 {
+	mergedVerts = allVerts[0]; 
 	MPointArray* meshVertsB = allVerts[2];
 	cout << "meshVertsAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout<< *meshVertsB << endl;
@@ -439,7 +440,40 @@ void MeshGitNode::manualResolveConflict(int index)
 
 }
 
+bool MeshGitNode::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB, MPoint &output){
+	if(selectedEditIndex==-1)
+		return false; 
 
+	//cout<<"Starting find selected edit index" << endl; 
+	vector<EditOperation*> allEdits = meshOperator->allEdits;
+	if(allEdits.size()<=selectedEditIndex){
+		return false;
+	}
+	
+	EditOperation* edit = allEdits[selectedEditIndex];
+	ComponentMatch* matchA = edit->matchA;
+	Match A = matchA->getMatches();
+	MeshComponent* A_original = A.originalComp;
+	MeshComponent* A_derivative = A.derivativeComp;
+
+
+	ComponentMatch* matchB = edit->matchB;
+	Match B = matchB->getMatches();
+	MeshComponent* B_original = B.originalComp;
+	MeshComponent* B_derivative = B.derivativeComp;
+
+	
+	orginal = A_original->pos;
+	derivA = A_derivative->pos;
+	derivB = B_derivative->pos;
+   int index = A_original->index;
+	if(mergedVerts->length()<=index)
+		return true;
+	output = (*mergedVerts)[index]; 
+	cout<<"Output Vert " << output<< endl; 
+
+	return true;
+}
 void MeshGitNode::mergeUnconflicting(){
 
 	mergedVerts = meshOperator->mergeUnconflictingEdits(); 

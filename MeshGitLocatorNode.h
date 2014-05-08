@@ -41,7 +41,10 @@ public:
 	static const int dBTranslateX = 0;
 	static const int dBTranslateY = 2;
 	static const int dBTranslateZ = -1;
+	static const int outputTranslateY = 4;
 
 	//test functions
 	static void MeshGitLocatorNode::reportError(MStatus status );
+
+	void drawSelected(MeshGitFn &mgFn);
 };

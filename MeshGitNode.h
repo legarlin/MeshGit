@@ -81,7 +81,7 @@ public:
 	
 	void  reloadDiffResultsWindow();
 	int  findSelectedEditIndex();
-
+	bool getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB, MPoint &output);
 	//PRINTING AND DEBUGGING FUNCTIONS
 	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);
 	void printTEST();
