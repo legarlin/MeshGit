@@ -434,14 +434,8 @@ int MeshGitNode::findSelectedEditIndex(){
 
 void MeshGitNode::manualResolveConflict(int rc)
 {
-	EditOperation* edit = meshOperator->allEdits[selectedEditIndex];
-
-	if (rc == 0) {
-	}
-	else if (rc == 1) {
-	}
-	else if (rc == 2) {
-	}
+	mergedVerts = meshOperator->manualResolveEdit(rc);
+	reloadDiffResultsWindow();
 }
 
 bool MeshGitNode::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB, MPoint &output){

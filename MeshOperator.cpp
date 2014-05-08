@@ -67,6 +67,50 @@ void MeshOperator::checkConflicts()
 	updateEditStrings(); 
 }
 
+MPointArray* MeshOperator::manualResolveEdit(int rc)
+{
+	EditOperation* eO = allEdits[selectedIndex];
+	
+	if (rc == 0) {
+		ComponentMatch* A = eO->matchA;
+		Match m = A->getMatches();
+		MeshComponent* dC = m.derivativeComp;
+		MPoint pos = dC->pos;
+		int index = m.originalComp->index;
+		meshVertsOutput->set(pos, index);
+	}
+	else if (rc == 1) {
+		ComponentMatch* B = eO->matchB;
+		Match m = B->getMatches();
+		MeshComponent* dC = m.derivativeComp;
+		MPoint pos = dC->pos;
+		int index = m.originalComp->index;
+		meshVertsOutput->set(pos, index);
+	}
+	else if (rc == 2) {
+		ComponentMatch* A = eO->matchA;
+		ComponentMatch* B = eO->matchB;
+
+		Match mA = A->getMatches();
+		Match mB = B->getMatches();
+
+		MeshComponent* dCA = mA.derivativeComp;
+		MeshComponent* dCB = mB.derivativeComp;
+
+		MPoint posA = dCA->pos;
+		MPoint posB = dCB->pos;
+
+		int index = mA.originalComp->index;
+
+		MPoint posAvg = (posA + posB) / 2;
+		meshVertsOutput->set(posAvg, index);
+	}
+
+	eO->resolved = true;
+
+	return meshVertsOutput;
+}
+
 MPointArray* MeshOperator::mergeUnconflictingEdits(){
 	cout<<"Starting Merge unconflicting Edits"<<endl;
 	for(int v = 0; v<nonconflictingEdits.size(); v++){

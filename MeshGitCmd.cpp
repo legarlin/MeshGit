@@ -252,4 +252,6 @@ void MeshGitCmd::manualResolveConflict(MString resolution, MString nodeName)
 	//Resolve conflict with resolution
 	int rc = resolution.asInt();
 	mgFn.manualResolveConflict(rc);
+
+	reportError(status);
 }
