@@ -54,6 +54,7 @@ void MeshOperator::checkConflicts()
 		ComponentMatch* cm_B = mc_B->matched;
 				
 		EditOperation* edit = new EditOperation(cm_A, cm_B);
+		allEdits.push_back(edit); 
 
 		bool conflicting = edit->conflict;
 		if (!conflicting) {
@@ -61,21 +62,9 @@ void MeshOperator::checkConflicts()
 		}
 		else 
 			conflictingEdits.push_back(edit);
-
-		MString editString = "Component Number: ";
-		editString += i;
-		editString+=  " | Status: ";
-		if(conflicting)
-			editString+= " CONFLICT!";
-		else
-			editString+= " no conflict";
-		cout<<editString << endl;
-		editInfo.push_back(editString);
-
-
 	}
 
-
+	updateEditStrings(); 
 }
 
 MPointArray* MeshOperator::mergeUnconflictingEdits(){
@@ -95,6 +84,7 @@ MPointArray* MeshOperator::mergeUnconflictingEdits(){
 		MPoint pos = derivComp->pos;
 		int index = derivComp->index;
 		meshVertsOutput->set(pos,index); 
+		eo->resolved=true; 
 	}
 
 	//fnMeshOutput->setPoints(*meshVertsOutput, MSpace::kObject); 
@@ -102,3 +92,32 @@ MPointArray* MeshOperator::mergeUnconflictingEdits(){
 
 	cout<<"Ended Merge unconflicting Edits = count: " << nonconflictingEdits.size()<<endl;
 }
+
+void MeshOperator::updateEditStrings(){
+
+	editInfo.clear(); 
+	for(int  i= 0; i < allEdits.size(); i ++ ){ 
+		
+		EditOperation* edit = allEdits[i];
+
+		bool conflicting = edit->conflict;
+		bool resolved = edit->resolved;
+		MString editString = "Component Number: ";
+		editString += i;
+		editString+=  " | Status: ";
+		if(conflicting)
+			editString+= " CONFLICT!|  ";
+		else
+			editString+= " no conflict |  ";
+		if(resolved)
+			editString+= " resolved";
+		else 
+			editString+= " NOT RESOLVED!";
+
+		cout<< editString << endl;
+		editInfo.push_back(editString);
+
+	}
+
+}
+

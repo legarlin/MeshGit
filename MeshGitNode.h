@@ -77,8 +77,10 @@ public:
 	unsigned int mergedMeshGroupID;
 	MString diffResultsWindowName;
 	MString diffResultsScrollListName;
+	int selectedEditIndex;
+	
 	void  reloadDiffResultsWindow();
-
+	void  findSelectedEditIndex();
 
 	//PRINTING AND DEBUGGING FUNCTIONS
 	void printVectorOfPoints(MString name, std::vector<MPointArray> &points);

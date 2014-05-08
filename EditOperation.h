@@ -14,6 +14,7 @@ public:
 	bool conflict;
 	bool aChanged;
 	bool bChanged;
+	bool resolved; 
 
 	EditOperation();
 	EditOperation(ComponentMatch* a, ComponentMatch* b);

@@ -40,9 +40,12 @@ public:
 	MPointArray* dB_unmatchedPointsOrig;
 	MPointArray* dB_unmatchedPointsB;
 
+	vector<EditOperation*> allEdits;
 	vector<EditOperation*> nonconflictingEdits;
 	vector<EditOperation*> conflictingEdits;
 	vector<MString> editInfo;
+	void updateEditStrings();
+
 
 	MeshOperator();
 	MeshOperator(vector<MPointArray*> meshVerts, vector<MFnMesh*> fnMeshObjects);

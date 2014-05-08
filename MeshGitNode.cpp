@@ -133,6 +133,9 @@ MStatus MeshGitNode::initialize()
 void MeshGitNode::postConstructor() {
 	cout<<"POST CONSTRUCTOR CALLED" << endl;
 	mergedVerts = new MPointArray(); 
+	diffResultsWindowName = "none";
+	diffResultsScrollListName = "none";
+	selectedEditIndex=-1; 
 }
 
 MStatus MeshGitNode::storeAllVerts(MDataBlock& dataBlock)
@@ -256,25 +259,25 @@ MStatus MeshGitNode::compute(const MPlug& plug, MDataBlock& dataBlock)
 }
 
 MStatus MeshGitNode::deformOutputMesh(MDataBlock &dataBlock) {
-	cout<<"Starting deforming merged mesh" << endl;
+	//cout<<"Starting deforming merged mesh" << endl;
 	MStatus status;
 	if(mergedVerts==NULL){
-		cout<<"NULL MERGEDVERTS" << endl;
+		//cout<<"NULL MERGEDVERTS" << endl;
 	}
-	cout<<"MERGEDVERTS NOT NULL" << endl;
+	//cout<<"MERGEDVERTS NOT NULL" << endl;
 
 	if(mergedVerts->length()<=1){
-		cout<<"MERGEDVERTS NO LENGTH" << endl;
+		//cout<<"MERGEDVERTS NO LENGTH" << endl;
 	}
 
 
 	if(mergedVerts==NULL || mergedVerts->length()<=1){
-		cout<<"Merged verts empty or null" << endl;
+		//cout<<"Merged verts empty or null" << endl;
 		return status; 
 	}
 	
     
-	cout<<"Starting deforming merged mesh 2" << endl;
+	//cout<<"Starting deforming merged mesh 2" << endl;
     MArrayDataHandle outputGeometryArrayHandle = dataBlock.outputArrayValue(outputGeom,
             &status);
 
@@ -313,7 +316,7 @@ MStatus MeshGitNode::deformOutputMesh(MDataBlock &dataBlock) {
         outputGeometryArrayHandle.next();
     }
 
-	cout<<"Finished deforming merged mesh" << endl;
+	//cout<<"Finished deforming merged mesh" << endl;
     return status;
 } // setupOutputGeometry
 
@@ -352,37 +355,59 @@ void MeshGitNode::startDiff()
 	conflictingOriginalVerts = meshOperator->conflictingEdits;
 	vector<MString> editStrings = meshOperator->editInfo;
 	//Present list of edits 
-	
-	diffResultsWindowName = MGlobal::executeCommandStringResult("window -title \"DIFF RESULTS\" -widthHeight 600 400; columnLayout;");
-	MGlobal::executeCommand("text -label \"Edit Operation Results\";");
-	MString command2 = "textScrollList -numberOfRows 20 -allowMultiSelection false -width 550";
-	for(int i = 0; i < editStrings.size(); i++){
-		MString s = editStrings.at(i);
-		command2 += "-append ";
-		command2 += "\"";
-		command2 += s;
-		command2 += "\" ";
+	if(diffResultsWindowName=="none"){
+		diffResultsWindowName = MGlobal::executeCommandStringResult("window -title \"DIFF RESULTS\" -widthHeight 600 400; columnLayout;");
+		MGlobal::executeCommand("text -label \"Edit Operation Results\";");
+		MString command2 = "textScrollList -numberOfRows 20 -allowMultiSelection false -width 550";
+		for(int i = 0; i < editStrings.size(); i++){
+			MString s = editStrings.at(i);
+			command2 += "-append ";
+			command2 += "\"";
+			command2 += s;
+			command2 += "\" ";
+		}
+		command2 += " ;";
+		diffResultsScrollListName = MGlobal::executeCommandStringResult(command2);
+		MGlobal::executeCommand("button -label \"Auto Merge NonConflicting Edits\" -command \" \";");
+		MGlobal::executeCommand("button -label \"Manually Merge Selected Conflict\" -command \" \";");
+		MGlobal::executeCommand("showWindow;");
+		cout << "diffResultsWindowName " << diffResultsWindowName << endl;
+		cout << "diffResultsScrollListName " << diffResultsScrollListName << endl;
 	}
-	command2 += " ;";
-	diffResultsScrollListName = MGlobal::executeCommandStringResult(command2);
-	MGlobal::executeCommand("button -label \"Auto Merge NonConflicting Edits\" -command \" \";");
-	MGlobal::executeCommand("button -label \"Manually Merge Selected Conflict\" -command \" \";");
-	MGlobal::executeCommand("showWindow;");
-	cout << "diffResultsWindowName " << diffResultsWindowName << endl;
-	cout << "diffResultsScrollListName " << diffResultsScrollListName << endl;
-
+	else 
+		reloadDiffResultsWindow(); 
 }
 
 void  MeshGitNode::reloadDiffResultsWindow(){
-
+	meshOperator->updateEditStrings(); 
+	cout<<"Starting reload Diff" << endl; 
 	MGlobal::executeCommand("textScrollList -e -removeAll " + diffResultsScrollListName); 
 
+	vector<MString> editStrings = meshOperator->editInfo;
+	for(int i = 0; i < editStrings.size(); i++){
+		MString command2 = "textScrollList -e -append "; 
+		MString s = editStrings.at(i);
+		command2 += "\"";
+		command2 += s;
+		command2 += "\" ";
+		MString finalCommand = command2 + " " + diffResultsScrollListName;
+		MGlobal::executeCommand(finalCommand); 
+		cout<<"Text Scroll Command " << finalCommand << endl; 
+	}//window1|columnLayout114|textScrollList21
+	
 }
 
+void  MeshGitNode::findSelectedEditIndex(){
+	cout<<"Starting find selected edit index" << endl; 
+		MString finalCommand = "textScrollList -q -selectIndexedItem " + diffResultsScrollListName;
+		//selectedEditIndex = MGlobal::Execute(finalCommand); 
+	
+}
 void MeshGitNode::mergeUnconflicting(){
 
 	mergedVerts = meshOperator->mergeUnconflictingEdits(); 
-
+	
+	reloadDiffResultsWindow(); 
 	//need to set something dirty so that it recomputes
 }
 

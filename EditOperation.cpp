@@ -13,7 +13,7 @@ EditOperation::EditOperation(ComponentMatch* a, ComponentMatch* b)
 {
 	matchA = a;
 	matchB = b;
-
+	resolved=false; 
 	checkConflict();
 }
 
