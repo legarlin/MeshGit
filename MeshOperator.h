@@ -57,7 +57,4 @@ public:
 	MPointArray* mergeUnconflictingEdits();
 
 	bool conflictingEdit(int index); // returns whether this index is conflicting
-
-	int selectedIndex;
-	void updateSelectedEdit(int index);
 };
