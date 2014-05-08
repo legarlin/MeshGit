@@ -159,14 +159,40 @@ void MeshGitLocatorNode::draw(M3dView & view, const MDagPath & path,
 		drawConflicting(mgFn);
 	}
 
-
 	glEnd();
+	
+	drawSelected(mgFn); 
+
+	
     glPopMatrix();
     glPopAttrib();
     view.endGL();
 
 }
 
+
+void MeshGitLocatorNode::drawSelected(MeshGitFn &mgFn){
+
+	MPoint original; 
+	MPoint derivA; 
+	MPoint derivB;
+	MPoint output;
+
+	bool isSelected = mgFn.getCurrentlySelectedEditPositions(original, derivA, derivB, output); 
+	if(!isSelected)
+		return;
+	glPointSize(20.0f);
+    glLineWidth(6.0f);
+	glBegin( GL_POINTS);
+
+	glColor3f(1, 1, 0); 
+	glVertex3d(original.x , original.y, original.z);
+	glVertex3d(derivA.x +dATranslateX , derivA.y +dATranslateY, derivA.z +dATranslateZ);
+	glVertex3d(derivB.x +dBTranslateX, derivB.y+dBTranslateY, derivB.z+dBTranslateZ);
+	glVertex3d(output.x , output.y+outputTranslateY, output.z);
+	glEnd();
+
+}
 
 void MeshGitLocatorNode::drawUnmatched(MeshGitFn &mgFn){
 

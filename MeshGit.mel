@@ -66,6 +66,7 @@ global proc load()
 	global string $AFileField;
 	global string $BFileField;
 	global string $meshGitNodeNameGlobal;
+	global string $vizNodeNameGlobal;
 
 	string $originalFilename = `textField -q -text $originalFileField`;
 	string $AFilename = `textField -q -text $AFileField`;
@@ -105,7 +106,7 @@ global proc load()
 	string $nameFourth[] = `ls -selection`;
 	string $outputMeshName = $nameFourth[0];
 	string $attrNameOutput = $outputMeshName + ".translate";
-	setAttr $attrNameOutput 0 5 0;
+	setAttr $attrNameOutput 0 4 0;
 
 	print("Object Names in Scene");
 	print("Original 1 = " + $originalMeshName  + " ");
@@ -124,10 +125,10 @@ global proc load()
 	string $mainNodeName[] = `deformer -type MeshGitNode`;
 
 	//Create visualizer node
-	string $vizNodeName = `createNode MeshGitLocatorNode`;
+	$vizNodeNameGlobal = `createNode MeshGitLocatorNode`;
 
 	//Connect the nodes 
-	MeshGitCmd -c $mainNodeName[0] $vizNodeName;
+	MeshGitCmd -c $mainNodeName[0] $vizNodeNameGlobal;
 	$meshGitNodeNameGlobal = $mainNodeName[0];
 
 	//Run the diff
@@ -172,6 +173,11 @@ global proc updateSelectedEditIndex()
 	global string $meshGitNodeNameGlobal;
 	print($meshGitNodeNameGlobal); 
 	MeshGitCmd -us $meshGitNodeNameGlobal;
+
+
+	global string $vizNodeNameGlobal;
+	string $comm = "setAttr " +  $vizNodeNameGlobal + ".localPositionX 0";
+	eval($comm);
 }
 
 global proc showListOfEditOperations(string $nodeName)

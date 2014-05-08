@@ -323,6 +323,7 @@ MStatus MeshGitNode::deformOutputMesh(MDataBlock &dataBlock) {
 
 void MeshGitNode::startDiff()
 {
+	mergedVerts = allVerts[0]; 
 	MPointArray* meshVertsB = allVerts[2];
 	cout << "meshVertsAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout<< *meshVertsB << endl;
@@ -415,7 +416,7 @@ int MeshGitNode::findSelectedEditIndex(){
 	
 }
 
-bool MeshGitNode::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB){
+bool MeshGitNode::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB, MPoint &output){
 	if(selectedEditIndex==-1)
 		return false; 
 
@@ -437,9 +438,16 @@ bool MeshGitNode::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & de
 	MeshComponent* B_original = B.originalComp;
 	MeshComponent* B_derivative = B.derivativeComp;
 
+	
 	orginal = A_original->pos;
 	derivA = A_derivative->pos;
 	derivB = B_derivative->pos;
+   int index = A_original->index;
+	if(mergedVerts->length()<=index)
+		return true;
+	output = (*mergedVerts)[index]; 
+	cout<<"Output Vert " << output<< endl; 
+
 	return true;
 }
 
