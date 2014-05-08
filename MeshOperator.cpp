@@ -126,7 +126,7 @@ MPointArray* MeshOperator::mergeUnconflictingEdits(){
 		Match m = editedMatch->getMatches();
 		MeshComponent * derivComp = m.derivativeComp; 
 		MPoint pos = derivComp->pos;
-		int index = derivComp->index;
+		int index = m.originalComp->index;
 		meshVertsOutput->set(pos,index); 
 		eo->resolved=true; 
 	}

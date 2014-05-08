@@ -202,6 +202,7 @@ global proc conflictResolveA()
 	global string $meshGitNodeNameGlobal;
 	string $a = "0";
 	MeshGitCmd -rc $a $meshGitNodeNameGlobal;
+	forceMeshGitNodeRefresh();
 }
 
 global proc conflictResolveB()
@@ -209,6 +210,7 @@ global proc conflictResolveB()
 	global string $meshGitNodeNameGlobal;
 	string $b = "1";
 	MeshGitCmd -rc $b $meshGitNodeNameGlobal;
+	forceMeshGitNodeRefresh();
 }
 
 global proc conflictResolveBoth()
@@ -216,6 +218,13 @@ global proc conflictResolveBoth()
 	global string $meshGitNodeNameGlobal;
 	string $both = "2";
 	MeshGitCmd -rc $both $meshGitNodeNameGlobal;
+	forceMeshGitNodeRefresh();
+}
+
+global proc forceMeshGitNodeRefresh(){
+	global string $meshGitNodeNameGlobal;
+	string $comm = "setAttr " +  $meshGitNodeNameGlobal + ".currentFrame 0";
+	eval($comm);
 }
 
 global proc exportMergedMesh(){
