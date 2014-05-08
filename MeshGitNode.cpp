@@ -359,7 +359,7 @@ void MeshGitNode::startDiff()
 	if(diffResultsWindowName=="none"){
 		diffResultsWindowName = MGlobal::executeCommandStringResult("window -title \"DIFF RESULTS\" -widthHeight 600 400; columnLayout;");
 		MGlobal::executeCommand("text -label \"Edit Operation Results\";");
-		MString command2 = "textScrollList -numberOfRows 20 -allowMultiSelection false -width 550";
+		MString command2 = "textScrollList -numberOfRows 20 -allowMultiSelection false -width 550 -selectCommand (\"updateSelectedEditIndex()\") ";
 		for(int i = 0; i < editStrings.size(); i++){
 			MString s = editStrings.at(i);
 			command2 += "-append ";
@@ -406,9 +406,11 @@ int MeshGitNode::findSelectedEditIndex(){
 	MString finalCommand = "textScrollList -q -selectIndexedItem " + diffResultsScrollListName;
 	MIntArray indexArray; 
 	MGlobal::executeCommand(finalCommand, indexArray); 
-	//selectedEditIndex= *indexArray.-1; 
-	//cout<<"finalCommand " << finalCommand<<endl;
-	//cout<<"selectedEditIndex " << selectedEditIndex<<endl;
+	cout<<"indexArray.length " << indexArray.length() <<endl;
+	if(indexArray.length()<=0)
+		return 0; 
+	selectedEditIndex = indexArray[0]-1; 
+	cout<<"selectedEditIndex " << selectedEditIndex<<endl;
 	return selectedEditIndex; 
 	
 }

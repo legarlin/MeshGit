@@ -173,3 +173,19 @@ global proc updateSelectedEditIndex()
 	print($meshGitNodeNameGlobal); 
 	MeshGitCmd -us $meshGitNodeNameGlobal;
 }
+
+global proc showListOfEditOperations(string $nodeName)
+{
+	window;
+	paneLayout;
+	textScrollList -numberOfRows 8 -allowMultiSelection false
+		-append "one"      -append "two"      -append "three"
+		-append "four"     -append "five"     -append "six"
+		-append "seven"    -append "eight"    -append "nine"
+		-append "ten"      -append "eleven"   -append "twelve"
+		-append "thirteen" -append "fourteen" -append "fifteen"
+		-selectItem "six"
+		-showIndexedItem 4
+	showWindow;
+	
+}
