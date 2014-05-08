@@ -414,6 +414,38 @@ int MeshGitNode::findSelectedEditIndex(){
 	return selectedEditIndex; 
 	
 }
+
+bool MeshGitNode::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB){
+	if(selectedEditIndex==-1)
+		return false; 
+
+	//cout<<"Starting find selected edit index" << endl; 
+	vector<EditOperation*> allEdits = meshOperator->allEdits;
+	if(allEdits.size()<=selectedEditIndex){
+		return false;
+	}
+	
+	EditOperation* edit = allEdits[selectedEditIndex];
+	ComponentMatch* matchA = edit->matchA;
+	Match A = matchA->getMatches();
+	MeshComponent* A_original = A.originalComp;
+	MeshComponent* A_derivative = A.derivativeComp;
+
+
+	ComponentMatch* matchB = edit->matchB;
+	Match B = matchB->getMatches();
+	MeshComponent* B_original = B.originalComp;
+	MeshComponent* B_derivative = B.derivativeComp;
+
+	orginal = A_original->pos;
+	derivA = A_derivative->pos;
+	derivB = B_derivative->pos;
+	return true;
+}
+
+
+
+
 void MeshGitNode::mergeUnconflicting(){
 
 	mergedVerts = meshOperator->mergeUnconflictingEdits(); 

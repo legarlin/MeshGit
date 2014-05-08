@@ -45,7 +45,7 @@ public:
 	vector<EditOperation*> conflictingEdits;
 	vector<MString> editInfo;
 	void updateEditStrings();
-
+	
 
 	MeshOperator();
 	MeshOperator(vector<MPointArray*> meshVerts, vector<MFnMesh*> fnMeshObjects);
@@ -54,4 +54,7 @@ public:
 	void diff();
 	void checkConflicts();
 	MPointArray* mergeUnconflictingEdits();
+
+	int selectedIndex;
+	void updateSelectedEdit(int index);
 };

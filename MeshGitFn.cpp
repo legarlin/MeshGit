@@ -118,3 +118,9 @@ int MeshGitFn::findSelectedEditIndex()
 {
 	return meshGitNode->findSelectedEditIndex();
 }
+
+bool MeshGitFn::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB){
+
+	return meshGitNode->getCurrentlySelectedEditPositions(orginal,  derivA, derivB);
+
+}
