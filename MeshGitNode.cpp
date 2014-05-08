@@ -416,7 +416,12 @@ int MeshGitNode::findSelectedEditIndex(){
 	if (selectedEditIndex != -1) { // check valid index
 		bool conflicting = meshOperator->conflictingEdit(selectedEditIndex);
 		if (conflicting) {
-			manualResolveConflict(selectedEditIndex);
+			MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
+			MGlobal::executeCommand("window -title \"Resolve Conflict\" -w 100 -h 150 ResolveConflictGUI; columnLayout -adjustableColumn true;");
+			MGlobal::executeCommand("button -label \"Resolve with A\" -command conflictResolveA -actOnPress false;");
+			MGlobal::executeCommand("button -label \"Resolve with B\" -command conflictResolveB -actOnPress false;");
+			MGlobal::executeCommand("button -label \"Resolve both\" -command conflictResolveBoth -actOnPress false;");
+			MGlobal::executeCommand("setParent..; showWindow ResolveConflictGUI;");
 		} 
 		else {
 			MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
@@ -427,17 +432,16 @@ int MeshGitNode::findSelectedEditIndex(){
 	
 }
 
-void MeshGitNode::manualResolveConflict(int index)
+void MeshGitNode::manualResolveConflict(int rc)
 {
-	MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
-	MGlobal::executeCommand("window -title \"Resolve Conflict\" -w 100 -h 150 ResolveConflictGUI; columnLayout -adjustableColumn true;");
-	MGlobal::executeCommand("button -label \"Resolve with A\" -command conflictResolveA -actOnPress false;");
-	MGlobal::executeCommand("button -label \"Resolve with B\" -command conflictResolveB -actOnPress false;");
-	MGlobal::executeCommand("button -label \"Resolve both\" -command conflictResolveBoth -actOnPress false;");
-	MGlobal::executeCommand("setParent..; showWindow ResolveConflictGUI;");
+	EditOperation* edit = meshOperator->allEdits[selectedEditIndex];
 
-	EditOperation* edit = meshOperator->allEdits[index];
-
+	if (rc == 0) {
+	}
+	else if (rc == 1) {
+	}
+	else if (rc == 2) {
+	}
 }
 
 bool MeshGitNode::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB, MPoint &output){

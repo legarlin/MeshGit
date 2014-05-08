@@ -51,5 +51,6 @@ public:
 	void startMergeUnconflicting();
 	int findSelectedEditIndex(); 
 	bool getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & derivA, MPoint &derivB, MPoint &output);
+	void manualResolveConflict(int rc);
 };
 

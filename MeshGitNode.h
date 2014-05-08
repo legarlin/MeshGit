@@ -88,7 +88,7 @@ public:
 	void reportError(MStatus status);
 	virtual void postConstructor();
 
-	void manualResolveConflict(int index);
+	void manualResolveConflict(int rc);
 
 protected:
 	

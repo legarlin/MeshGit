@@ -6,7 +6,7 @@ menuItem -ann "Load Files" -label "Load Files" -echoCommand true -command open;
 global string $originalFileField;
 global string $AFileField;
 global string $BFileField;
-//global string $meshGitNodeNameGlobal;
+global string $meshGitNodeNameGlobal;
 
 global proc open() 
 {
@@ -199,17 +199,23 @@ global proc showListOfEditOperations(string $nodeName)
 
 global proc conflictResolveA()
 {
-	
+	global string $meshGitNodeNameGlobal;
+	string $a = "0";
+	MeshGitCmd -rc $a $meshGitNodeNameGlobal;
 }
 
 global proc conflictResolveB()
 {
-	
+	global string $meshGitNodeNameGlobal;
+	string $b = "1";
+	MeshGitCmd -rc $b $meshGitNodeNameGlobal;
 }
 
 global proc conflictResolveBoth()
 {
-	
+	global string $meshGitNodeNameGlobal;
+	string $both = "2";
+	MeshGitCmd -rc $both $meshGitNodeNameGlobal;
 }
 
 global proc exportMergedMesh(){

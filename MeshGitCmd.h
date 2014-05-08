@@ -17,6 +17,7 @@ public:
 	void startDiff(MString nodeName);
 	void startMergeUnconflicting(MString nodeName);
 	void startUpdateSelectedEdit(MString nodeName);
+	void manualResolveConflict(MString resolution, MString nodeName);
 };
 
 #endif

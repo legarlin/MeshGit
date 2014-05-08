@@ -18,8 +18,9 @@ const char *aFlag = "-a", *aLongFlag = "-derivativeA";
 const char *bFlag = "-b", *bLongFlag = "-derivativeB";
 const char *connectFlag = "-c", *connectLongFlag= "-connectNodes";
 const char *diffFlag = "-d", *diffLongFlag= "-startDiff";
-const char *mergeUnconflictingFlag = "-mu", *mergeUnconflictingLongFlag= "-mergeUnconflicting";
-const char *updateSelectedEditFlag = "-us", *updateSelectedEditLongFlag= "-updateSelectedEdit";
+const char *mergeUnconflictingFlag = "-mu", *mergeUnconflictingLongFlag = "-mergeUnconflicting";
+const char *updateSelectedEditFlag = "-us", *updateSelectedEditLongFlag = "-updateSelectedEdit";
+const char *resolveConflictFlag = "rc", *resolveConflictLongFlag = "-resolveConflict";
 
 MeshGitCmd::MeshGitCmd() : MPxCommand()
 {
@@ -43,11 +44,13 @@ MStatus MeshGitCmd::doIt( const MArgList& args )
 	MString bFilepath = "";
 	MString meshGitNodeName;
 	MString locatorNodeName;
+	MString resolveConflict ="";
 
 	//Set flags
 	if (argData.isFlagSet(originalFlag)) { argData.getFlagArgument(originalFlag, 0, originalFilepath); }
 	if (argData.isFlagSet(aFlag)) { argData.getFlagArgument(aFlag, 0, aFilepath); }
 	if (argData.isFlagSet(bFlag)) { argData.getFlagArgument(bFlag, 0, bFilepath); }
+
 	if (argData.isFlagSet(connectFlag)) { 
 		argData.getFlagArgument(connectFlag, 0, meshGitNodeName); 
 		argData.getFlagArgument(connectFlag, 1, locatorNodeName);
@@ -65,7 +68,11 @@ MStatus MeshGitCmd::doIt( const MArgList& args )
 		argData.getFlagArgument(updateSelectedEditFlag, 0, meshGitNodeName); 
 		startUpdateSelectedEdit(meshGitNodeName);
 	}
-
+	if (argData.isFlagSet(resolveConflictFlag)) {
+		argData.getFlagArgument(resolveConflictFlag, 0, resolveConflict);
+		argData.getFlagArgument(resolveConflictFlag, 1, meshGitNodeName);
+		manualResolveConflict(resolveConflict, meshGitNodeName);
+	}
 
 
 	MGlobal::displayInfo(originalFilepath);
@@ -84,6 +91,7 @@ MSyntax MeshGitCmd::newSyntax()
 	syntax.addFlag(diffFlag, diffLongFlag, MSyntax::kString);
 	syntax.addFlag(mergeUnconflictingFlag, mergeUnconflictingLongFlag, MSyntax::kString);
 	syntax.addFlag(updateSelectedEditFlag, updateSelectedEditLongFlag, MSyntax::kString);
+	syntax.addFlag(resolveConflictFlag, resolveConflictLongFlag, MSyntax::kString, MSyntax::kString);
 	return syntax;
 }
 
@@ -92,7 +100,6 @@ std::string stringify(double x)
 	std::stringstream s;
 	s << "(" << x << ")";
 	return s.str();
-
  }
 
 void MeshGitCmd::startDiff(MString nodeName){
@@ -223,4 +230,26 @@ void MeshGitCmd::startUpdateSelectedEdit(MString nodeName){
 	mgFn.findSelectedEditIndex();
 	reportError(status);
 
+}
+
+void MeshGitCmd::manualResolveConflict(MString resolution, MString nodeName)
+{
+	MStatus status;
+	if(nodeName == NULL || nodeName =="") return;
+
+	//Get Node Object
+	MSelectionList nodeList;
+	status = nodeList.add(nodeName);
+	MObject nodeObject;
+	status = nodeList.getDependNode(0, nodeObject);
+	reportError(status);
+
+	//Create Node Fn
+	MeshGitFn mgFn;
+	status = mgFn.setObject(nodeObject);
+	reportError(status);
+
+	//Resolve conflict with resolution
+	int rc = resolution.asInt();
+	mgFn.manualResolveConflict(rc);
 }

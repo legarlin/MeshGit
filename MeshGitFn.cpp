@@ -124,3 +124,8 @@ bool MeshGitFn::getCurrentlySelectedEditPositions(MPoint& orginal, MPoint & deri
 	return meshGitNode->getCurrentlySelectedEditPositions(orginal,  derivA, derivB, output);
 
 }
+
+void MeshGitFn::manualResolveConflict(int rc)
+{
+	meshGitNode->manualResolveConflict(rc);
+}
