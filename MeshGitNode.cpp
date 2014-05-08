@@ -411,9 +411,35 @@ int MeshGitNode::findSelectedEditIndex(){
 		return 0; 
 	selectedEditIndex = indexArray[0]-1; 
 	cout<<"selectedEditIndex " << selectedEditIndex<<endl;
+
+	if (selectedEditIndex != -1) { // check valid index
+		bool conflicting = meshOperator->conflictingEdit(selectedEditIndex);
+		if (conflicting) {
+			manualResolveConflict(selectedEditIndex);
+		} 
+		else {
+			MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
+		}
+	}
+
 	return selectedEditIndex; 
 	
 }
+
+void MeshGitNode::manualResolveConflict(int index)
+{
+	MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
+	MGlobal::executeCommand("window -title \"Resolve Conflict\" -w 100 -h 150 ResolveConflictGUI; columnLayout -adjustableColumn true;");
+	MGlobal::executeCommand("button -label \"Resolve with A\" -command conflictResolveA -actOnPress false;");
+	MGlobal::executeCommand("button -label \"Resolve with B\" -command conflictResolveB -actOnPress false;");
+	MGlobal::executeCommand("button -label \"Resolve both\" -command conflictResolveBoth -actOnPress false;");
+	MGlobal::executeCommand("setParent..; showWindow ResolveConflictGUI;");
+
+	EditOperation* edit = meshOperator->allEdits[index];
+
+}
+
+
 void MeshGitNode::mergeUnconflicting(){
 
 	mergedVerts = meshOperator->mergeUnconflictingEdits(); 

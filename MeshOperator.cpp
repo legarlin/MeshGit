@@ -121,7 +121,16 @@ void MeshOperator::updateEditStrings(){
 
 }
 
-void MeshOperator::updateSelectedEdit(int index)
+bool MeshOperator::conflictingEdit(int index)
 {
 	selectedIndex = index;
+
+	if (selectedIndex >= 0 && selectedIndex < allEdits.size()) {
+		EditOperation* selectedEdit = allEdits[selectedIndex];
+		if (selectedEdit->conflict) {
+			return true;
+		}
+	}
+
+	return false;
 }

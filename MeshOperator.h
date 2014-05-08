@@ -25,11 +25,12 @@ class MeshOperator {
 	MFnMesh* fnMeshB;
 	MFnMesh* fnMeshOutput;
 
-
 	MatchComputer* matchComputerA;
 	MatchComputer* matchComputerB;
 
 	vector<MeshComponent*> origMeshComponents;
+
+	int selectedIndex;
 
 public:
 	vector<ComponentMatch*> dA_bestMatches;
@@ -54,4 +55,6 @@ public:
 	void diff();
 	void checkConflicts();
 	MPointArray* mergeUnconflictingEdits();
+
+	bool conflictingEdit(int index); // returns whether this index is conflicting
 };

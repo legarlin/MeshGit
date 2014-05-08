@@ -189,3 +189,18 @@ global proc showListOfEditOperations(string $nodeName)
 	showWindow;
 	
 }
+
+global proc conflictResolveA()
+{
+	
+}
+
+global proc conflictResolveB()
+{
+	
+}
+
+global proc conflictResolveBoth()
+{
+	
+}
