@@ -121,3 +121,7 @@ void MeshOperator::updateEditStrings(){
 
 }
 
+void MeshOperator::updateSelectedEdit(int index)
+{
+	selectedIndex = index;
+}
