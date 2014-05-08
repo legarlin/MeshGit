@@ -67,6 +67,7 @@ global proc load()
 	global string $BFileField;
 	global string $meshGitNodeNameGlobal;
 	global string $vizNodeNameGlobal;
+	global string $outputMeshName; 
 
 	string $originalFilename = `textField -q -text $originalFileField`;
 	string $AFilename = `textField -q -text $AFileField`;
@@ -97,14 +98,14 @@ global proc load()
 	string $attrNameB = $BMeshName + ".translate";
 	setAttr $attrNameB 0 2 -1;
 
-		//Output
+	//Output
 	file -i $originalFilename;
 	select -allDagObjects;
 	select -deselect $originalMeshName;
 	select -deselect $AMeshName;
 	select -deselect $BMeshName;
 	string $nameFourth[] = `ls -selection`;
-	string $outputMeshName = $nameFourth[0];
+	$outputMeshName = $nameFourth[0];
 	string $attrNameOutput = $outputMeshName + ".translate";
 	setAttr $attrNameOutput 0 4 0;
 
@@ -149,8 +150,8 @@ global proc openDiffWindow(string $mainNodeName) {
 	string $comm2 = "MeshGitCmd -mu " + $mainNodeName + "; setAttr " +  $mainNodeName +".currentFrame 3" ;
 	button -label "Merge Unconflicting Edits" -command $comm2 -width 250;
 	
-	string $comm3 = "MeshGitCmd -us " + $mainNodeName; 
-	button -label "Update Selected Edit Index" -command $comm3 -width 250;
+	string $comm3 = "exportMergedMesh()"; 
+	button -label "Export Merged Mesh" -command $comm3 -width 250;
 
 	showWindow myWindow; 
 }
@@ -194,4 +195,20 @@ global proc showListOfEditOperations(string $nodeName)
 		-showIndexedItem 4
 	showWindow;
 	
+}
+
+global proc exportMergedMesh(){
+	global string $outputMeshName; 
+	string $dir = (`workspace -q -dir` + "mergedMesh.mb" );
+	string $newName[] = `duplicate $outputMeshName`; 
+	string $attrName = $newName[0] + ".translate";
+	setAttr $attrName 0 0 0;
+	select $newName[0];
+	file -op "" -typ "mayaBinary" -es $dir;
+	delete $newName[0];
+
+	string $mess =  "Merged mesh exported to " + $dir; 
+	$response = `confirmDialog -title "Export Completed" 
+			              -message $mess
+			              -button "Okay!"`;
 }
