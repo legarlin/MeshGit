@@ -77,6 +77,9 @@ public:
 	unsigned int mergedMeshGroupID;
 	MString diffResultsWindowName;
 	MString diffResultsScrollListName;
+	MString totalEditsLabel;
+	MString unresolvedEditsLabel;
+	MString diffResultsScrollListName;
 	int selectedEditIndex;
 	
 	void  reloadDiffResultsWindow();

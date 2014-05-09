@@ -358,9 +358,23 @@ void MeshGitNode::startDiff()
 	vector<MString> editStrings = meshOperator->editInfo;
 	//Present list of edits 
 	if(diffResultsWindowName=="none"){
-		diffResultsWindowName = MGlobal::executeCommandStringResult("window -title \"DIFF RESULTS\" -widthHeight 600 400; columnLayout;");
-		MGlobal::executeCommand("text -label \"Edit Operation Results\";");
-		MString command2 = "textScrollList -numberOfRows 20 -allowMultiSelection false -width 550 -selectCommand (\"updateSelectedEditIndex()\") ";
+		diffResultsWindowName = MGlobal::executeCommandStringResult("window -title \"Diff Results\" -widthHeight 420 380 -s false; columnLayout -adjustableColumn true;");
+		
+		int numTotalEdits = meshOperator->allEdits.size();
+		MString totalEdits = "Total Edits: ";
+		totalEdits += numTotalEdits;
+		int numUnresolvedEdits = meshOperator->unresolvedEdits;
+		MString unresolvedEdits = "Unresolved Edits: ";
+		unresolvedEdits += numUnresolvedEdits;
+		
+		//MGlobal::executeCommand("frameLayout -label \"Number of Edits \" -collapsable false;");
+		//MGlobal::executeCommand("rowLayout -numberOfColumns 2 -columnWidth2 210 210 -columnAlign2 left right;");
+		totalEditsLabel = MGlobal::executeCommandStringResult("text -label \"" + totalEdits + "\" -w 210 -al left;");
+		unresolvedEditsLabel = MGlobal::executeCommandStringResult("text -label \"" + unresolvedEdits + "\" -w 220 -al left;");
+		//MGlobal::executeCommand("setParent..;");
+
+		MGlobal::executeCommand("frameLayout -label \"Edit Operation Results\" -collapsable false; columnLayout -adjustableColumn true;");
+		MString command2 = "textScrollList -numberOfRows 20 -w 430 -allowMultiSelection false -fn fixedWidthFont -selectCommand (\"updateSelectedEditIndex()\") ";
 		for(int i = 0; i < editStrings.size(); i++){
 			MString s = editStrings.at(i);
 			command2 += "-append ";
@@ -370,8 +384,17 @@ void MeshGitNode::startDiff()
 		}
 		command2 += " ;";
 		diffResultsScrollListName = MGlobal::executeCommandStringResult(command2);
-		MGlobal::executeCommand("button -label \"Auto Merge NonConflicting Edits\" -command \" \";");
-		MGlobal::executeCommand("button -label \"Manually Merge Selected Conflict\" -command \" \";");
+
+		MGlobal::executeCommand("button -label \"Merge Non-Conflicting Edits\" -command mergeUnconflicting;");
+		MGlobal::executeCommand("setParent..;");
+
+		MGlobal::executeCommand("frameLayout -label \"Resolve Selected Conflict\" -collapsable false;");
+		MGlobal::executeCommand("rowLayout -numberOfColumns 3 -columnAlign3 center center center -columnWidth3 140 140 140;");
+		MGlobal::executeCommand("button -label \"Resolve with A\" -command conflictResolveA -actOnPress false -w 140 -enable false ResolveButtonA;");
+		MGlobal::executeCommand("button -label \"Resolve with B\" -command conflictResolveB -actOnPress false -w 140 -enable false ResolveButtonB;");
+		MGlobal::executeCommand("button -label \"Resolve with both\" -command conflictResolveBoth -actOnPress false -w 140 -enable false ResolveButtonAB;");
+		MGlobal::executeCommand("setParent..;");
+
 		MGlobal::executeCommand("showWindow;");
 		cout << "diffResultsWindowName " << diffResultsWindowName << endl;
 		cout << "diffResultsScrollListName " << diffResultsScrollListName << endl;
@@ -416,15 +439,18 @@ int MeshGitNode::findSelectedEditIndex(){
 	if (selectedEditIndex != -1) { // check valid index
 		bool conflicting = meshOperator->conflictingEdit(selectedEditIndex);
 		if (conflicting) {
-			MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
-			MGlobal::executeCommand("window -title \"Resolve Conflict\" -w 100 -h 150 ResolveConflictGUI; columnLayout -adjustableColumn true;");
-			MGlobal::executeCommand("button -label \"Resolve with A\" -command conflictResolveA -actOnPress false;");
-			MGlobal::executeCommand("button -label \"Resolve with B\" -command conflictResolveB -actOnPress false;");
-			MGlobal::executeCommand("button -label \"Resolve both\" -command conflictResolveBoth -actOnPress false;");
-			MGlobal::executeCommand("setParent..; showWindow ResolveConflictGUI;");
+			//MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
+			//MGlobal::executeCommand("window -title \"Resolve Conflict\" -w 100 -h 150 ResolveConflictGUI; columnLayout -adjustableColumn true;");
+			MGlobal::executeCommand("button -e -enable true ResolveButtonA;");
+			MGlobal::executeCommand("button -e -enable true ResolveButtonB;");
+			MGlobal::executeCommand("button -e -enable true ResolveButtonAB;");
+			//MGlobal::executeCommand("setParent..; showWindow ResolveConflictGUI;");
 		} 
 		else {
-			MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
+			//MGlobal::executeCommand("if (`window -exists ResolveConflictGUI`) { deleteUI -window ResolveConflictGUI; }");
+			MGlobal::executeCommand("button -e -enable false ResolveButtonA;");
+			MGlobal::executeCommand("button -e -enable false ResolveButtonB;");
+			MGlobal::executeCommand("button -e -enable false ResolveButtonAB;");
 		}
 	}
 

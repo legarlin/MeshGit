@@ -2,6 +2,8 @@ global string $gMainWindow;
 setParent $gMainWindow;
 menu -label "MeshGit" -parent $gMainWindow -tearOff on MeshGitMenu;
 menuItem -ann "Load Files" -label "Load Files" -echoCommand true -command open;
+menuItem -ann "Diff" -label "Diff" -echoCommand true -command diff -enable false DiffMenuItem;
+menuItem -ann "Export Merged Mesh" -label "Export Merged Mesh" -echoCommand true -command exportMergedMesh -enable false ExportMenuItem;
 
 global string $originalFileField;
 global string $AFileField;
@@ -133,12 +135,21 @@ global proc load()
 	$meshGitNodeNameGlobal = $mainNodeName[0];
 
 	//Run the diff
-	MeshGitCmd -d $mainNodeName[0];
-	openDiffWindow($mainNodeName[0]);
+	diff();
+	//openDiffWindow($mainNodeName[0]);
+
+	menuItem -e -enable true DiffMenuItem;
+	menuItem -e -enable true ExportMenuItem;
 
 	//Connect the attributes so we have access to the kMesh Objects
 
 	deleteUI -window MeshGitGUI;
+}
+
+global proc diff()
+{
+	global string $meshGitNodeNameGlobal;
+	MeshGitCmd -d $meshGitNodeNameGlobal;
 }
 
 global proc openDiffWindow(string $mainNodeName) {
@@ -167,6 +178,13 @@ global proc unloadMenu()
 	buildFileMenu();
 
 	if (`menu -ex MeshGitMenu`) deleteUI -menu MeshGitMenu;
+}
+
+global proc mergeUnconflicting()
+{
+	global string $meshGitNodeNameGlobal;
+	MeshGitCmd -mu $meshGitNodeNameGlobal;
+	forceMeshGitNodeRefresh();
 }
 
 global proc updateSelectedEditIndex()

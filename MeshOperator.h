@@ -47,6 +47,8 @@ public:
 	vector<MString> editInfo;
 	void updateEditStrings();
 	
+	//int resolvedEdits;
+	int unresolvedEdits;
 
 	MeshOperator();
 	MeshOperator(vector<MPointArray*> meshVerts, vector<MFnMesh*> fnMeshObjects);

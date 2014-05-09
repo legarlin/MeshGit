@@ -137,7 +137,9 @@ MPointArray* MeshOperator::mergeUnconflictingEdits(){
 	cout<<"Ended Merge unconflicting Edits = count: " << nonconflictingEdits.size()<<endl;
 }
 
-void MeshOperator::updateEditStrings(){
+void MeshOperator::updateEditStrings()
+{
+	unresolvedEdits = 0;
 
 	editInfo.clear(); 
 	for(int  i= 0; i < allEdits.size(); i ++ ){ 
@@ -146,17 +148,22 @@ void MeshOperator::updateEditStrings(){
 
 		bool conflicting = edit->conflict;
 		bool resolved = edit->resolved;
-		MString editString = "Component Number: ";
+		MString editString = "Component ";
 		editString += i;
-		editString+=  " | Status: ";
-		if(conflicting)
-			editString+= " CONFLICT!|  ";
-		else
-			editString+= " no conflict |  ";
-		if(resolved)
-			editString+= " resolved";
-		else 
-			editString+= " NOT RESOLVED!";
+		editString+=  "   |";
+		if(conflicting) {
+			editString+= "       CONFLICT!       |";
+		}
+		else {
+			editString+= "    Not Conflicting    |";
+		}
+		if (resolved) {
+			editString+= "       Resolved";
+		}
+		else {
+			editString+= "     NOT Resolved";
+			unresolvedEdits++;
+		}
 
 		cout<< editString << endl;
 		editInfo.push_back(editString);
