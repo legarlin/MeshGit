@@ -372,7 +372,8 @@ void MeshGitNode::startDiff()
 		totalEditsLabel = MGlobal::executeCommandStringResult("text -label \"" + totalEdits + "\" -w 210 -al left;");
 		unresolvedEditsLabel = MGlobal::executeCommandStringResult("text -label \"" + unresolvedEdits + "\" -w 220 -al left;");
 		//MGlobal::executeCommand("setParent..;");
-
+		cout<< " totalEditsLabel " << totalEditsLabel << endl;
+		cout<< " unresolvedEditsLabel " << unresolvedEditsLabel << endl;
 		MGlobal::executeCommand("frameLayout -label \"Edit Operation Results\" -collapsable false; columnLayout -adjustableColumn true;");
 		MString command2 = "textScrollList -numberOfRows 20 -w 430 -allowMultiSelection false -fn fixedWidthFont -selectCommand (\"updateSelectedEditIndex()\") ";
 		for(int i = 0; i < editStrings.size(); i++){
@@ -420,6 +421,16 @@ void  MeshGitNode::reloadDiffResultsWindow(){
 		cout<<"Text Scroll Command " << finalCommand << endl; 
 	}//window1|columnLayout114|textScrollList21
 	
+	    //fix labels 
+		int numTotalEdits = meshOperator->allEdits.size();
+		MString totalEdits = "Total Edits: ";
+		totalEdits += numTotalEdits;
+		int numUnresolvedEdits = meshOperator->unresolvedEdits;
+		MString unresolvedEdits = "Unresolved Edits: ";
+		unresolvedEdits += numUnresolvedEdits;
+		MString command = "text -e -label " + unresolvedEdits + " " + unresolvedEdits;
+		MGlobal::executeCommand(command); 
+
 }
 
 int MeshGitNode::findSelectedEditIndex(){
