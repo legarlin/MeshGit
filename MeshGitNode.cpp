@@ -390,7 +390,7 @@ void MeshGitNode::startDiff()
 		MGlobal::executeCommand("setParent..;");
 
 		MGlobal::executeCommand("frameLayout -label \"Resolve Selected Conflict\" -collapsable false;");
-		MGlobal::executeCommand("rowLayout -numberOfColumns 3 -columnAlign3 center center center -columnWidth3 140 140 140;");
+		//MGlobal::executeCommand("rowLayout -numberOfColumns 3 -columnAlign3 center center center -columnWidth3 140 140 140;");
 		MGlobal::executeCommand("button -label \"Resolve with A\" -command conflictResolveA -actOnPress false -w 140 -enable false ResolveButtonA;");
 		MGlobal::executeCommand("button -label \"Resolve with B\" -command conflictResolveB -actOnPress false -w 140 -enable false ResolveButtonB;");
 		MGlobal::executeCommand("button -label \"Resolve with both\" -command conflictResolveBoth -actOnPress false -w 140 -enable false ResolveButtonAB;");
@@ -428,9 +428,22 @@ void  MeshGitNode::reloadDiffResultsWindow(){
 		int numUnresolvedEdits = meshOperator->unresolvedEdits;
 		MString unresolvedEdits = "Unresolved Edits: ";
 		unresolvedEdits += numUnresolvedEdits;
-		MString command = "text -e -label " + unresolvedEdits + " " + unresolvedEdits;
+		MString command = "text -e -label " ;
+		command= command+  "\"";
+		command=  command + totalEdits;
+		command= command +"\" " + totalEditsLabel;
 		MGlobal::executeCommand(command); 
+		
+		MString command2 = "text -e -label " ;
+		command2= command2 +  "\"";
+		command2=  command2 + unresolvedEdits;
+		command2= command2 +"\" " + unresolvedEditsLabel;
+		MGlobal::executeCommand(command2); 
 
+		cout<< "totalEditsLabel " << totalEditsLabel << endl;
+		cout<< "unresolvedEditsLabel " << unresolvedEditsLabel << endl;
+		cout<< "command " << command << endl;
+		cout<< "command2 " << command2 << endl;
 }
 
 int MeshGitNode::findSelectedEditIndex(){
@@ -441,7 +454,7 @@ int MeshGitNode::findSelectedEditIndex(){
 	MString finalCommand = "textScrollList -q -selectIndexedItem " + diffResultsScrollListName;
 	MIntArray indexArray; 
 	MGlobal::executeCommand(finalCommand, indexArray); 
-	cout<<"indexArray.length " << indexArray.length() <<endl;
+	//cout<<"indexArray.length " << indexArray.length() <<endl;
 	if(indexArray.length()<=0)
 		return 0; 
 	selectedEditIndex = indexArray[0]-1; 
